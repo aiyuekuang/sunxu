@@ -5,7 +5,7 @@
   "description": "Shared React Native components for Sunxu apps",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aiyuekuang/sunxu.git"
+    "url": "git+https://github.com/aiyuekuang/sunxu.git"
   },
   "homepage": "https://github.com/aiyuekuang/sunxu#readme",
   "bugs": {
