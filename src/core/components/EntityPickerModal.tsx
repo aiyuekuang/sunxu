@@ -115,7 +115,7 @@ export function EntityPickerModal<T>({
   renderDetails,
   categoryFetchFn,
   categoryLayout = 'quick-filter',
-  searchPlaceholder = '搜索编码/名称/规格...',
+  searchPlaceholder = '搜索...',
   quickFilters = [],
 }: EntityPickerModalProps<T>) {
   const { colors } = useTheme();
@@ -308,7 +308,7 @@ export function EntityPickerModal<T>({
       ? [
           {
             key: CATEGORY_QUICK_FILTER_KEY,
-            label: '物料分类',
+            label: '分类',
             queryParam: 'categoryId',
             options: categoryList.map((item) => ({
               label: item.displayName ?? item.name,
@@ -380,7 +380,7 @@ export function EntityPickerModal<T>({
                 ]}
               >
                 <View style={[styles.categoryHeader, { borderBottomColor: colors.borderLight }]}>
-                  <Text style={[styles.categoryTitle, { color: colors.textSecondary }]}>物料分类</Text>
+                  <Text style={[styles.categoryTitle, { color: colors.textSecondary }]}>分类</Text>
                 </View>
                 <FlatList
                   data={categoryList}
@@ -426,7 +426,7 @@ export function EntityPickerModal<T>({
                         style={styles.categoryError}
                         onPress={() => void loadCategories()}
                         accessibilityRole="button"
-                        accessibilityLabel="重新加载物料分类"
+                        accessibilityLabel="重新加载分类"
                       >
                         <Ionicons name="refresh-outline" size={16} color={colors.error} />
                         <Text style={[styles.categoryErrorText, { color: colors.error }]}>重试</Text>
@@ -690,7 +690,7 @@ export function EntityPickerModal<T>({
                     style={styles.categoryError}
                     onPress={() => void loadCategories()}
                     accessibilityRole="button"
-                    accessibilityLabel="重新加载物料分类"
+                    accessibilityLabel="重新加载分类"
                   >
                     <Ionicons name="refresh-outline" size={16} color={colors.error} />
                     <Text style={[styles.categoryErrorText, { color: colors.error }]}>

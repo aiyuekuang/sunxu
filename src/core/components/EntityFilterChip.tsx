@@ -60,6 +60,8 @@ export interface EntityFilterChipProps<T> {
   renderDetails?: (item: T) => React.ReactNode;
   /** 分类筛选项；传入后在搜索下方提供快捷筛选 */
   categoryFetchFn?: () => Promise<EntityPickerCategoryOption[]>;
+  categoryLayout?: 'quick-filter' | 'sidebar';
+  searchPlaceholder?: string;
   /** 可扩展的快捷筛选 */
   quickFilters?: EntityPickerQuickFilter[];
   /** 弹窗标题 */
@@ -101,6 +103,8 @@ function EntityFilterChipInner<T>({
   renderLeading,
   renderDetails,
   categoryFetchFn,
+  categoryLayout,
+  searchPlaceholder,
   quickFilters,
   title,
   variant = 'chip',
@@ -166,6 +170,8 @@ function EntityFilterChipInner<T>({
         renderLeading={renderLeading}
         renderDetails={renderDetails}
         categoryFetchFn={categoryFetchFn}
+        categoryLayout={categoryLayout}
+        searchPlaceholder={searchPlaceholder}
         quickFilters={quickFilters}
         selectedKey={value?.id}
         clearable

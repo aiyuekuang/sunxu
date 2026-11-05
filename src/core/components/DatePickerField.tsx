@@ -47,6 +47,8 @@ export interface DatePickerFieldProps {
   centered?: boolean;
   /** 无障碍名称；未传时回退到字段 label。 */
   accessibilityLabel?: string;
+  /** 父级已提供可见字段标题时隐藏重复标签；无障碍名称仍由 accessibilityLabel 或 label 提供。 */
+  hideLabel?: boolean;
 }
 
 export function DatePickerField({
@@ -69,6 +71,7 @@ export function DatePickerField({
   compact,
   centered,
   accessibilityLabel,
+  hideLabel = false,
 }: DatePickerFieldProps) {
   const { colors, isDark } = useTheme();
   const insets = useSafeAreaInsets();
@@ -194,7 +197,7 @@ export function DatePickerField({
 
   return (
     <View style={[styles.container, containerStyle]}>
-      {label || showStandaloneCurrentShortcut ? (
+      {!hideLabel && (label || showStandaloneCurrentShortcut) ? (
         <FormLabel
           label={label}
           required={required}
@@ -334,7 +337,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: Radius.sm,
     paddingHorizontal: Spacing.md,
-    height: 42,
+    height: 44,
     gap: Spacing.sm,
   },
   inputWrapperCompact: {
@@ -343,7 +346,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: Radius.sm,
     paddingHorizontal: Spacing.sm,
-    height: 36,
+    height: 44,
     gap: Spacing.xs,
   },
   valueText: {

@@ -24,7 +24,12 @@ export interface FullScreenModalProps {
   /** 确认按钮禁用时给读屏用户的原因提示 */
   confirmDisabledHint?: string;
   avoidKeyboard?: boolean;
+  /** scroll 保持表单滚动；fill 将内容区交给子组件管理滚动和全高布局。 */
+  bodyMode?: 'scroll' | 'fill';
+  /** 沉浸式内容隐藏页头/副标题/页脚并占满弹窗内容区，供地图或媒体查看使用。 */
+  immersive?: boolean;
   subtitle?: string;
+  headerRight?: React.ReactNode;
   confirmButtonColor?: string;
   renderFooter?: () => React.ReactNode;
 }
@@ -41,13 +46,16 @@ export function FullScreenModal({
   disabled = false,
   confirmDisabledHint,
   avoidKeyboard = false,
+  bodyMode = 'scroll',
+  immersive = false,
   subtitle,
+  headerRight,
   confirmButtonColor,
   renderFooter,
 }: FullScreenModalProps) {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
-  const footerVisible = !!confirmText || !!renderFooter;
+  const footerVisible = !immersive && (!!confirmText || !!renderFooter);
   const confirmButtonDisabled = disabled && !loading;
   const visibleDisabledHint = confirmButtonDisabled
     ? (confirmDisabledHint ?? '请先完善必填项或处理页面提示后再提交')
@@ -74,9 +82,11 @@ export function FullScreenModal({
             behavior={avoidKeyboard ? 'padding' : undefined}
             keyboardVerticalOffset={0}
           >
-            <PageHeader title={title} onBack={onClose} />
+            {!immersive ? (
+              <PageHeader title={title} onBack={onClose} right={headerRight} />
+            ) : null}
 
-            {subtitle ? (
+            {!immersive && subtitle ? (
               <View
                 style={[
                   styles.subtitleWrap,
@@ -90,24 +100,39 @@ export function FullScreenModal({
               </View>
             ) : null}
 
-            <KeyboardAwareScrollView
-              style={styles.contentScroll}
-              contentContainerStyle={[
-                styles.content,
-                {
-                  paddingBottom: footerVisible
-                    ? Spacing.md
-                    : (insets.bottom || Spacing.md) + Spacing.md,
-                },
-              ]}
-              keyboardShouldPersistTaps="handled"
-              showsVerticalScrollIndicator
-              bottomOffset={20}
-            >
-              {children}
-            </KeyboardAwareScrollView>
+            {bodyMode === 'fill' || immersive ? (
+              <View
+                style={[
+                  styles.fillContent,
+                  immersive && styles.immersiveFillContent,
+                  !footerVisible &&
+                    !immersive && {
+                      paddingBottom: (insets.bottom || Spacing.md) + Spacing.md,
+                    },
+                ]}
+              >
+                {children}
+              </View>
+            ) : (
+              <KeyboardAwareScrollView
+                style={styles.contentScroll}
+                contentContainerStyle={[
+                  styles.content,
+                  {
+                    paddingBottom: footerVisible
+                      ? Spacing.md
+                      : (insets.bottom || Spacing.md) + Spacing.md,
+                  },
+                ]}
+                keyboardShouldPersistTaps="handled"
+                showsVerticalScrollIndicator
+                bottomOffset={20}
+              >
+                {children}
+              </KeyboardAwareScrollView>
+            )}
 
-            {confirmText ? (
+            {!immersive && confirmText ? (
               <View
                 style={[
                   styles.confirmFooter,
@@ -170,7 +195,7 @@ export function FullScreenModal({
               </View>
             ) : null}
 
-            {!confirmText && renderFooter ? (
+            {!immersive && !confirmText && renderFooter ? (
               <View
                 style={[
                   styles.footer,
@@ -212,6 +237,12 @@ const styles = StyleSheet.create({
   },
   contentScroll: {
     flex: 1,
+  },
+  fillContent: {
+    flex: 1,
+  },
+  immersiveFillContent: {
+    padding: 0,
   },
   content: {
     padding: Spacing.md,

@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ReactNode } from 'react';
 import { useRef, useState } from 'react';
 import { Animated, StyleSheet, TouchableOpacity } from 'react-native';
 import { FontSize, Radius, Spacing } from '../theme/tokens';
@@ -15,6 +16,10 @@ interface SearchBarProps {
   autoCorrect?: boolean;
   /** 序列号等场景需要关闭自动大写（透传给内部输入框） */
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
+  onSubmitEditing?: () => void;
+  rightAccessory?: ReactNode;
+  variant?: 'subtle' | 'surface';
+  accessibilityLabel?: string;
 }
 
 export function SearchBar({
@@ -24,8 +29,12 @@ export function SearchBar({
   autoFocus,
   autoCorrect,
   autoCapitalize,
+  onSubmitEditing,
+  rightAccessory,
+  variant = 'subtle',
+  accessibilityLabel = '搜索',
 }: SearchBarProps) {
-  const { colors, isDark } = useTheme();
+  const { colors } = useTheme();
   const inputFontSize = useScaledFontSize(FontSize.base);
   const [focused, setFocused] = useState(false);
   const focusAnim = useRef(new Animated.Value(0)).current;
@@ -54,11 +63,24 @@ export function SearchBar({
 
   const backgroundColor = focusAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: [colors.surfaceSecondary, isDark ? '#3A3A3C' : '#E8EAEF'],
+    outputRange: [
+      variant === 'surface' ? colors.surface : colors.surfaceSecondary,
+      colors.primarySurface,
+    ],
   });
 
   return (
-    <Animated.View style={[styles.container, { backgroundColor }]}>
+    <Animated.View
+      style={[
+        styles.container,
+        variant === 'surface' && {
+          borderRadius: Radius.md,
+          borderWidth: StyleSheet.hairlineWidth,
+          borderColor: colors.border,
+        },
+        { backgroundColor },
+      ]}
+    >
       <Ionicons
         name="search-outline"
         size={18}
@@ -77,6 +99,8 @@ export function SearchBar({
         autoCorrect={autoCorrect}
         autoCapitalize={autoCapitalize}
         returnKeyType="search"
+        onSubmitEditing={onSubmitEditing}
+        accessibilityLabel={accessibilityLabel}
         onFocus={handleFocus}
         onBlur={handleBlur}
       />
@@ -86,6 +110,8 @@ export function SearchBar({
           hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
           style={styles.clearBtn}
           activeOpacity={0.6}
+          accessibilityRole="button"
+          accessibilityLabel="清除搜索"
         >
           <Ionicons
             name="close-circle"
@@ -94,6 +120,7 @@ export function SearchBar({
           />
         </TouchableOpacity>
       )}
+      {rightAccessory}
     </Animated.View>
   );
 }

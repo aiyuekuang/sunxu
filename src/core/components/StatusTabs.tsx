@@ -37,8 +37,8 @@ interface StatusTabsProps<T extends string = string> {
   keepActiveVisible?: boolean;
   /** overflow tab 的 key，默认 "__overflow__" */
   overflowKey?: T;
-  /** 圆角风格：rounded=方形小圆角分段条（默认，轨道式：灰色轨道 + 主色选中块），underline=下划线导航 Tab */
-  variant?: 'rounded' | 'underline';
+  /** segment=轻量分段；rounded/pill=带轨道的分段条；underline=下划线导航 Tab。 */
+  variant?: 'segment' | 'rounded' | 'pill' | 'underline';
   /** 紧凑视觉密度；仅缩小可见控件，触控热区仍由 hitSlop 保持不变 */
   density?: 'default' | 'compact';
   /**
@@ -47,6 +47,8 @@ interface StatusTabsProps<T extends string = string> {
    * 会反向撑满父行、把兄弟元素挤成 0 宽（文字逐字折行成超高但不可见）。
    */
   sizing?: 'stretch' | 'hug';
+  /** segment/rounded/pill 变体将 count 显示为徽标；underline 保持内联计数。 */
+  countBadge?: boolean;
   /** 容器自定义样式（用于调整间距等） */
   style?: StyleProp<ViewStyle>;
 }
@@ -64,6 +66,7 @@ export function StatusTabs<T extends string = string>({
   variant = 'rounded',
   density = 'default',
   sizing = 'stretch',
+  countBadge = false,
   style: containerStyle,
 }: StatusTabsProps<T>) {
   const { colors } = useTheme();
@@ -124,7 +127,11 @@ export function StatusTabs<T extends string = string>({
                 : { selected: active, disabled: tab.disabled }
             }
             aria-selected={isOverflowTab ? undefined : active}
-            accessibilityLabel={isOverflowTab ? `${tab.label}，更多选项` : tab.label}
+            accessibilityLabel={
+              isOverflowTab
+                ? `${tab.label}，更多选项`
+                : `${tab.label}${tab.count != null ? `，${tab.count}` : ''}`
+            }
           >
             {tab.icon ? <Ionicons name={tab.icon} size={16} color={tabColor} /> : null}
             <Text
@@ -197,21 +204,80 @@ export function StatusTabs<T extends string = string>({
           accessibilityRole={isOverflowTab ? 'button' : 'tab'}
           accessibilityState={isOverflowTab ? undefined : { selected: active }}
           aria-selected={isOverflowTab ? undefined : active}
-          accessibilityLabel={isOverflowTab ? `${tab.label}，更多选项` : tab.label}
+          accessibilityLabel={
+            isOverflowTab
+              ? `${tab.label}，更多选项`
+              : `${tab.label}${tab.count != null ? `，${tab.count}` : ''}`
+          }
         >
-          <Text
-            style={[
-              styles.tabText,
-              { color: active ? colors.textOnPrimary : colors.textSecondary },
-              active && { fontWeight: '600' },
-            ]}
-          >
-            {tab.label}
-            {tab.count != null && tab.count > 0 ? ` (${tab.count})` : ''}
-          </Text>
+          <View style={styles.tabContent}>
+            <Text
+              style={[
+                styles.tabText,
+                { color: active ? colors.textOnPrimary : colors.textSecondary },
+                active && { fontWeight: '600' },
+              ]}
+            >
+              {tab.label}
+              {!countBadge && tab.count != null && tab.count > 0
+                ? ` (${tab.count})`
+                : ''}
+            </Text>
+            {countBadge && tab.count != null ? (
+              <View
+                style={[
+                  styles.countBadge,
+                  {
+                    backgroundColor: active
+                      ? colors.surface
+                      : colors.surfaceSecondary,
+                  },
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.countBadgeText,
+                    { color: active ? colors.primary : colors.textSecondary },
+                  ]}
+                >
+                  {tab.count}
+                </Text>
+              </View>
+            ) : null}
+          </View>
         </TouchableOpacity>
       );
     });
+
+  if (variant === 'segment') {
+    if (scrollable) {
+      return (
+        <View style={[styles.wrapper, isCompact && styles.wrapperCompact, containerStyle]}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            alwaysBounceHorizontal={false}
+            contentContainerStyle={styles.scrollContent}
+          >
+            {renderTabs()}
+          </ScrollView>
+        </View>
+      );
+    }
+
+    return (
+      <View
+        style={[
+          styles.wrapper,
+          isCompact && styles.wrapperCompact,
+          styles.row,
+          containerStyle,
+        ]}
+      >
+        {renderTabs()}
+      </View>
+    );
+  }
 
   if (scrollable) {
     return (
@@ -281,6 +347,26 @@ const styles = StyleSheet.create({
     minHeight: 34,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.xs,
+  },
+  tabContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: Spacing.xs,
+  },
+  countBadge: {
+    minWidth: 22,
+    height: 22,
+    paddingHorizontal: 6,
+    borderRadius: 11,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  countBadgeText: {
+    fontSize: FontSize.xs,
+    lineHeight: 16,
+    fontWeight: '700',
+    fontVariant: ['tabular-nums'],
   },
   tabCompact: {
     minHeight: 32,

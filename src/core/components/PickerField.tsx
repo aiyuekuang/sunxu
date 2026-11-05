@@ -17,9 +17,10 @@ import {
 import { AppText as Text } from './AppText.tsx';
 import { FontSize, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
+import { useScaledFontSize } from '../theme/font-scale';
+import { useBottomSheetTextInput } from './BottomSheetContext.ts';
 import { type FieldHelpContent, FormLabel } from './FormLabel.tsx';
 import { useModalRequestCloseContext } from './ModalRequestCloseContext';
-import { SearchBar } from './SearchBar.tsx';
 
 export interface PickerOption {
   label: string;
@@ -64,10 +65,16 @@ export function PickerField({
   disabledReason,
 }: PickerFieldProps) {
   const { colors } = useTheme();
+  const searchInputFontSize = useScaledFontSize(FontSize.base);
   const sheetRef = useRef<BottomSheetModal>(null);
   const [query, setQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const modalRequestClose = useModalRequestCloseContext();
+  const { InputComponent, inputKey, inputProps } = useBottomSheetTextInput({
+    value: query,
+    onChangeText: setQuery,
+    forceInsideBottomSheet: true,
+  });
 
   const selectedOption = options.find((o) => o.value === value);
   const displayText = selectedOption?.label ?? '';
@@ -147,12 +154,26 @@ export function PickerField({
       {/* Search */}
       {showSearch && (
         <View style={[styles.searchRow, { borderBottomColor: colors.border }]}>
-          <SearchBar
-            value={query}
-            onChangeText={setQuery}
+          <Ionicons name="search-outline" size={16} color={colors.textTertiary} accessible={false} />
+          <InputComponent
+            key={inputKey}
+            style={[styles.searchInput, { color: colors.text, fontSize: searchInputFontSize }]}
+            {...inputProps}
             placeholder="搜索…"
+            placeholderTextColor={colors.textTertiary}
+            numberOfLines={1}
             autoCorrect={false}
           />
+          {query.length > 0 ? (
+            <TouchableOpacity
+              onPress={() => inputProps.onChangeText('')}
+              hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
+              accessibilityRole="button"
+              accessibilityLabel="清除搜索"
+            >
+              <Ionicons name="close-circle" size={16} color={colors.textTertiary} accessible={false} />
+            </TouchableOpacity>
+          ) : null}
         </View>
       )}
     </View>
@@ -314,9 +335,17 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   searchRow: {
-    paddingHorizontal: Spacing.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.sm,
     borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: FontSize.base,
+    padding: 0,
   },
   optionItem: {
     flexDirection: 'row',

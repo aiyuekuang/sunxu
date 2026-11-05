@@ -22,6 +22,10 @@ interface PhotoPickerProps {
   label?: string;
   /** 点检证据只允许现场拍照；成功拍摄后可先上传并由服务端签发证据。 */
   cameraOnly?: boolean;
+  /** 是否允许一次从相册选择多张图片。 */
+  allowsMultipleSelection?: boolean;
+  /** 标记首张为封面，并允许调整封面顺序。 */
+  showCoverControls?: boolean;
   onPhotoCaptured?: (uri: string) => Promise<string | undefined>;
   onPhotoEvidenceChange?: (evidenceIds: string[]) => void;
 }
@@ -32,6 +36,8 @@ export const PhotoPicker = ({
   maxCount = 3,
   label = '拍照凭证',
   cameraOnly = false,
+  allowsMultipleSelection = false,
+  showCoverControls = false,
   onPhotoCaptured,
   onPhotoEvidenceChange,
 }: PhotoPickerProps) => {
@@ -78,10 +84,14 @@ export const PhotoPicker = ({
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
       quality: 0.7,
-      allowsMultipleSelection: false,
+      allowsMultipleSelection,
+      selectionLimit: allowsMultipleSelection ? Math.max(1, maxCount - photos.length) : 1,
     });
-    if (!result.canceled && result.assets[0]) {
-      onPhotosChange([...photos, result.assets[0].uri]);
+    if (!result.canceled && result.assets.length) {
+      onPhotosChange([
+        ...photos,
+        ...result.assets.slice(0, Math.max(0, maxCount - photos.length)).map((asset) => asset.uri),
+      ]);
     }
   };
 
@@ -109,21 +119,79 @@ export const PhotoPicker = ({
     onPhotosChange(next);
   };
 
+  const setCoverPhoto = (index: number) => {
+    if (index <= 0 || index >= photos.length) return;
+    const nextPhotos = [photos[index], ...photos.filter((_, photoIndex) => photoIndex !== index)];
+    const nextEvidenceIds = [...evidenceIds];
+    if (index < nextEvidenceIds.length) {
+      const [coverEvidenceId] = nextEvidenceIds.splice(index, 1);
+      if (coverEvidenceId) nextEvidenceIds.unshift(coverEvidenceId);
+    }
+    setEvidenceIds(nextEvidenceIds);
+    onPhotoEvidenceChange?.(nextEvidenceIds);
+    onPhotosChange(nextPhotos);
+  };
+
   return (
     <View>
       <Text style={[styles.label, { color: colors.text }]}>{label}</Text>
       <View style={styles.grid}>
         {photos.map((uri, index) => (
           <View key={uri} style={styles.photoWrap}>
-            <Pressable onPress={() => setPreviewUri(uri)}>
+            <Pressable
+              onPress={() => setPreviewUri(uri)}
+              accessibilityRole="imagebutton"
+              accessibilityLabel={`预览第 ${index + 1} 张照片`}
+            >
               <Image source={{ uri }} style={styles.photo} />
             </Pressable>
             <TouchableOpacity
               style={[styles.removeBtn, { backgroundColor: colors.surface }]}
               onPress={() => removePhoto(index)}
+              hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel={`删除第 ${index + 1} 张照片`}
             >
               <Ionicons name="close-circle" size={20} color={colors.error} />
             </TouchableOpacity>
+            {showCoverControls ? (
+              <>
+                <View
+                  style={[
+                    styles.coverBadge,
+                    {
+                      backgroundColor:
+                        index === 0 ? colors.primary : colors.surfaceSecondary,
+                    },
+                  ]}
+                  accessibilityElementsHidden
+                  importantForAccessibility="no-hide-descendants"
+                >
+                  <Text
+                    style={[
+                      styles.coverText,
+                      {
+                        color:
+                          index === 0 ? colors.textOnPrimary : colors.textSecondary,
+                      },
+                    ]}
+                  >
+                    {index === 0 ? '封面' : `${index + 1}`}
+                  </Text>
+                </View>
+                {index > 0 ? (
+                  <TouchableOpacity
+                    style={[styles.setCoverBtn, { backgroundColor: colors.surface }]}
+                    onPress={() => setCoverPhoto(index)}
+                    hitSlop={8}
+                    accessibilityRole="button"
+                    accessibilityLabel={`将第 ${index + 1} 张设为封面`}
+                  >
+                    <Ionicons name="star-outline" size={15} color={colors.primary} />
+                  </TouchableOpacity>
+                ) : null}
+              </>
+            ) : null}
           </View>
         ))}
         {photos.length < maxCount && (
@@ -172,4 +240,23 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   addText: { fontSize: FontSize.xs },
+  coverBadge: {
+    position: 'absolute',
+    left: 3,
+    top: 3,
+    borderRadius: 4,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+  },
+  coverText: { fontSize: 9, lineHeight: 12, fontWeight: '600' },
+  setCoverBtn: {
+    position: 'absolute',
+    bottom: 3,
+    right: 3,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

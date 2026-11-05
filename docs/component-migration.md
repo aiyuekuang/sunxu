@@ -53,12 +53,12 @@ Sunxu 面向多个 React Native / Expo App，提供跨业务可组合的 UI 控�
 
 ## CRM 来源组件盘点与合入结果
 
-来源为 `../dongjian-crm` 的 `main` 分支，提交 `3e96dd331ef4b0f0c72c139f8790a0aeceeee9c5`。完整盘点 `src/components/**` 共 98 项：35 项复用现有 Sunxu 通用实现，10 项合并 CRM 优化，2 项新增为通用组件，4 项 CRM 差异经评估后保留 Sunxu 既有能力，47 项因业务领域、宿主集成或数据/导航耦合而排除在通用运行时之外。CRM 业务、地图和宿主生命周期模块留在 CRM App。
+来源为 `../dongjian-crm` 的 `main` 分支，提交 `1732835a54ae62710089b0a5f096da76545bad2a`。完整盘点 `src/components/**` 共 98 项：35 项复用现有 Sunxu 通用实现，10 项合并 CRM 优化，2 项新增为通用组件，4 项 CRM 差异经评估后保留 Sunxu 既有能力，47 项因业务领域、宿主集成或数据/导航耦合而排除在通用运行时之外。CRM 业务、地图和宿主生命周期模块留在 CRM App。
 
 本次新增 `DateNavigator`、`DetailActionBar`；优化日期字段的标签/触控尺寸、详情卡片外层样式、实体选择器分类侧栏、全屏弹窗填充与沉浸模式、照片多选/封面、底部弹层输入法适配、搜索栏和状态标签。`FormLabel`、`QuickNumInput`、`ScanCameraModal` 保留 Sunxu 已有帮助/连续扫码能力；CRM 对筛选控件的触控尺寸和隐藏高级筛选行为已在 Sunxu 实现，无需重复改动。
 
-CRM 与 MES 固定提交 `e92d02d7cf2269cf8c564a60ff6a00255e903c8e` 比较：84 项同路径，其中 64 项内容一致、20 项不同；CRM 独有 14 项，MES 独有 4 项。CRM 页面私有目录另发现 5 个组件、6 个调用点，未见跨页面复用，继续留在 CRM App。
+CRM 与 MES 固定提交 `e92d02d7cf2269cf8c564a60ff6a00255e903c8e` 比较：84 项同路径，其中 64 项内容一致、20 项不同；CRM 独有 14 项，MES 独有 4 项。CRM 页面私有目录另有 6 个文件：5 个被 `ProfileScreen` 引用、共 6 条 import 声明（`PieceworkPeriodPicker` 有类型与值两条导入），另有 1 个未被 screens 引用；没有跨页面复用，均留在 CRM App。
 
-逐项来源提交、当前工作树 SHA-256、来源依赖、目标、适配与排除理由见 [CRM 迁移清单](./migrations/crm-components.md) 和 [JSON 账本](./migrations/crm-components.json)。来源工作树有 5 个未提交组件文件，按逐文件快照记录；CRM 仓库没有根 `LICENSE`，当前账本不代表对外再分发授权。
+逐项来源提交、当前工作树 SHA-256、来源依赖、目标、适配与排除理由见 [CRM 迁移清单](./migrations/crm-components.md) 和 [JSON 账本](./migrations/crm-components.json)。当前 CRM 工作树有 2 个未提交组件文件，按逐文件快照记录；CRM 仓库没有根 `LICENSE`，当前账本不代表对外再分发授权。
 
 本次组件 UI 的真实页面截图和几何/溢出证据未完成，视觉状态为 `UNVERIFIED`。类型检查通过不代表视觉验收通过。

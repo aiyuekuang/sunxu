@@ -38,6 +38,8 @@ export interface EntityPickerFieldProps<T> {
   onScanResult?: (code: string) => void;
   /** 分类筛选项；传入后在搜索框下方显示分类快捷筛选 */
   categoryFetchFn?: () => Promise<EntityPickerCategoryOption[]>;
+  categoryLayout?: 'quick-filter' | 'sidebar';
+  searchPlaceholder?: string;
   /** 列表项左侧内容，如物料图片 */
   renderLeading?: (item: T) => React.ReactNode;
   /** 列表项补充信息；传入后替代默认副标签 */
@@ -66,6 +68,8 @@ export function EntityPickerField<T>({
   scannable,
   onScanResult,
   categoryFetchFn,
+  categoryLayout,
+  searchPlaceholder,
   renderLeading,
   renderDetails,
   quickFilters,
@@ -186,6 +190,8 @@ export function EntityPickerField<T>({
           setModalVisible(false);
         }}
         categoryFetchFn={categoryFetchFn}
+        categoryLayout={categoryLayout}
+        searchPlaceholder={searchPlaceholder}
         quickFilters={quickFilters}
       />
 
