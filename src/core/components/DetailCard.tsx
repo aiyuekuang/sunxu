@@ -4,11 +4,12 @@ import { Pressable, StyleSheet, View, type ViewStyle } from 'react-native';
 import { AppText as Text } from './AppText.tsx';
 import { FontSize, Radius, Shadow, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
-import { formatDate } from '../utils/date';
 
 interface DetailCardProps {
   title?: string;
   children: React.ReactNode;
+  /** 卡片外层布局样式；style 仍只作用于内容卡片。 */
+  containerStyle?: ViewStyle;
   style?: ViewStyle;
   /** 不显示内边距（用于自定义内部布局） */
   noPadding?: boolean;
@@ -16,11 +17,18 @@ interface DetailCardProps {
   right?: React.ReactNode;
 }
 
-export function DetailCard({ title, children, style, noPadding, right }: DetailCardProps) {
+export function DetailCard({
+  title,
+  children,
+  containerStyle,
+  style,
+  noPadding,
+  right,
+}: DetailCardProps) {
   const { colors } = useTheme();
 
   return (
-    <View style={styles.wrapper}>
+    <View style={[styles.wrapper, containerStyle]}>
       {title || right ? (
         <View style={styles.titleRow}>
           {title ? (
@@ -59,16 +67,9 @@ interface InfoRowProps {
 
 export function InfoRow({ label, value, last, right, onPress }: InfoRowProps) {
   const { colors } = useTheme();
-  const auditDateLabel =
-    label === '创建时间' ? '创建日期' : label === '更新时间' ? '更新日期' : undefined;
-
   const borderStyle = last
     ? null
     : { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border };
-
-  const primaryBorderStyle = auditDateLabel
-    ? { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border }
-    : borderStyle;
 
   const content = (
     <>
@@ -88,28 +89,14 @@ export function InfoRow({ label, value, last, right, onPress }: InfoRowProps) {
   );
 
   const primaryRow = onPress ? (
-    <Pressable style={[styles.row, primaryBorderStyle]} onPress={onPress}>
+    <Pressable style={[styles.row, borderStyle]} onPress={onPress}>
       {content}
     </Pressable>
   ) : (
-    <View style={[styles.row, primaryBorderStyle]}>{content}</View>
+    <View style={[styles.row, borderStyle]}>{content}</View>
   );
 
-  if (!auditDateLabel) return primaryRow;
-
-  return (
-    <View>
-      {primaryRow}
-      <View style={[styles.row, borderStyle]}>
-        <Text style={[styles.rowLabel, { color: colors.textSecondary }]}>{auditDateLabel}</Text>
-        <View style={styles.rowRight}>
-          <Text style={[styles.rowValue, { color: colors.text }]} numberOfLines={2}>
-            {formatDate(typeof value === 'string' ? value : null)}
-          </Text>
-        </View>
-      </View>
-    </View>
-  );
+  return primaryRow;
 }
 
 interface StatusTagProps {

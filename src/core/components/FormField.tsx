@@ -37,6 +37,7 @@ export function FormField({
   rightElement,
   multiline,
   numberOfLines,
+  accessibilityLabel,
   style,
   value,
   onChangeText,
@@ -77,6 +78,7 @@ export function FormField({
           textAlignVertical={multiline ? 'top' : undefined}
           {...inputProps}
           {...props}
+          accessibilityLabel={accessibilityLabel ?? label}
         />
         {secureToggle && secureTextEntry && (
           <TouchableOpacity
@@ -135,7 +137,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: Radius.sm,
     paddingHorizontal: Spacing.md,
-    height: 42,
+    height: 44,
     gap: Spacing.sm,
   },
   inputWrapperMultiline: {

@@ -1,32 +1,29 @@
-import { useNavigation } from '@react-navigation/native';
 import type React from 'react';
 import { useRef } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { FontSize, Radius, Shadow, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { AppText as Text } from './AppText.tsx';
 import { LoadingView } from './LoadingView.tsx';
-import { PageHeader } from './PageHeader.tsx';
+import { FormScreenContainer } from './ScreenContainer.tsx';
 
 interface FormPageProps {
-  /** 页面标题 */
+  /** Page title */
   title: string;
-  /** 提交按钮文字，默认"保存" */
+  /** Submit button label */
   submitText?: string;
-  /** 提交中 */
   loading?: boolean;
-  /** 提交回调，不传则隐藏保存按钮（只读模式） */
+  /** Omit to make the form read-only. */
   onSubmit?: () => void;
-  /** 自定义返回 */
+  /** Supply navigation behavior from the host app. */
   onBack?: () => void;
-  /** 初始加载中（编辑时加载详情） */
   initLoading?: boolean;
-  /** 表单验证错误数量（>0 时在保存按钮旁显示红点） */
   errorCount?: number;
+  footer?: React.ReactNode;
   children: React.ReactNode;
 }
 
+/** Standard keyboard-aware form page. Navigation and submission stay host-owned. */
 export function FormPage({
   title,
   submitText = '保存',
@@ -35,12 +32,10 @@ export function FormPage({
   onBack,
   initLoading = false,
   errorCount = 0,
+  footer,
   children,
 }: FormPageProps) {
   const { colors } = useTheme();
-  const navigation = useNavigation();
-  const goBack = onBack ?? (() => navigation.goBack());
-  // 时间戳防抖：防止双击重复提交，且永远不会卡死
   const lastPressRef = useRef(0);
 
   const handleSubmit = () => {
@@ -53,49 +48,43 @@ export function FormPage({
   if (initLoading) return <LoadingView />;
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <PageHeader
-        title={title}
-        onBack={goBack}
-        right={
-          onSubmit ? (
-            <View>
-              <TouchableOpacity
-                style={[
-                  styles.saveBtn,
-                  { backgroundColor: colors.primary, opacity: loading ? 0.6 : 1 },
-                ]}
-                onPress={handleSubmit}
-                disabled={loading}
-              >
-                <Text style={[styles.saveBtnText, { color: colors.textOnPrimary }]}>
-                  {loading ? '保存中...' : submitText}
+    <FormScreenContainer
+      title={title}
+      onBack={onBack}
+      footer={footer}
+      contentContainerStyle={styles.content}
+      headerRight={
+        onSubmit ? (
+          <View>
+            <TouchableOpacity
+              style={[styles.saveBtn, { backgroundColor: colors.primary, opacity: loading ? 0.6 : 1 }]}
+              onPress={handleSubmit}
+              disabled={loading}
+              accessibilityRole="button"
+              accessibilityLabel={loading ? '保存中' : submitText}
+              accessibilityState={{ disabled: loading, busy: loading }}
+            >
+              <Text style={[styles.saveBtnText, { color: colors.textOnPrimary }]}>
+                {loading ? '保存中...' : submitText}
+              </Text>
+            </TouchableOpacity>
+            {errorCount > 0 && (
+              <View style={[styles.errorBadge, { backgroundColor: colors.error }]}>
+                <Text style={[styles.errorBadgeText, { color: colors.textOnPrimary }]}>
+                  {errorCount}
                 </Text>
-              </TouchableOpacity>
-              {errorCount > 0 && (
-                <View style={[styles.errorBadge, { backgroundColor: colors.error }]}>
-                  <Text style={[styles.errorBadgeText, { color: colors.textOnPrimary }]}>
-                    {errorCount}
-                  </Text>
-                </View>
-              )}
-            </View>
-          ) : undefined
-        }
-      />
-      <KeyboardAwareScrollView
-        contentContainerStyle={styles.content}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-        bottomOffset={20}
-      >
-        {children}
-      </KeyboardAwareScrollView>
-    </View>
+              </View>
+            )}
+          </View>
+        ) : undefined
+      }
+    >
+      {children}
+    </FormScreenContainer>
   );
 }
 
-/** 表单分区容器 */
+/** Card-like section for grouping related fields. */
 export function FormSection({ title, children }: { title?: string; children: React.ReactNode }) {
   const { colors } = useTheme();
   return (
@@ -106,7 +95,7 @@ export function FormSection({ title, children }: { title?: string; children: Rea
   );
 }
 
-/** 表单字段 label + children 包装 */
+/** Label and content wrapper for a single form field. */
 export function Field({
   label,
   required,
@@ -129,8 +118,9 @@ export function Field({
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
   saveBtn: {
+    minHeight: 44,
+    justifyContent: 'center',
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.xs + 2,
     borderRadius: Radius.md,

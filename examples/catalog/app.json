@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "name": "Sunxu Catalog",
+    "slug": "sunxu-catalog",
+    "scheme": "sunxu-catalog",
+    "orientation": "portrait",
+    "ios": {
+      "supportsTablet": true
+    },
+    "plugins": [
+      "expo-camera",
+      "expo-image-picker"
+    ]
+  }
+}

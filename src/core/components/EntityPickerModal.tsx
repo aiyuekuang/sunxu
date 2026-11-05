@@ -1,6 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import axios from 'axios';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
@@ -85,6 +84,10 @@ export interface EntityPickerModalProps<T> {
   renderDetails?: (item: T) => React.ReactNode;
   /** 分类筛选项；传入后在搜索下方提供快捷筛选 */
   categoryFetchFn?: () => Promise<EntityPickerCategoryOption[]>;
+  /** 分类呈现方式；sidebar 将分类固定在结果区左侧，quick-filter 使用筛选面板。 */
+  categoryLayout?: 'quick-filter' | 'sidebar';
+  /** 搜索提示文案。 */
+  searchPlaceholder?: string;
   /** 可扩展的快捷筛选 */
   quickFilters?: EntityPickerQuickFilter[];
 }
@@ -111,6 +114,8 @@ export function EntityPickerModal<T>({
   renderLeading,
   renderDetails,
   categoryFetchFn,
+  categoryLayout = 'quick-filter',
+  searchPlaceholder = '搜索编码/名称/规格...',
   quickFilters = [],
 }: EntityPickerModalProps<T>) {
   const { colors } = useTheme();
@@ -125,6 +130,7 @@ export function EntityPickerModal<T>({
   const [categoryOptions, setCategoryOptions] = useState<EntityPickerCategoryOption[]>([]);
   const [categoryLoading, setCategoryLoading] = useState(false);
   const [categoryError, setCategoryError] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const [quickFilterValues, setQuickFilterValues] = useState<Record<string, string>>({});
   const [activeQuickFilterKey, setActiveQuickFilterKey] = useState<string | null>(null);
 
@@ -185,7 +191,7 @@ export function EntityPickerModal<T>({
       pageRef.current = nextPage;
       hasMoreRef.current = hasMoreEntityPickerResults(nextPage, PAGE_SIZE, res.total);
     } catch (e: unknown) {
-      if (axios.isCancel(e) || (e instanceof Error && e.message === 'canceled')) return;
+      if (e instanceof Error && e.message === 'canceled') return;
       // 请求失败时停止加载更多，防止 onEndReached 无限循环；保留已加载结果并展示重试。
       hasMoreRef.current = false;
       setLoadError(true);
@@ -230,6 +236,7 @@ export function EntityPickerModal<T>({
       quickFilterValuesRef.current = {};
       setQuickFilterValues({});
       categoryIdRef.current = undefined;
+      setSelectedCategoryId(null);
       pageRef.current = 0;
       hasMoreRef.current = true;
       setLoaded(false);
@@ -254,7 +261,10 @@ export function EntityPickerModal<T>({
     const nextValues = { ...quickFilterValuesRef.current, [key]: value };
     quickFilterValuesRef.current = nextValues;
     setQuickFilterValues(nextValues);
-    if (key === CATEGORY_QUICK_FILTER_KEY) categoryIdRef.current = value || undefined;
+    if (key === CATEGORY_QUICK_FILTER_KEY) {
+      categoryIdRef.current = value || undefined;
+      setSelectedCategoryId(value || null);
+    }
     pageRef.current = 0;
     hasMoreRef.current = true;
     setActiveQuickFilterKey(null);
@@ -294,7 +304,7 @@ export function EntityPickerModal<T>({
   );
 
   const quickFilterGroups = useMemo(() => {
-    const categoryGroup = categoryFetchFn
+    const categoryGroup = categoryFetchFn && categoryLayout !== 'sidebar'
       ? [
           {
             key: CATEGORY_QUICK_FILTER_KEY,
@@ -311,7 +321,7 @@ export function EntityPickerModal<T>({
       ...categoryGroup,
       ...quickFilters.filter((filter) => filter.key !== CATEGORY_QUICK_FILTER_KEY),
     ];
-  }, [categoryFetchFn, categoryList, quickFilters]);
+  }, [categoryFetchFn, categoryLayout, categoryList, quickFilters]);
 
   const activeQuickFilter = quickFilterGroups.find((filter) => filter.key === activeQuickFilterKey);
 
@@ -356,7 +366,76 @@ export function EntityPickerModal<T>({
             )}
           </View>
 
-          <View style={styles.contentRow}>
+          <View
+            style={[
+              styles.contentRow,
+              categoryLayout === 'sidebar' && categoryFetchFn && styles.contentRowSidebar,
+            ]}
+          >
+            {categoryLayout === 'sidebar' && categoryFetchFn ? (
+              <View
+                style={[
+                  styles.categoryPane,
+                  { backgroundColor: colors.surface, borderRightColor: colors.border },
+                ]}
+              >
+                <View style={[styles.categoryHeader, { borderBottomColor: colors.borderLight }]}>
+                  <Text style={[styles.categoryTitle, { color: colors.textSecondary }]}>物料分类</Text>
+                </View>
+                <FlatList
+                  data={categoryList}
+                  keyExtractor={(item) => item.id ?? 'all'}
+                  showsVerticalScrollIndicator={false}
+                  renderItem={({ item }) => {
+                    const categoryId = item.id;
+                    const isSelected = selectedCategoryId === categoryId;
+                    return (
+                      <TouchableOpacity
+                        style={[
+                          styles.categoryItem,
+                          isSelected && {
+                            backgroundColor: colors.primarySurface,
+                            borderLeftColor: colors.primary,
+                          },
+                        ]}
+                        onPress={() =>
+                          handleQuickFilterChange(CATEGORY_QUICK_FILTER_KEY, categoryId ?? '')
+                        }
+                        activeOpacity={0.7}
+                        accessibilityRole="button"
+                        accessibilityState={{ selected: isSelected }}
+                        accessibilityLabel={item.displayName ?? item.name}
+                      >
+                        <Text
+                          style={[
+                            styles.categoryLabel,
+                            { color: isSelected ? colors.primary : colors.textSecondary },
+                          ]}
+                          numberOfLines={2}
+                        >
+                          {item.displayName ?? item.name}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  }}
+                  ListFooterComponent={
+                    categoryLoading ? (
+                      <ActivityIndicator style={styles.categoryFooter} color={colors.primary} />
+                    ) : categoryError ? (
+                      <TouchableOpacity
+                        style={styles.categoryError}
+                        onPress={() => void loadCategories()}
+                        accessibilityRole="button"
+                        accessibilityLabel="重新加载物料分类"
+                      >
+                        <Ionicons name="refresh-outline" size={16} color={colors.error} />
+                        <Text style={[styles.categoryErrorText, { color: colors.error }]}>重试</Text>
+                      </TouchableOpacity>
+                    ) : null
+                  }
+                />
+              </View>
+            ) : null}
             <View style={styles.archivePane}>
               <View
                 style={[
@@ -367,7 +446,7 @@ export function EntityPickerModal<T>({
                 <SearchBar
                   value={keyword}
                   onChangeText={handleSearch}
-                  placeholder="搜索编码/名称/规格..."
+                  placeholder={searchPlaceholder}
                   autoCorrect={false}
                 />
               </View>
@@ -654,6 +733,26 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
   contentRow: { flex: 1 },
+  contentRowSidebar: { flexDirection: 'row' },
+  categoryPane: {
+    width: 132,
+    borderRightWidth: StyleSheet.hairlineWidth,
+  },
+  categoryHeader: {
+    minHeight: 44,
+    justifyContent: 'center',
+    paddingHorizontal: Spacing.md,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  categoryTitle: { fontSize: FontSize.sm, fontWeight: '600' },
+  categoryItem: {
+    minHeight: 52,
+    justifyContent: 'center',
+    paddingHorizontal: Spacing.md,
+    borderLeftWidth: 3,
+    borderLeftColor: 'transparent',
+  },
+  categoryLabel: { fontSize: FontSize.sm, lineHeight: 18 },
   quickFiltersRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',

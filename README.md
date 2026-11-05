@@ -1,31 +1,49 @@
 # 榫序 Sunxu
 
-**Sunxu 是面向 React Native / Expo 项目的共享组件包。**它整理跨业务基础 UI、MES 领域组件和宿主 App 集成，让多个 App 可以复用同一份组件代码和契约。
+Sunxu 是面向 React Native / Expo 项目的通用 UI 组件和页面容器库。它提供主题 token、表单/筛选/选择控件，以及列表、表单和详情页常用骨架；数据请求、路由、授权和业务规则由宿主 App 管理。
 
-## 当前迁移状态
-
-MES 基线 `main-买断版本` 的固定提交 `e92d02d7cf2269cf8c564a60ff6a00255e903c8e` 已完整纳入：88 个 `src/components/**` 共享组件和 305 个 `src/screens/**/components/**` 页面私有组件，共 393 条逐文件迁移记录。来源工作区存在未提交改动，本次仅使用固定提交树。
-
-共享组件按职责从 `sunxu/core`、`sunxu/mes` 和 `sunxu/integrations/mes-app` 导入。页面私有组件保留在 `src/mes/screens/**`，不会从公开入口导出。完整来源、目标、摘要、宿主依赖和适配记录见 [`docs/migrations/mes-components.md`](./docs/migrations/mes-components.md) 与 [`docs/migrations/mes-components.json`](./docs/migrations/mes-components.json)。
-
-TypeScript 项目检查已通过。真实页面渲染、截图和几何/溢出检查尚未执行，视觉验收状态为 **UNVERIFIED**。
-
-## 导入示例
+## 页面容器
 
 ```tsx
-import { AppText, EmptyState, SunxuProvider } from 'sunxu';
-import { ApprovalActionBar, configureMesHostServices } from 'sunxu/mes';
-import { AppUpdateChecker } from 'sunxu/integrations/mes-app';
+import {
+  AppText,
+  ListCard,
+  ListScreenContainer,
+  SearchBar,
+  SunxuProvider,
+} from 'sunxu';
+
+export function ExampleApp() {
+  return (
+    <SunxuProvider>
+      <ListScreenContainer title="客户" toolbar={<SearchBar value="" onChangeText={() => {}} />}>
+        <ListCard>
+          <ListCard.Title>新项目可直接复用的卡片</ListCard.Title>
+          <AppText>请求、权限和路由由宿主项目提供。</AppText>
+        </ListCard>
+      </ListScreenContainer>
+    </SunxuProvider>
+  );
+}
 ```
 
-MES 组件由宿主注入 API client、服务实现、授权判断、Store、实时事件和文件下载能力。对应配置入口从 `sunxu/mes` 导入；集成组件单独从 `sunxu/integrations/mes-app` 引入。
+`ListScreenContainer` 将搜索/筛选工具栏放在其控制的结果区紧邻位置；`FormPage` 自动处理键盘滚动，返回行为通过 `onBack` 传入；`DetailScreenContainer` 提供可滚动内容和固定页头/底部操作区；`ScreenContainer` 用于按插槽组合其他页面骨架。
+
+所有容器默认使用 Sunxu 语义主题和顶部安全区。底部操作区可搭配 `BottomActionBar`，由操作栏本身处理底部安全区。
+
+## 基线组件筛选
+
+MES 固定基线原始盘点共 393 项：筛选后保留 49 个跨项目共享组件/工具，排除 MES 领域模块、宿主集成、页面私有组件和带数据请求/导航耦合的树列表。Sunxu 新增标准页面容器。每个基线文件的来源提交、状态、目标路径或排除原因见 [`逐文件迁移账本`](./docs/migrations/mes-components.md)。
+
+Expo Web 示例已在 375×812 竖屏、812×375 横屏和浅/深主题下渲染；截图、控制台结果和几何/溢出数据见 [`容器预览记录`](./docs/verification/component-containers.md)。原生 iOS/Android 的安全区、键盘和无障碍渲染仍为 **UNVERIFIED**。
 
 ## 包与授权
 
-`package.json` 当前设置 `private: true`、`license: UNLICENSED`，尚未发布。MES 来源仓库未发现明确许可证；在权利人确认再分发权并选定许可证前，不公开发布迁入代码。第三方运行时依赖以 peer dependency 声明，开发检查依赖单独列出。
+`package.json` 当前设置 `private: true`、`license: UNLICENSED`，尚未发布。MES 来源仓库未发现明确许可证；在权利人确认再分发权并选定许可证前，不公开发布迁入代码。
 
 ## 开发入口
 
-- 项目目标和迁移边界：[`AGENTS.md`](./AGENTS.md)
-- MES 迁移记录：[`docs/component-migration.md`](./docs/component-migration.md)
-- 逐文件 MES 清单：[`docs/migrations/mes-components.md`](./docs/migrations/mes-components.md)
+- 项目目标与收录边界：[AGENTS.md](./AGENTS.md)
+- 组件筛选、容器规范与验证记录：[docs/component-migration.md](./docs/component-migration.md)
+- 393 项基线明细：[docs/migrations/mes-components.md](./docs/migrations/mes-components.md)
+- 可运行 Expo 示例：[examples/catalog](./examples/catalog)

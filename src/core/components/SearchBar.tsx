@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: Radius.sm,
     paddingHorizontal: Spacing.md,
-    height: 40,
+    height: 44,
     gap: 6,
   },
   icon: {
