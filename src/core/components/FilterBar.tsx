@@ -679,6 +679,7 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
                             styles.advChip,
                             { backgroundColor: isSel ? colors.primary : colors.surfaceSecondary },
                           ]}
+                          hitSlop={{ top: 4, right: 0, bottom: 4, left: 0 }}
                           accessibilityRole="radio"
                           accessibilityState={{ selected: isSel }}
                           onPress={() =>

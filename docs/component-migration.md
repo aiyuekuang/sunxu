@@ -71,3 +71,12 @@ CRM 与 MES 固定提交 `e92d02d7cf2269cf8c564a60ff6a00255e903c8e` 比较：84 
 - 42 个源文件共 78 处相对 import 携带 `.ts/.tsx` 扩展名，要求每个消费方 tsconfig 开启 `allowImportingTsExtensions`。已全部去除扩展名，消费方无需额外 tsconfig 配置，Metro/Bundler 均可解析。
 
 两项变更不改变任何组件运行时行为与视觉表现，Sunxu 自身 `tsc --noEmit` 通过。CRM 宿主以打包产物与全量类型检查做接入验证。
+
+## 2026-11-06 CRM 接入审计修正与 0.1.2
+
+CRM 宿主对 49 个再导出组件与来源基线逐文件比对后，修正与修复如下：
+
+- 盘点更正：`DateNavigator`、`DetailActionBar` 在 CRM 基线中已存在，实为原样迁移而非新增；`ScanCameraModal` 的"帮助"能力实际位于 `FormLabel`/`QuickNumInput`，ScanCameraModal 仅保留连续扫码。
+- 触控热区修复：`FilterBar.advChip`（36px 无 hitSlop，高级筛选面板选项）补 `hitSlop={top:4,bottom:4}` 达到 44 有效热区；`MultiEntityPickerField.fieldWrapper` 42px 恢复 `MIN_TOUCH_TARGET`。其余紧凑视觉样式（StatusTabs 34/32、FilterActionButton 36、FormLabel 28 等）均已有 hitSlop 补偿、有效热区 ≥44，属既定设计模式，不再改动。
+- 行为语义说明：`FilterBar` 快捷行的 `advancedExtra` 改为无条件参与行可见性判断（来源基线把它与 `!hideAdvancedButton` 绑定，导致 CRM 通话页"按客户筛选"等传入内容从未渲染）。此为有意的语义修正，宿主如不传 `advancedExtra` 不受影响。
+- 潜伏 API 差异备忘：`OfflineIndicator` 改为必填 props（不再自接 store）；`FormPage.onBack` 不再默认 `navigation.goBack()`；`EntityPickerModal` 分类侧栏改为 `categoryLayout="sidebar"` 显式开启（默认快捷筛选），默认搜索占位改为"搜索..."。上述项当前 CRM 均无调用方或无实际影响，记录以备后续消费方排查。

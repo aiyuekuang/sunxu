@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     borderRadius: Radius.sm,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
-    minHeight: 42,
+    minHeight: MIN_TOUCH_TARGET,
     gap: Spacing.sm,
   },
   placeholder: { flex: 1, fontSize: FontSize.base },
