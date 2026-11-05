@@ -1,0 +1,28 @@
+import type { User } from './User.d.ts';
+import type { Warehouse } from './Warehouse.d.ts';
+import type { WarehouseLocationType } from './WarehouseLocationType.d.ts';
+export type WarehouseLocation = {
+    allowStock: boolean;
+    barcode?: string | null;
+    code: string;
+    companyId: string;
+    createdAt: string;
+    createdBy?: string | null;
+    creator?: User | null;
+    depth: number;
+    id: string;
+    isActive: boolean;
+    name: string;
+    parent?: WarehouseLocation | null;
+    parentId?: string | null;
+    pathCode: string;
+    pathName: string;
+    remarks?: string | null;
+    sortOrder: number;
+    type: WarehouseLocationType;
+    updatedAt: string;
+    updatedBy?: string | null;
+    updater?: User | null;
+    warehouse?: Warehouse;
+    warehouseId: string;
+};

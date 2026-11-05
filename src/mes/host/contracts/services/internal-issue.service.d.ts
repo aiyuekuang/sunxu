@@ -1,0 +1,20 @@
+import type { CancelInternalIssueDto } from '../generated/models/CancelInternalIssueDto.d.ts';
+import type { CompleteInternalIssueDto } from '../generated/models/CompleteInternalIssueDto.d.ts';
+import type { CreateInternalIssueDto } from '../generated/models/CreateInternalIssueDto.d.ts';
+import type { InternalIssueItem } from '../generated/models/InternalIssueItem.d.ts';
+import type { InternalIssueItemDto } from '../generated/models/InternalIssueItemDto.d.ts';
+import type { InternalIssueListDto } from '../generated/models/InternalIssueListDto.d.ts';
+import type { InternalIssueOrder } from '../generated/models/InternalIssueOrder.d.ts';
+import type { InternalIssueStatus } from '../generated/models/InternalIssueStatus.d.ts';
+import type { InternalIssueType } from '../generated/models/InternalIssueType.d.ts';
+import type { UpdateInternalIssueDto } from '../generated/models/UpdateInternalIssueDto.d.ts';
+export type { InternalIssueItem, InternalIssueItemDto, InternalIssueOrder, InternalIssueStatus, InternalIssueType, };
+export type InternalIssueListParams = InternalIssueListDto;
+export declare const internalIssueService: {
+    create: (dto: CreateInternalIssueDto) => import("../../../types/generated/index").Promise<InternalIssueOrder>;
+    update: (dto: UpdateInternalIssueDto) => import("../../../types/generated/index").Promise<InternalIssueOrder>;
+    complete: (dto: CompleteInternalIssueDto) => import("../../../types/generated/index").Promise<InternalIssueOrder>;
+    cancel: (dto: CancelInternalIssueDto) => import("../../../types/generated/index").Promise<InternalIssueOrder>;
+    list(params?: InternalIssueListDto): Promise<import("./_base.d.ts").PaginatedList<InternalIssueOrder>>;
+    detail(id: string): Promise<InternalIssueOrder>;
+};

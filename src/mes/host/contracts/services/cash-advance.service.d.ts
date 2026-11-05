@@ -1,0 +1,28 @@
+import type { CancelCashAdvanceDto } from '../generated/models/CancelCashAdvanceDto.d.ts';
+import type { CashAdvance } from '../generated/models/CashAdvance.d.ts';
+import type { CashAdvanceListDto } from '../generated/models/CashAdvanceListDto.d.ts';
+import type { CreateCashAdvanceDto } from '../generated/models/CreateCashAdvanceDto.d.ts';
+import type { DisburseCashAdvanceDto } from '../generated/models/DisburseCashAdvanceDto.d.ts';
+import type { ReverseCashAdvanceDto } from '../generated/models/ReverseCashAdvanceDto.d.ts';
+import type { RejectCashAdvanceDto } from '../generated/models/RejectCashAdvanceDto.d.ts';
+import type { SettleCashAdvanceDto } from '../generated/models/SettleCashAdvanceDto.d.ts';
+import type { UpdateCashAdvanceDto } from '../generated/models/UpdateCashAdvanceDto.d.ts';
+export type { CashAdvance } from '../generated/models/CashAdvance.d.ts';
+export type { CashAdvanceListDto as CashAdvanceListParams } from '../generated/models/CashAdvanceListDto.d.ts';
+export type CashAdvanceCounterpartyType = CashAdvance['counterpartyType'];
+export type CashAdvanceStatus = CashAdvance['status'];
+export declare const cashAdvanceService: {
+    list: (params?: CashAdvanceListDto | undefined) => Promise<import("./_base.d.ts").PaginatedList<CashAdvance>>;
+    detail: (id: string) => Promise<CashAdvance>;
+    create: (dto: CreateCashAdvanceDto) => Promise<CashAdvance>;
+    update: (dto: UpdateCashAdvanceDto) => Promise<CashAdvance>;
+    delete: (id: string) => Promise<unknown>;
+    submit: (id: string) => import("../../../types/generated/index").Promise<CashAdvance>;
+    approve: (id: string) => import("../../../types/generated/index").Promise<CashAdvance>;
+    withdraw: (id: string) => import("../../../types/generated/index").Promise<CashAdvance>;
+    reject: (dto: RejectCashAdvanceDto) => import("../../../types/generated/index").Promise<CashAdvance>;
+    disburse: (dto: DisburseCashAdvanceDto) => import("../../../types/generated/index").Promise<CashAdvance>;
+    settle: (dto: SettleCashAdvanceDto) => import("../../../types/generated/index").Promise<CashAdvance>;
+    reverse: (dto: ReverseCashAdvanceDto) => import("../../../types/generated/index").Promise<CashAdvance>;
+    cancel: (dto: CancelCashAdvanceDto) => import("../../../types/generated/index").Promise<CashAdvance>;
+};

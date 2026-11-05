@@ -1,0 +1,72 @@
+export type SaleReturnStockTransactionRefDto = {
+    /**
+     * 批号
+     */
+    batchNo?: string | null;
+    /**
+     * 发生时间
+     */
+    createdAt: string;
+    /**
+     * 库存流水ID
+     */
+    id: string;
+    /**
+     * 数量
+     */
+    qty: number;
+    /**
+     * 库存流水号
+     */
+    transactionNo?: string | null;
+    /**
+     * 流水类型
+     */
+    type: SaleReturnStockTransactionRefDto.type;
+    /**
+     * 仓库ID
+     */
+    warehouseId: string;
+    /**
+     * 仓库名称
+     */
+    warehouseName?: string | null;
+};
+export declare namespace SaleReturnStockTransactionRefDto {
+    /**
+     * 流水类型
+     */
+    enum type {
+        IN_PURCHASE = "in_purchase",
+        IN_PRODUCTION = "in_production",
+        IN_CUSTOMER_SUPPLIED = "in_customer_supplied",
+        IN_OWNER_TRANSFER = "in_owner_transfer",
+        IN_TRANSFER = "in_transfer",
+        IN_ADJUST = "in_adjust",
+        IN_RETURN = "in_return",
+        IN_SALE_RETURN = "in_sale_return",
+        IN_CUSTOMER_DISPOSITION_REVERSAL = "in_customer_disposition_reversal",
+        IN_SALE_REVERSAL = "in_sale_reversal",
+        IN_PURCHASE_RETURN_REVERSAL = "in_purchase_return_reversal",
+        IN_PRODUCTION_REVERSAL = "in_production_reversal",
+        IN_OTHER = "in_other",
+        IN_CONVERSION = "in_conversion",
+        IN_CONVERSION_REVERSAL = "in_conversion_reversal",
+        IN_OUTSOURCING = "in_outsourcing",
+        OUT_PRODUCTION = "out_production",
+        OUT_SALE = "out_sale",
+        OUT_CUSTOMER_RETURN = "out_customer_return",
+        OUT_SALE_RETURN_REVERSAL = "out_sale_return_reversal",
+        OUT_OWNER_TRANSFER = "out_owner_transfer",
+        OUT_TRANSFER = "out_transfer",
+        OUT_ADJUST = "out_adjust",
+        OUT_SCRAP = "out_scrap",
+        OUT_PURCHASE_RETURN = "out_purchase_return",
+        OUT_OTHER = "out_other",
+        OUT_CONVERSION = "out_conversion",
+        OUT_CONVERSION_REVERSAL = "out_conversion_reversal",
+        OUT_OUTSOURCING = "out_outsourcing",
+        OUT_OUTSOURCING_RETURN = "out_outsourcing_return",
+        OUT_INTERNAL_ISSUE = "out_internal_issue"
+    }
+}

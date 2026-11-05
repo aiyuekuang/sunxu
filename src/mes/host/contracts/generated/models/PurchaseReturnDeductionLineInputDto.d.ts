@@ -1,0 +1,18 @@
+export type PurchaseReturnDeductionLineInputDto = {
+    /**
+     * 扣款金额（正数，单位元）
+     */
+    amount: number;
+    /**
+     * 计算依据
+     */
+    basis?: string;
+    /**
+     * 扣款项目（字典 deduction_item 的 itemValue）
+     */
+    deductionItemCode: string;
+    /**
+     * 扣款行备注
+     */
+    remarks?: string;
+};

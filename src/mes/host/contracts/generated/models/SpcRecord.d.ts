@@ -1,0 +1,21 @@
+import type { Material } from './Material.d.ts';
+import type { QualityInspection } from './QualityInspection.d.ts';
+import type { QualityInspectionRecord } from './QualityInspectionRecord.d.ts';
+export type SpcRecord = {
+    characteristicName: string;
+    companyId: string;
+    createdAt: string;
+    id: string;
+    inspection?: QualityInspection | null;
+    inspectionId?: string | null;
+    inspectionMeasurement?: Record<string, any> | null;
+    inspectionMeasurementId?: string | null;
+    inspectionRecord?: QualityInspectionRecord | null;
+    inspectionRecordId?: string | null;
+    material?: Material;
+    materialId: string;
+    measuredValue: number;
+    recordedAt: string;
+    sampleGroup: number;
+    updatedAt: string;
+};

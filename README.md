@@ -1,58 +1,31 @@
 # 榫序 Sunxu
 
-**Sunxu 是面向 React Native / Expo 项目的共享组件系统。**
+**Sunxu 是面向 React Native / Expo 项目的共享组件包。**它整理跨业务基础 UI、MES 领域组件和宿主 App 集成，让多个 App 可以复用同一份组件代码和契约。
 
-它把多个 App 已经验证过的视觉基础、交互组件和可复用业务组件沉淀为一个可安装、可维护的公共依赖，让后续 RN 项目复用同一套组件实现和契约。
+## 当前迁移状态
 
-英文项目描述：**Sunxu — a shared component system for React Native apps.**
+MES 基线 `main-买断版本` 的固定提交 `e92d02d7cf2269cf8c564a60ff6a00255e903c8e` 已完整纳入：88 个 `src/components/**` 共享组件和 305 个 `src/screens/**/components/**` 页面私有组件，共 393 条逐文件迁移记录。来源工作区存在未提交改动，本次仅使用固定提交树。
 
-## 项目定位
+共享组件按职责从 `sunxu/core`、`sunxu/mes` 和 `sunxu/integrations/mes-app` 导入。页面私有组件保留在 `src/mes/screens/**`，不会从公开入口导出。完整来源、目标、摘要、宿主依赖和适配记录见 [`docs/migrations/mes-components.md`](./docs/migrations/mes-components.md) 与 [`docs/migrations/mes-components.json`](./docs/migrations/mes-components.json)。
 
-Sunxu 不是一个独立 App，也不是某一个 MES 或 CRM 的页面仓库。它是多个 RN App 共用的组件源码与发布包。
+TypeScript 项目检查已通过。真实页面渲染、截图和几何/溢出检查尚未执行，视觉验收状态为 **UNVERIFIED**。
 
-首批整理来源：
-
-- MES App 基线仓库：`../mes-app`
-- 东建 CRM App：`../dongjian-crm`
-
-MES 基线中可复用的组件要求完整盘点并纳入 Sunxu。MES 专属组件保留 MES 语义，按明确的子路径或模块分组导出；不能为了让组件看起来“通用”而删除业务能力，也不能把 MES 业务组件混进基础 UI 命名空间。CRM 组件也按同一原则归类。
-
-## 组件边界
-
-- **基础 UI**：文本、按钮、输入、标签、卡片、弹层、空态、加载态、筛选和布局等跨业务组件。
-- **交互组件**：日期选择、图片预览、扫码入口、底部操作栏等可复用交互。
-- **业务组件**：审批、物料、仓库、BOM 等有明确领域语义的组件。完整保留并放入领域模块，由使用方提供数据、权限判断和动作回调。
-- **App 集成组件**：更新检查、应用发布记录等依赖特定 App 生命周期或服务的模块。先完整盘点，作为显式集成模块处理，不从基础 UI 入口隐式加载副作用。
-
-Sunxu 只负责呈现和组件自身的交互契约。它不拥有宿主 App 的 API 客户端、登录会话、权限策略、业务状态机、导航树或业务数据；领域组件通过明确的 props、回调或宿主适配器接入这些能力。
-
-## 预期使用方式
-
-包名确定为无 scope 的 `sunxu`。组件 API 尚未实现，下面仅展示目标导入形式，不代表当前已有可安装版本：
+## 导入示例
 
 ```tsx
-import { AppText, EmptyState } from 'sunxu';
-import { ApprovalActionBar } from 'sunxu/mes';
-
-export function ExampleScreen() {
-  return <EmptyState title="暂无记录" />;
-}
+import { AppText, EmptyState, SunxuProvider } from 'sunxu';
+import { ApprovalActionBar, configureMesHostServices } from 'sunxu/mes';
+import { AppUpdateChecker } from 'sunxu/integrations/mes-app';
 ```
 
-目标是让新 App 先安装 Sunxu，再从基础入口或明确的领域子路径导入组件；不再从 MES/CRM App 源码目录复制同一组件。最终导出名、Peer Dependencies、Expo 支持范围和版本兼容表，应在完成组件清单与依赖盘点后确定。
+MES 组件由宿主注入 API client、服务实现、授权判断、Store、实时事件和文件下载能力。对应配置入口从 `sunxu/mes` 导入；集成组件单独从 `sunxu/integrations/mes-app` 引入。
 
-## 当前状态
+## 包与授权
 
-仓库目前只有项目说明，尚未迁入组件、创建 npm 包或发布版本。请勿把示例导入当作已实现 API。
-
-## 开源与发布
-
-发布前必须确认 MES 与 CRM 源代码的开源授权和组件再分发权，选定并添加适用的 `LICENSE`，并检查第三方依赖、字体、图标、图片和其他资源的许可证。当前来源仓库根目录未发现 `LICENSE` 文件，因此在权利和许可证得到明确处理前，不发布从来源仓库迁入的代码。
-
-无 scope 的 npm 包是公开包，由个人 npm 账号创建和管理。只有在包代码、许可证、包内容清单和发布身份都准备完成后，才发布 `sunxu`。
+`package.json` 当前设置 `private: true`、`license: UNLICENSED`，尚未发布。MES 来源仓库未发现明确许可证；在权利人确认再分发权并选定许可证前，不公开发布迁入代码。第三方运行时依赖以 peer dependency 声明，开发检查依赖单独列出。
 
 ## 开发入口
 
-- 面向使用者的定位与当前状态：本文件
-- 面向 Codex / agent 的实现边界与工作流程：[`AGENTS.md`](./AGENTS.md)
-- 组件来源、归类和迁移记录要求：[`docs/component-migration.md`](./docs/component-migration.md)
+- 项目目标和迁移边界：[`AGENTS.md`](./AGENTS.md)
+- MES 迁移记录：[`docs/component-migration.md`](./docs/component-migration.md)
+- 逐文件 MES 清单：[`docs/migrations/mes-components.md`](./docs/migrations/mes-components.md)
