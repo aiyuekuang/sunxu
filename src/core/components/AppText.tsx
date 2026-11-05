@@ -9,7 +9,7 @@ import { scaleTextStyle, useFontScale } from '../theme/font-scale';
  *
  * Usage: just change the import —
  *   import { Text } from 'react-native'
- *   → import { AppText as Text } from './AppText.tsx'
+ *   → import { AppText as Text } from './AppText'
  *
  * No other code changes required.
  */

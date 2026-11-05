@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { FontSize, HIT_SLOP, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
-import { AppText as Text } from './AppText.tsx';
+import { AppText as Text } from './AppText';
 
 export interface TabItem<T extends string = string> {
   key: T;

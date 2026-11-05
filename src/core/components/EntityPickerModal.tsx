@@ -12,14 +12,14 @@ import {
 } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { AppText as Text } from './AppText.tsx';
-import { EmptyState } from './EmptyState.tsx';
+import { AppText as Text } from './AppText';
+import { EmptyState } from './EmptyState';
 import { FontSize, HIT_SLOP, MIN_TOUCH_TARGET, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { hasMoreEntityPickerResults } from '../utils/entity-picker-pagination';
-import { BottomSheet } from './BottomSheet.tsx';
-import { FilterQuickControl } from './FilterQuickControl.tsx';
-import { SearchBar } from './SearchBar.tsx';
+import { BottomSheet } from './BottomSheet';
+import { FilterQuickControl } from './FilterQuickControl';
+import { SearchBar } from './SearchBar';
 
 export interface EntityPickerFetchParams {
   page: number;

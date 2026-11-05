@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import dayjs from 'dayjs';
 import { Platform, Pressable, StyleSheet, View } from 'react-native';
-import { AppText as Text } from './AppText.tsx';
-import { DatePickerField } from './DatePickerField.tsx';
+import { AppText as Text } from './AppText';
+import { DatePickerField } from './DatePickerField';
 import { FontSize, MIN_TOUCH_TARGET, MIN_TOUCH_TARGET_ANDROID } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 

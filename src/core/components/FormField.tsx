@@ -9,12 +9,12 @@ import {
   View,
   type ViewStyle,
 } from 'react-native';
-import { AppText as Text } from './AppText.tsx';
-import { useBottomSheetTextInput } from './BottomSheetContext.ts';
+import { AppText as Text } from './AppText';
+import { useBottomSheetTextInput } from './BottomSheetContext';
 import { FontSize, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { useScaledFontSize } from '../theme/font-scale';
-import { type FieldHelpContent, FormLabel } from './FormLabel.tsx';
+import { type FieldHelpContent, FormLabel } from './FormLabel';
 
 interface FormFieldProps extends TextInputProps {
   label: string;

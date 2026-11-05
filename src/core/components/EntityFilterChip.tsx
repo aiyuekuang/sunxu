@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, type ViewStyle } from 'react-native';
-import { AppText as Text } from './AppText.tsx';
+import { AppText as Text } from './AppText';
 import { FontSize, MIN_TOUCH_TARGET, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import {
@@ -9,8 +9,8 @@ import {
   type EntityPickerFetchFn,
   type EntityPickerQuickFilter,
   EntityPickerModal,
-} from './EntityPickerModal.tsx';
-import { FilterQuickControl } from './FilterQuickControl.tsx';
+} from './EntityPickerModal';
+import { FilterQuickControl } from './FilterQuickControl';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

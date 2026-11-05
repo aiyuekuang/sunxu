@@ -12,11 +12,11 @@ import {
   type ViewStyle,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { AppText as Text } from './AppText.tsx';
+import { AppText as Text } from './AppText';
 import { FontSize, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { now, today } from '../utils/date';
-import { type FieldHelpContent, FormLabel } from './FormLabel.tsx';
+import { type FieldHelpContent, FormLabel } from './FormLabel';
 
 export interface DatePickerFieldProps {
   label: string;

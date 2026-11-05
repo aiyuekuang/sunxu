@@ -5,9 +5,9 @@ import { StyleSheet, TouchableOpacity, View, type ViewStyle } from 'react-native
 import { FontSize, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { toast } from '../toast';
-import { AppText as Text } from './AppText.tsx';
-import { DrillDownTreePicker, type TreePickerNode } from './DrillDownTreePicker.tsx';
-import { ScanCameraModal } from './ScanCameraModal.tsx';
+import { AppText as Text } from './AppText';
+import { DrillDownTreePicker, type TreePickerNode } from './DrillDownTreePicker';
+import { ScanCameraModal } from './ScanCameraModal';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

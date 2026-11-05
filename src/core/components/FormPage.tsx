@@ -3,9 +3,9 @@ import { useRef } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { FontSize, Radius, Shadow, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
-import { AppText as Text } from './AppText.tsx';
-import { LoadingView } from './LoadingView.tsx';
-import { FormScreenContainer } from './ScreenContainer.tsx';
+import { AppText as Text } from './AppText';
+import { LoadingView } from './LoadingView';
+import { FormScreenContainer } from './ScreenContainer';
 
 interface FormPageProps {
   /** Page title */

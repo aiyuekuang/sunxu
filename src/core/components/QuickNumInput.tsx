@@ -1,10 +1,10 @@
 import { StyleSheet, TouchableOpacity, View, type ViewStyle } from 'react-native';
-import { useBottomSheetTextInput } from './BottomSheetContext.ts';
+import { useBottomSheetTextInput } from './BottomSheetContext';
 import { FontSize, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { useScaledFontSize } from '../theme/font-scale';
-import { AppText as Text } from './AppText.tsx';
-import { type FieldHelpContent, FormLabel } from './FormLabel.tsx';
+import { AppText as Text } from './AppText';
+import { type FieldHelpContent, FormLabel } from './FormLabel';
 
 interface QuickButton {
   label: string;

@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import type React from 'react';
 import { Pressable, StyleSheet, View, type ViewStyle } from 'react-native';
-import { AppText as Text } from './AppText.tsx';
+import { AppText as Text } from './AppText';
 import { FontSize, Radius, Shadow, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 

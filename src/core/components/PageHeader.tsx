@@ -8,7 +8,7 @@ import {
   type ViewStyle,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { AppText as Text } from './AppText.tsx';
+import { AppText as Text } from './AppText';
 import { FontSize, HIT_SLOP, MIN_TOUCH_TARGET, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 

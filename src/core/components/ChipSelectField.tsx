@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View, type ViewStyle } from 'react-native';
-import { AppText as Text } from './AppText.tsx';
-import { PickerField } from './PickerField.tsx';
+import { AppText as Text } from './AppText';
+import { PickerField } from './PickerField';
 import { FontSize, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
-import { type FieldHelpContent, FormLabel } from './FormLabel.tsx';
+import { type FieldHelpContent, FormLabel } from './FormLabel';
 
 /** 超过此数量的选项自动切换展示形态 */
 const CHIP_THRESHOLD = 10;

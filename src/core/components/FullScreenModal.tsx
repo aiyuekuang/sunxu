@@ -7,9 +7,9 @@ import Toast from 'react-native-toast-message';
 import { FontSize, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { toastConfig } from '../toast';
-import { AppText as Text } from './AppText.tsx';
+import { AppText as Text } from './AppText';
 import { ModalRequestCloseContext, useModalRequestCloseRegistry } from './ModalRequestCloseContext';
-import { PageHeader } from './PageHeader.tsx';
+import { PageHeader } from './PageHeader';
 
 export interface FullScreenModalProps {
   visible: boolean;

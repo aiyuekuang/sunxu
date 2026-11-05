@@ -2,7 +2,7 @@ import type React from 'react';
 import { type StyleProp, StyleSheet, TouchableOpacity, View, type ViewStyle } from 'react-native';
 import { FontSize, Radius, Shadow, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
-import { AppText as Text } from './AppText.tsx';
+import { AppText as Text } from './AppText';
 
 interface ListCardProps {
   onPress?: () => void;

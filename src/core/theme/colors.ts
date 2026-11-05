@@ -111,4 +111,16 @@ export const Colors = {
 } as const;
 
 export type ColorScheme = keyof typeof Colors;
-export type ThemeColors = typeof Colors.light | typeof Colors.dark;
+
+type StatusBarStyleValue = 'auto' | 'inverted' | 'light-content' | 'dark-content';
+
+/**
+ * Host apps supply their own brand palette through `SunxuProvider`, so theme
+ * values widen to `string` instead of the built-in literal colors. Only
+ * `statusBar` keeps a literal union because it feeds Expo's `StatusBar`.
+ */
+type WidenThemeColors<T> = {
+  readonly [K in keyof T]: K extends 'statusBar' ? StatusBarStyleValue : string;
+};
+
+export type ThemeColors = WidenThemeColors<typeof Colors.light>;

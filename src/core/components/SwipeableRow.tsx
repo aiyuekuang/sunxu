@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import type { SwipeableMethods } from 'react-native-gesture-handler/ReanimatedSwipeable';
-import { AppText as Text } from './AppText.tsx';
+import { AppText as Text } from './AppText';
 import { FontSize } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 

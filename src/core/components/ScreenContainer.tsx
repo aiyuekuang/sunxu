@@ -4,7 +4,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
 import { Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
-import { PageHeader } from './PageHeader.tsx';
+import { PageHeader } from './PageHeader';
 
 export type ScreenScrollMode = 'none' | 'scroll' | 'keyboard';
 

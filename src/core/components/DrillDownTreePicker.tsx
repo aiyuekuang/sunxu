@@ -14,8 +14,8 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FontSize, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
-import { AppText as Text } from './AppText.tsx';
-import { EmptyState } from './EmptyState.tsx';
+import { AppText as Text } from './AppText';
+import { EmptyState } from './EmptyState';
 
 /**
  * 下钻式树形选择器（DrillDownTreePicker）

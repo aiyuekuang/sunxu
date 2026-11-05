@@ -2,11 +2,11 @@ import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { useEffect, useState } from 'react';
 import { Alert, Image, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { AppText as Text } from './AppText.tsx';
+import { AppText as Text } from './AppText';
 import { FontSize, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { toast } from '../toast';
-import { ImagePreviewModal } from './ImagePreviewModal.tsx';
+import { ImagePreviewModal } from './ImagePreviewModal';
 
 /** 包装 async onPress 回调，捕获未处理的 rejection */
 const safeAsync = (fn: () => Promise<void>) => () => {

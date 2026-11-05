@@ -4,12 +4,12 @@ import { useState } from 'react';
 import { Modal, StyleSheet, TouchableOpacity, View, type ViewStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
-import { useBottomSheetTextInput } from './BottomSheetContext.ts';
+import { useBottomSheetTextInput } from './BottomSheetContext';
 import { FontSize, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { useScaledFontSize } from '../theme/font-scale';
 import { toast, toastConfig } from '../toast';
-import { AppText as Text } from './AppText.tsx';
+import { AppText as Text } from './AppText';
 
 interface ScanInputProps {
   label: string;

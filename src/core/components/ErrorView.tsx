@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
-import { EmptyState } from './EmptyState.tsx';
-import { PageHeader } from './PageHeader.tsx';
+import { EmptyState } from './EmptyState';
+import { PageHeader } from './PageHeader';
 import { useTheme } from '../theme/useTheme';
 
 // ─── Types ────────────────────────────────────────────────────────────────────

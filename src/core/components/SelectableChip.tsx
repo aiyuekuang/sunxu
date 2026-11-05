@@ -1,7 +1,7 @@
 import { type StyleProp, StyleSheet, TouchableOpacity, type ViewStyle } from 'react-native';
 import { FontSize, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
-import { AppText as Text } from './AppText.tsx';
+import { AppText as Text } from './AppText';
 
 export interface SelectableChipProps {
   label: string;

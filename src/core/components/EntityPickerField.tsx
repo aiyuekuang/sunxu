@@ -3,7 +3,7 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useState } from 'react';
 import { Modal, StyleSheet, TouchableOpacity, View, type ViewStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { AppText as Text } from './AppText.tsx';
+import { AppText as Text } from './AppText';
 import { FontSize, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import {
@@ -11,8 +11,8 @@ import {
   type EntityPickerFetchFn,
   type EntityPickerQuickFilter,
   EntityPickerModal,
-} from './EntityPickerModal.tsx';
-import { type FieldHelpContent, FormLabel } from './FormLabel.tsx';
+} from './EntityPickerModal';
+import { type FieldHelpContent, FormLabel } from './FormLabel';
 
 export interface EntityPickerFieldProps<T> {
   label: string;

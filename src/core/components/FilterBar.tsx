@@ -22,11 +22,11 @@ import {
 } from 'react-native';
 import { FontSize, MIN_TOUCH_TARGET, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
-import { AppText as Text } from './AppText.tsx';
-import { DatePickerField } from './DatePickerField.tsx';
-import { DateRangeQuickSelect } from './DateRangeQuickSelect.tsx';
-import { FilterActionButton } from './FilterActionButton.tsx';
-import { FilterQuickControl } from './FilterQuickControl.tsx';
+import { AppText as Text } from './AppText';
+import { DatePickerField } from './DatePickerField';
+import { DateRangeQuickSelect } from './DateRangeQuickSelect';
+import { FilterActionButton } from './FilterActionButton';
+import { FilterQuickControl } from './FilterQuickControl';
 
 export interface FilterOption {
   label: string;

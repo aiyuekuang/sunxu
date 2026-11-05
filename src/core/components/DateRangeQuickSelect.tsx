@@ -2,7 +2,7 @@ import dayjs, { type Dayjs } from 'dayjs';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { FontSize, MIN_TOUCH_TARGET, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
-import { AppText as Text } from './AppText.tsx';
+import { AppText as Text } from './AppText';
 
 export type DateRangeValue = [startDate: string, endDate: string];
 

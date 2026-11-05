@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Platform, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { AppText as Text } from './AppText.tsx';
+import { AppText as Text } from './AppText';
 import { MIN_TOUCH_TARGET, MIN_TOUCH_TARGET_ANDROID, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { BottomSheet } from './BottomSheet';

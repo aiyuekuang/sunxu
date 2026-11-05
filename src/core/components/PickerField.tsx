@@ -14,12 +14,12 @@ import {
   View,
   type ViewStyle,
 } from 'react-native';
-import { AppText as Text } from './AppText.tsx';
+import { AppText as Text } from './AppText';
 import { FontSize, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { useScaledFontSize } from '../theme/font-scale';
-import { useBottomSheetTextInput } from './BottomSheetContext.ts';
-import { type FieldHelpContent, FormLabel } from './FormLabel.tsx';
+import { useBottomSheetTextInput } from './BottomSheetContext';
+import { type FieldHelpContent, FormLabel } from './FormLabel';
 import { useModalRequestCloseContext } from './ModalRequestCloseContext';
 
 export interface PickerOption {

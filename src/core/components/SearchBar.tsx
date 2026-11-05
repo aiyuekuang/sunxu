@@ -5,7 +5,7 @@ import { Animated, StyleSheet, TouchableOpacity } from 'react-native';
 import { FontSize, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { useScaledFontSize } from '../theme/font-scale';
-import { useBottomSheetTextInput } from './BottomSheetContext.ts';
+import { useBottomSheetTextInput } from './BottomSheetContext';
 
 interface SearchBarProps {
   value: string;

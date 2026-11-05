@@ -1,8 +1,8 @@
 import type React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from '../theme/useTheme';
-import { EmptyState } from './EmptyState.tsx';
-import { PageHeader } from './PageHeader.tsx';
+import { EmptyState } from './EmptyState';
+import { PageHeader } from './PageHeader';
 
 interface PermissionGuardProps {
   /** Permission identifiers are interpreted by the host application. */

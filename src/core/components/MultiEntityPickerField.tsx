@@ -1,10 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View, type ViewStyle } from 'react-native';
-import { AppText as Text } from './AppText.tsx';
+import { AppText as Text } from './AppText';
 import { FontSize, MIN_TOUCH_TARGET, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
-import { type EntityPickerFetchFn, EntityPickerModal } from './EntityPickerModal.tsx';
+import { type EntityPickerFetchFn, EntityPickerModal } from './EntityPickerModal';
 
 export interface MultiEntityPickerFieldProps<T> {
   label: string;

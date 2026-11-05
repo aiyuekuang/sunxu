@@ -1,6 +1,6 @@
 import { StyleSheet, TouchableOpacity, View, type ViewStyle } from 'react-native';
 import { useSafeAreaFrame } from 'react-native-safe-area-context';
-import { AppText as Text } from './AppText.tsx';
+import { AppText as Text } from './AppText';
 import { FontSize, FontWeight, Radius, Shadow, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 

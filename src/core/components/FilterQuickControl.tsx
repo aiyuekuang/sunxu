@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { AppText as Text } from './AppText.tsx';
+import { AppText as Text } from './AppText';
 import { FontSize, MIN_TOUCH_TARGET, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 

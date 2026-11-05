@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { AppText as Text } from './AppText.tsx';
+import { AppText as Text } from './AppText';
 import { useTheme } from '../theme/useTheme';
 import { FontSize, Spacing, Radius } from '../theme/tokens';
 

@@ -62,3 +62,12 @@ CRM 与 MES 固定提交 `e92d02d7cf2269cf8c564a60ff6a00255e903c8e` 比较：84 
 逐项来源提交、当前工作树 SHA-256、来源依赖、目标、适配与排除理由见 [CRM 迁移清单](./migrations/crm-components.md) 和 [JSON 账本](./migrations/crm-components.json)。当前 CRM 工作树有 2 个未提交组件文件，按逐文件快照记录；CRM 仓库没有根 `LICENSE`，当前账本不代表对外再分发授权。
 
 本次组件 UI 的真实页面截图和几何/溢出证据未完成，视觉状态为 `UNVERIFIED`。一次 Expo Web `/`、375×812 CSS px 预检在 15 秒内没有呈现预期首屏，浏览器按一次性停止规则关闭；没有重试或保存截图/DOM。包和示例类型检查通过，Metro Web bundle 成功，但不代表视觉验收通过。详情及失败原因见 [CRM 迁移清单](./migrations/crm-components.md) 与 JSON 账本。
+
+## 2026-11-05 宿主主题类型与源码可移植性修复
+
+接入 `dongjian-crm` 宿主时发现两项可移植性问题并修复：
+
+- `ThemeColors` 原为 `typeof Colors.light | typeof Colors.dark` 字面量类型，宿主品牌色（如 CRM 深绿 `#007D35`）无法通过 `SunxuProvider.theme` 传入。已放宽为结构化映射类型：颜色值统一为 `string`，仅 `statusBar` 保留 `'auto' | 'inverted' | 'light-content' | 'dark-content'` 字面量联合以供 Expo `StatusBar` 消费。
+- 42 个源文件共 78 处相对 import 携带 `.ts/.tsx` 扩展名，要求每个消费方 tsconfig 开启 `allowImportingTsExtensions`。已全部去除扩展名，消费方无需额外 tsconfig 配置，Metro/Bundler 均可解析。
+
+两项变更不改变任何组件运行时行为与视觉表现，Sunxu 自身 `tsc --noEmit` 通过。CRM 宿主以打包产物与全量类型检查做接入验证。

@@ -22,8 +22,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 import { FontSize, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
-import { AppText as Text } from './AppText.tsx';
-import { BottomSheetInternalContext } from './BottomSheetContext.ts';
+import { AppText as Text } from './AppText';
+import { BottomSheetInternalContext } from './BottomSheetContext';
 import { useModalRequestCloseContext } from './ModalRequestCloseContext';
 
 interface BottomSheetProps {

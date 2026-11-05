@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, type ViewStyle } from 'react-native';
 import { FontSize, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
-import { AppText as Text } from './AppText.tsx';
-import { BottomSheet } from './BottomSheet.tsx';
+import { AppText as Text } from './AppText';
+import { BottomSheet } from './BottomSheet';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

@@ -7,7 +7,7 @@ import Toast from 'react-native-toast-message';
 import { FontSize, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { toast, toastConfig } from '../toast';
-import { AppText as Text } from './AppText.tsx';
+import { AppText as Text } from './AppText';
 
 interface ScanCameraModalProps {
   visible: boolean;

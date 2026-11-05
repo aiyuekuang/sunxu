@@ -3,8 +3,8 @@ import { useCallback } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { FontSize, HIT_SLOP, MIN_TOUCH_TARGET, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
-import { AppText as Text } from './AppText.tsx';
-import { BottomSheet } from './BottomSheet.tsx';
+import { AppText as Text } from './AppText';
+import { BottomSheet } from './BottomSheet';
 
 export type ListSortDirection = 'ASC' | 'DESC';
 
