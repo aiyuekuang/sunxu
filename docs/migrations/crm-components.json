@@ -4,7 +4,7 @@
   "source_branch": "main",
   "source_commit": "1732835a54ae62710089b0a5f096da76545bad2a",
   "source_worktree": "dirty; current tracked src/components/** snapshot recorded per file; source was read-only",
-  "source_worktree_diff_sha256": "1abc8269cf68fdfa3b346cacfa9bb4b61215414b34c172dd0506a24e552558fe",
+  "source_worktree_diff_sha256": "9a462c661760cfba8cdb88b615ebb38804efbb7280ca971f9b6b7d04f907cfb3",
   "source_dirty_component_files": [
     "src/components/crm/CallRecordingPlayer.tsx",
     "src/components/crm/CustomerTimelineSection.tsx"
@@ -81,7 +81,7 @@
     "ADDED": 2,
     "MERGED": 10
   },
-  "visual_status": "UNVERIFIED; Expo Catalog list/detail screens were rendered and inspected at 390x844, but screenshot images were not persisted and the new DateNavigator/DetailActionBar plus other changed states are not exercised by this route.",
+  "visual_status": "UNVERIFIED (current browser preflight BLOCKED): the one-shot Playwright navigation to examples/catalog at 375x812 did not render the expected first-screen title within 15 seconds; the browser was stopped without retry and no screenshot or DOM geometry was captured. Package/catalog typechecks and Metro web bundling succeeded. Native PhotoPicker permission, album multi-select, and cover ordering also remain UNVERIFIED.",
   "files": [
     {
       "source": "src/components/AppReleaseHistorySheet.tsx",
@@ -1892,7 +1892,7 @@
       "source": "src/components/crm/CustomerTimelineSection.tsx",
       "source_commit": "1732835a54ae62710089b0a5f096da76545bad2a",
       "source_state": "DIRTY_WORKTREE_SNAPSHOT",
-      "source_sha256": "41c8c294b8988c19da4ee40035dc6ac132970958582a678c59fb92cc7039f3a2",
+      "source_sha256": "c559cb9ecc7e17390a06457cddc234f930c5764f602a6a7d998ee9dd6e33dbc2",
       "source_commit_sha256": "dcc71c6f5f31a545f13a2b893d1259cf0b847f13e16dc025bc20a285c32ecfa9",
       "name": "CustomerTimelineSection",
       "layer": "crm-domain",
@@ -1917,7 +1917,7 @@
         "@/utils/business-date"
       ],
       "status": "EXCLUDED",
-      "evidence": "CRM source SHA-256 41c8c294b8988c19da4ee40035dc6ac132970958582a678c59fb92cc7039f3a2; source commit 1732835a54ae62710089b0a5f096da76545bad2a; working-tree snapshot; visual status UNVERIFIED.",
+      "evidence": "CRM source SHA-256 c559cb9ecc7e17390a06457cddc234f930c5764f602a6a7d998ee9dd6e33dbc2; source commit 1732835a54ae62710089b0a5f096da76545bad2a; working-tree snapshot; visual status UNVERIFIED.",
       "export_subpath": null,
       "adaptation": "CRM working-tree changes were audited by file hash; their customer/call/field-route behavior remains CRM-domain code and was not moved into generic core.",
       "host_adapter": [],
@@ -2424,7 +2424,40 @@
       "shadow* style props are deprecated. Use boxShadow."
     ],
     "screenshot_artifact": null,
-    "status": "PARTIAL_UNVERIFIED"
+    "status": "PARTIAL_UNVERIFIED",
+    "current_attempt": {
+      "app": "examples/catalog Expo Web",
+      "route": "http://localhost:8082/",
+      "review_date": "2026-11-05",
+      "viewport_css_px": [
+        375,
+        812
+      ],
+      "browser": "Playwright Chromium visible",
+      "access_mode": "public local demonstration; no authenticated session used",
+      "expected_first_screen": "客户档案",
+      "stop_condition": "one navigation only; stop on authentication signal, 401/403, or navigation/render timeout",
+      "status": "BLOCKED",
+      "reason": "The expected first-screen title did not become visible within 15 seconds. The browser was closed per the one-shot stop rule; no retry, screenshot, or DOM geometry was collected.",
+      "screenshot_artifact": null,
+      "dom_geometry": null,
+      "fallback_evidence": [
+        "root package typecheck passed",
+        "catalog TypeScript check passed",
+        "Metro web bundle completed"
+      ]
+    },
+    "added_demo_components": [
+      "DateNavigator",
+      "DetailActionBar",
+      "DatePickerField",
+      "SearchBar",
+      "StatusTabs",
+      "PickerField",
+      "EntityFilterChip category sidebar",
+      "PhotoPicker",
+      "FullScreenModal fill and immersive modes"
+    ]
   },
   "screen_private_scope": {
     "pattern": "src/screens/**/components/**",
@@ -2517,5 +2550,6 @@
     "cross_screen_reused_count": 0,
     "note": "Not promoted to Sunxu core. One component has no callers in src/screens.",
     "source_commit": "1732835a54ae62710089b0a5f096da76545bad2a"
-  }
+  },
+  "source_worktree_snapshot_date": "2026-11-05"
 }

@@ -21,7 +21,7 @@
 CRM 新增的两个通用组件已加入 `sunxu/core`：`DateNavigator` 与 `DetailActionBar`。已有通用控件吸收了日期标签、详情卡片布局、选择器分类侧栏、全屏弹窗填充与沉浸模式、照片多选/封面、搜索栏和状态标签增强，以及底部弹层输入法适配。CRM 业务特有差异不进入通用 API。
 20 个与 MES 同路径但内容不同的文件中，10 项通用改进已合并，3 项触控/筛选行为已在 Sunxu 存在，4 项保留 Sunxu 既有功能，另有 `AppUpdateChecker`、`MaterialPickerField`、`OnboardingGuide` 3 项因宿主服务、品牌流程或数据耦合留在 CRM。 CRM 最新提交新增的横屏路线地图沉浸展示仍留在 `FieldRouteDetailModal`：路线 API、AMap、WebView 和设备方向锁属于 CRM 宿主；其中通用的 `FullScreenModal` 沉浸填充能力已合入 Sunxu。
 
-UI 视觉状态：`UNVERIFIED`。已在 `examples/catalog` 的 Expo Web 路由 `/`、390×844 CSS px 视口下检查列表和详情页；搜索栏位于 `x=8,y=61,w=374,h=44`，筛选栏位于 `x=8,y=109,w=374,h=38`，首条结果卡片位于 `x=12,y=164,w=366,h=89`，详情区无文档溢出。页面截图在当前浏览器检查中可见，但未保存为工作区图片；新加的 `DateNavigator`、`DetailActionBar` 及其他未展示状态仍未渲染，因此总体保留 `UNVERIFIED`。浏览器另有 `shadow*` 样式弃用警告。完整几何数据见 JSON 账本。
+UI 视觉状态：`UNVERIFIED`（本次浏览器预检 `BLOCKED`）。`examples/catalog` 已增加组件示例页，覆盖 `DateNavigator`、`SearchBar`、分段 `StatusTabs`、`PickerField`、实体分类侧栏、`PhotoPicker` 布局和 `FullScreenModal` 的 fill/immersive 模式；详情页使用 `DetailActionBar` 展示动作溢出。一次性检查目标为 Expo Web `/`、375×812 CSS px；Playwright 在 15 秒内未看到预期的“客户档案”首屏，按预检规则停止浏览器，没有重开或重试，也没有保存截图或 DOM 几何。包与示例类型检查通过，Metro Web bundle 成功，但这些不能替代视觉验收。照片多选、权限和封面排序仍需 iOS/Android 相册环境验证，保持 `UNVERIFIED`。此前 390×844 的列表/详情局部几何记录和本次预检结果见 JSON 账本。
 
 许可证状态：CRM 仓库未发现根目录 `LICENSE`；该账本只作本地迁移记录，不构成公开再分发授权。
 
