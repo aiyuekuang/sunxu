@@ -116,4 +116,4 @@ API、筛选状态所有权、主题 token、标签顺序、计数徽标和触�
 
 CRM“客户 / 商机”导航的两个等宽 Tab 文字贴近格子左缘，而选中指示线按格子居中。根因是 underline Tab 使用横向 flex 布局但缺少主轴居中；在共享 `underlineTab` 增加 `justifyContent: 'center'`，不改 API、等分宽度、选中指示线、状态所有权或回调。Catalog 增加相同的两项导航示例。
 
-渲染与 DOM 几何记录见[StatusTabs underline 对齐验收](./verification/status-tabs-alignment-2026-11-06/README.md)。375×812、320×720 竖屏及切换交互通过；812×375 的示例截图未显示落在首屏以下的控件，因此该格标记 `UNVERIFIED`。CRM 认证路由与原生 iOS/Android 也未验证。Sunxu 源码已在 `21bda27` 推送；本次准备将修复包含在 `0.1.3` MIT 发布包并更新 CRM 精确依赖。
+渲染与 DOM 几何记录见[StatusTabs underline 对齐验收](./verification/status-tabs-alignment-2026-11-06/README.md)。375×812、320×720 竖屏及切换交互通过；812×375 的示例截图未显示落在首屏以下的控件，因此该格标记 `UNVERIFIED`。CRM 认证路由与原生 iOS/Android 也未验证。Sunxu 源码修复已在 `21bda27` 推送，MIT 元数据从 `0.1.3` 起生效；为兼容 CRM Expo `55.0.26`，`34f3a0f` 将 Expo peer 范围修正为 `~55.0.0`，并发布 `0.1.4`。CRM 已精确锁定 `sunxu@0.1.4`；干净安装、类型检查和 iOS JS bundle 导出通过，受保护的 CRM 认证路由仍为 `UNVERIFIED`。

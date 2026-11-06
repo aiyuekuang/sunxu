@@ -57,4 +57,6 @@ python3 /Users/suconnect/.codex/skills/ui-ux-pro-max/scripts/validate_spacing_au
 
 ## CRM 接入边界
 
-Sunxu 源码改动已在 `21bda27`（`origin/main`）中。用户于 2026-11-06 选定 MIT，修复将随 `0.1.3` 发布并更新 CRM 精确依赖。既有的 [CRM iPhone 17 pill 预览](../status-tabs.md)核验的是四项 pill 筛选样式，不是客户/商机 underline 导航。CRM 实际认证路由仍需在确认的测试会话中复核。
+Sunxu underline 居中修复在 `21bda27`（`origin/main`），MIT 元数据随 `0.1.3` 起公开发布。`0.1.3` 的 Expo peer 曾固定为 `~55.0.32`，与 CRM 的 Expo `55.0.26` 不兼容；`34f3a0f` 将 peer 范围改为 `~55.0.0`，并公开发布 `sunxu@0.1.4`。npm registry 已回读 `license=MIT`、`expo` peer `~55.0.0` 和 integrity `sha512-tlbN6GV8noRQZ75h4wFjQq1bfYy+IqrbWZZIhZcm8GhOS4bubwLKHIJVO27sPPT8FR3BErp4mzxiZcLXcJsEWA==`。CRM 已 pin 到 `0.1.4`；干净 `npm ci --ignore-scripts`、`npx tsc --noEmit` 与 `npx expo export --platform ios --output-dir /tmp/dongjian-crm-export --clear` 通过。该导出验证 JS bundle，不等同于原生 iOS 构建。
+
+既有的 [CRM iPhone 17 pill 预览](../status-tabs.md)核验的是四项 pill 筛选样式，不是客户/商机 underline 导航。CRM 实际认证路由仍需在有认证测试会话时复核；本次使用用户指定的独立 Catalog 作为视觉验证目标。真实 CRM 路由及原生 iOS/Android 对该 underline 页面仍标记 `UNVERIFIED`。

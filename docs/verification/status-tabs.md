@@ -52,6 +52,14 @@
 - **视觉结果**：绿色选中项和“全部 / 通话 / 跟进 / 其他”四个标签完整可见，轨道横向填满工具区；验收图只保留组件区域，不含客户资料。
 - **交互结果**：点击“通话”后该项成为唯一选中项，时间轴由 5 条变为 2 条；再点“全部”恢复默认选中及 5 条记录。
 - **截图**：[CRM iPhone 17 原生组件区域](./status-tabs/crm-iphone17-light.png)。
-- **限制**：当前本机 `node_modules` 是临时预览内容；正式 CRM 依赖仍为 `sunxu@0.1.2`。重新安装依赖会恢复注册表版本。正式升级需要完成 Sunxu 许可证门禁并发布精确版本。
+- **限制**：上述预览记录当时的本机 `node_modules` 与正式依赖状态；后续注册表版本升级见下方记录。
+
+## 2026-11-06 underline 修复的 CRM 精确依赖升级
+
+- **公开版本**：`sunxu@0.1.4`，MIT。`0.1.3` 的 Expo peer `~55.0.32` 与 CRM `expo@55.0.26` 不兼容；源仓 `34f3a0f` 将 peer 放宽到同一 55.0 patch 系列的 `~55.0.0` 后发布 `0.1.4`。npm registry 回读版本、许可证、peer 范围与 tarball integrity。
+- **CRM 安装**：`package.json` 与 `package-lock.json` 精确锁定 `0.1.4`；`npm ci --ignore-scripts` 成功，`npm ls sunxu --depth=0` 回读 `sunxu@0.1.4`，实际安装源码含 underline Tab 主轴居中修复。
+- **代码构建**：`npx tsc --noEmit` 通过；首次 iOS JS bundle 导出遇到旧 Metro cache/Expo CLI 异常，清空缓存后 `npx expo export --platform ios --output-dir /tmp/dongjian-crm-export --clear` 成功，输出 iOS bundle。该命令不替代原生 iOS 编译或上机验收。
+- **视觉边界**：客户/商机 underline 由独立 Catalog 的竖屏和切换交互证据覆盖；812×375 横屏示例控件落在首屏外，继续标记 `UNVERIFIED`。CRM 实际认证路由在本次未打开，原生 iOS/Android 该页面也未复核。
+- **安装提示**：干净 npm 安装报告 44 项依赖审计告警（2 low、20 moderate、20 high、2 critical）；本次没有升级或修复无关传递依赖。
 
 代码验证：Sunxu `npm run typecheck` 与 Catalog `npx tsc --noEmit --project examples/catalog/tsconfig.json` 通过；`git diff --check` 通过。未新增或运行单元测试。
