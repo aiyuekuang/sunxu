@@ -36,7 +36,7 @@
 - **状态交互**：点击“通话”后唯一选中项切换为“通话”；禁用示例中的“跟进”暴露 disabled，尝试点击后仍保持“全部”选中。
 - **主题**：浅色与深色均完成渲染；组件继续读取语义色 token。CRM 主色与白色 `textOnPrimary` 的源码对比度分别约 5.27:1（浅色 `#007D35`）及 5.35:1（深色 `#1F7A45`）。Catalog 自带的蓝色主题并非 CRM 品牌色，截图用于验证结构和几何。
 - **运行错误**：Playwright 页面错误 0 条。
-- **平台边界**：Expo Web 已有 E2 几何和 E3 点击/状态证据；原生 iOS/Android 渲染、系统字体最大缩放和实际命中框标记为 `UNVERIFIED`。
+- **平台边界**：Expo Web 已有 E2 几何和 E3 点击/状态证据；iPhone 17 / iOS 26.1 原生渲染和筛选切换已在 CRM 页面核验。Android、系统字体最大缩放及原生实际命中框尺寸仍为 `UNVERIFIED`。
 
 截图：
 
@@ -44,5 +44,14 @@
 - [375×812 深色](./status-tabs/375-dark.png)
 - [320×720 浅色](./status-tabs/320-light.png)
 - [812×375 横屏浅色](./status-tabs/812-landscape-light.png)
+
+## CRM iOS 模拟器补充验收
+
+- **页面/设备**：CRM「客户详情」→「客户时间轴」；iPhone 17，iOS 26.1，模拟器截图原始尺寸 1206×2622 px。
+- **预览来源**：从 Sunxu 提交 `21bda27` 打包的本地 tarball 临时替换 CRM `node_modules/sunxu`，由现有 Expo 开发服务刷新；CRM `package.json` 与 `package-lock.json` 未修改，npm 未发布。该预览用于验证源组件在宿主页面的实际渲染，不代表 CRM 已升级正式依赖。
+- **视觉结果**：绿色选中项和“全部 / 通话 / 跟进 / 其他”四个标签完整可见，轨道横向填满工具区；验收图只保留组件区域，不含客户资料。
+- **交互结果**：点击“通话”后该项成为唯一选中项，时间轴由 5 条变为 2 条；再点“全部”恢复默认选中及 5 条记录。
+- **截图**：[CRM iPhone 17 原生组件区域](./status-tabs/crm-iphone17-light.png)。
+- **限制**：当前本机 `node_modules` 是临时预览内容；正式 CRM 依赖仍为 `sunxu@0.1.2`。重新安装依赖会恢复注册表版本。正式升级需要完成 Sunxu 许可证门禁并发布精确版本。
 
 代码验证：Sunxu `npm run typecheck` 与 Catalog `npx tsc --noEmit --project examples/catalog/tsconfig.json` 通过；`git diff --check` 通过。未新增或运行单元测试。
