@@ -1,6 +1,6 @@
 # StatusTabs underline 对齐修复验收
 
-**状态：PASS WITH UNVERIFIED。** 375×812 与 320×720 的可见渲染、几何和选择交互通过；812×375 的 DOM 几何通过，但 catalog 示例把该控件排在可视区以下，截图未显示控件。CRM 真机路由和原生 iOS/Android 未打开验证。
+**状态：PASS WITH UNVERIFIED。** 375×812 与 320×720 的可见渲染、几何和选择交互通过；812×375 的 DOM 几何通过，但 catalog 示例把该控件排在可视区以下，截图未显示控件。CRM 客户/商机 underline 路由没有在真机复核；已存在的 iPhone 17 pill 变体预览不覆盖此次 underline 对齐。
 
 ## 目标与范围
 
@@ -34,7 +34,7 @@ CRM 销售人员在手机上切换“客户 / 商机”记录列表，再搜索�
 | 320×720 / 客户选中 | 两格各 124px；文字和选中线中心偏差均为 0px；页面与控件无横向溢出 | PASS |
 | 812×375 / 客户选中 | DOM 两格各 370px、文字中心偏差均为 0px；但示例页面将该控件排在可视区以下，截图无法检查实际绘制 | UNVERIFIED |
 | CRM `CustomersTab → Customers` / iOS 原生 | 页面源码确认使用 `CustomerOpportunityTabs`，但未使用个人登录态打开路由 | BLOCKED：没有经确认的认证测试会话 |
-| iOS / Android 原生控件与读屏 | 本次仅运行 Expo Web catalog | UNVERIFIED |
+| iOS / Android 原生 underline 控件与读屏 | 本次对齐验收仅运行 Expo Web catalog；iPhone 17 上另有 StatusTabs pill 变体预览，但不是 underline 变体 | UNVERIFIED |
 
 移动端可见截图：
 
@@ -57,4 +57,4 @@ python3 /Users/suconnect/.codex/skills/ui-ux-pro-max/scripts/validate_spacing_au
 
 ## CRM 接入边界
 
-Sunxu 源码改动已在 `21bda27`（`origin/main`）中。CRM 当前安装的 `sunxu@0.1.2` 尚未包含此提交；由于 Sunxu 当前包许可证为 `UNLICENSED`，项目发布规范要求先确认可再分发权和许可证，故本次没有发布 npm 包或改动 CRM 锁文件。原生 CRM 页面要拿到该修复，仍需完成受许可约束的版本发布与精确依赖升级，再在确认的测试会话中复核实际路由。
+Sunxu 源码改动已在 `21bda27`（`origin/main`）中。CRM 当前安装的 `sunxu@0.1.2` 尚未包含此提交；由于 Sunxu 当前包许可证为 `UNLICENSED`，项目发布规范要求先确认可再分发权和许可证，故本次没有发布 npm 包或改动 CRM 锁文件。既有的 [CRM iPhone 17 pill 预览](../status-tabs.md)核验的是四项 pill 筛选样式，不是客户/商机 underline 导航。CRM 实际路由要拿到该修复，仍需完成受许可约束的版本发布与精确依赖升级，再在确认的测试会话中复核。
