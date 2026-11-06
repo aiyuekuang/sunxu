@@ -48,8 +48,8 @@ Sunxu 面向多个 React Native / Expo App，提供跨业务可组合的 UI 控�
 ## 验证、授权与发布
 
 - 类型检查不能代替 UI 验收；UI 变更应在可运行示例或真实宿主页面、实际视口及相关状态中检查，并记录截图和几何/溢出数据。
-- `sunxu@0.1.0` 已发布到公开 npm，当前 `license` 为 `UNLICENSED`，不授予一般使用或再分发许可。后续公开版本需先确认来源代码及第三方资产的再分发权，并由用户选定许可证。包文件白名单仅包含运行时代码、README 和许可证文件。
-- 按项目约定在 `main` 开发、提交并推送通过验证的当前任务变更；公开 npm 发布仍受上一条许可证与再分发权要求约束。
+- 用户于 2026-11-06 选定 MIT，Sunxu 从 `0.1.3` 起使用根目录 `LICENSE` 和 package 元数据 `MIT` 公开发布；`0.1.0`–`0.1.2` 保留各自发布时的 `UNLICENSED` 元数据。包文件白名单仅包含运行时代码、README 和许可证文件，peer dependencies 不捆绑。
+- 按项目约定在 `main` 开发、提交并推送通过验证的当前任务变更；未来新增第三方代码或资产仍须单独核实再分发权与版权声明。
 
 ## CRM 来源组件盘点与合入结果
 
@@ -110,10 +110,10 @@ CRM 宿主对 49 个再导出组件与来源基线逐文件比对后，修正与
 
 API、筛选状态所有权、主题 token、标签顺序、计数徽标和触控补偿保持不变。Catalog 增加与 CRM 时间轴相同的四项 Pill 示例及禁用态示例，供后续复核。
 
-验收记录见[StatusTabs 布局与状态验收](./verification/status-tabs.md)，包含 Expo Web 375×812、320×720、812×375 浅/深色渲染、几何/溢出、选择切换和禁用态证据。原生 iOS/Android 触控范围仍为 `UNVERIFIED`。Sunxu npm 当前为 `UNLICENSED`；按授权门禁，新的公开 npm 版本和 CRM 精确依赖升级须等用户选定许可证后进行。
+验收记录见[StatusTabs 布局与状态验收](./verification/status-tabs.md)，包含 Expo Web 375×812、320×720、812×375 浅/深色渲染、几何/溢出、选择切换和禁用态证据。原生 iOS/Android 触控范围仍为 `UNVERIFIED`。`0.1.0`–`0.1.2` 发布包标记 `UNLICENSED`；用户已选定新版本使用 MIT。
 
 ## 2026-11-06 StatusTabs underline 标签居中修复
 
 CRM“客户 / 商机”导航的两个等宽 Tab 文字贴近格子左缘，而选中指示线按格子居中。根因是 underline Tab 使用横向 flex 布局但缺少主轴居中；在共享 `underlineTab` 增加 `justifyContent: 'center'`，不改 API、等分宽度、选中指示线、状态所有权或回调。Catalog 增加相同的两项导航示例。
 
-渲染与 DOM 几何记录见[StatusTabs underline 对齐验收](./verification/status-tabs-alignment-2026-11-06/README.md)。375×812、320×720 竖屏及切换交互通过；812×375 的示例截图未显示落在首屏以下的控件，因此该格标记 `UNVERIFIED`。CRM 认证路由与原生 iOS/Android 也未验证。Sunxu 源码已在 `21bda27` 推送；当前 `sunxu@0.1.2` 发布包尚未包含修复，受 `UNLICENSED` 发布门禁约束，本次未发 npm 包或更新 CRM 依赖。
+渲染与 DOM 几何记录见[StatusTabs underline 对齐验收](./verification/status-tabs-alignment-2026-11-06/README.md)。375×812、320×720 竖屏及切换交互通过；812×375 的示例截图未显示落在首屏以下的控件，因此该格标记 `UNVERIFIED`。CRM 认证路由与原生 iOS/Android 也未验证。Sunxu 源码已在 `21bda27` 推送；本次准备将修复包含在 `0.1.3` MIT 发布包并更新 CRM 精确依赖。

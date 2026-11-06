@@ -57,4 +57,4 @@ python3 /Users/suconnect/.codex/skills/ui-ux-pro-max/scripts/validate_spacing_au
 
 ## CRM 接入边界
 
-Sunxu 源码改动已在 `21bda27`（`origin/main`）中。CRM 当前安装的 `sunxu@0.1.2` 尚未包含此提交；由于 Sunxu 当前包许可证为 `UNLICENSED`，项目发布规范要求先确认可再分发权和许可证，故本次没有发布 npm 包或改动 CRM 锁文件。既有的 [CRM iPhone 17 pill 预览](../status-tabs.md)核验的是四项 pill 筛选样式，不是客户/商机 underline 导航。CRM 实际路由要拿到该修复，仍需完成受许可约束的版本发布与精确依赖升级，再在确认的测试会话中复核。
+Sunxu 源码改动已在 `21bda27`（`origin/main`）中。用户于 2026-11-06 选定 MIT，修复将随 `0.1.3` 发布并更新 CRM 精确依赖。既有的 [CRM iPhone 17 pill 预览](../status-tabs.md)核验的是四项 pill 筛选样式，不是客户/商机 underline 导航。CRM 实际认证路由仍需在确认的测试会话中复核。

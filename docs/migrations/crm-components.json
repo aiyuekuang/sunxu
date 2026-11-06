@@ -17,7 +17,7 @@
   "source_scope": [
     "src/components/**"
   ],
-  "source_license": "No root LICENSE found; do not publicly redistribute without rights-holder confirmation and a selected license.",
+  "source_license": "CRM had no root LICENSE at migration time. On 2026-11-06 the user selected MIT for the retained Sunxu package source; this does not license excluded CRM files or future third-party assets.",
   "mes_comparison": {
     "repository": "../mes-app",
     "branch": "main-买断版本",

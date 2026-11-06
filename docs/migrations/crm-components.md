@@ -23,7 +23,7 @@ CRM 新增的两个通用组件已加入 `sunxu/core`：`DateNavigator` 与 `Det
 
 UI 视觉状态：`UNVERIFIED`（本次浏览器预检 `BLOCKED`）。`examples/catalog` 已增加组件示例页，覆盖 `DateNavigator`、`SearchBar`、分段 `StatusTabs`、`PickerField`、实体分类侧栏、`PhotoPicker` 布局和 `FullScreenModal` 的 fill/immersive 模式；详情页使用 `DetailActionBar` 展示动作溢出。一次性检查目标为 Expo Web `/`、375×812 CSS px；Playwright 在 15 秒内未看到预期的“客户档案”首屏，按预检规则停止浏览器，没有重开或重试，也没有保存截图或 DOM 几何。包与示例类型检查通过，Metro Web bundle 成功，但这些不能替代视觉验收。照片多选、权限和封面排序仍需 iOS/Android 相册环境验证，保持 `UNVERIFIED`。此前 390×844 的列表/详情局部几何记录和本次预检结果见 JSON 账本。
 
-许可证状态：CRM 仓库未发现根目录 `LICENSE`；该账本只作本地迁移记录，不构成公开再分发授权。
+许可证状态：迁移时 CRM 仓库未发现根目录 `LICENSE`。用户于 2026-11-06 选择对保留在 Sunxu 包中的源码采用 MIT；该授权不覆盖未迁入的 CRM 文件，未来新增第三方源码或资产仍需单独核实许可。
 
 ## 逐文件结果
 

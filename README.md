@@ -67,7 +67,7 @@ Expo Web 示例已在 375×812 竖屏、812×375 横屏和浅/深主题下渲染
 
 ## 包与授权
 
-[`sunxu@0.1.0`](https://www.npmjs.com/package/sunxu) 已发布到公开 npm。当前许可证仍标记为 `UNLICENSED`，不授予使用者一般使用或再分发许可；后续版本需先选定许可证。发布包仅包含 `src/`、本 README 和许可证文件，不包含迁移账本、项目指令或示例 App。
+[`sunxu@0.1.3`](https://www.npmjs.com/package/sunxu) 起采用 MIT 许可证，允许使用者使用、复制、修改、分发、再许可和销售软件副本，并须随副本保留版权与许可声明。`0.1.0`–`0.1.2` 保留各自发布时的 `UNLICENSED` 元数据。发布包仅包含 `src/`、本 README 和根目录 `LICENSE`；peer dependencies 由使用方安装，不捆绑进包。
 
 ## 开发入口
 
