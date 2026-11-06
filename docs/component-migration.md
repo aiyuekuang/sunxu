@@ -111,3 +111,9 @@ CRM 宿主对 49 个再导出组件与来源基线逐文件比对后，修正与
 API、筛选状态所有权、主题 token、标签顺序、计数徽标和触控补偿保持不变。Catalog 增加与 CRM 时间轴相同的四项 Pill 示例及禁用态示例，供后续复核。
 
 验收记录见[StatusTabs 布局与状态验收](./verification/status-tabs.md)，包含 Expo Web 375×812、320×720、812×375 浅/深色渲染、几何/溢出、选择切换和禁用态证据。原生 iOS/Android 触控范围仍为 `UNVERIFIED`。Sunxu npm 当前为 `UNLICENSED`；按授权门禁，新的公开 npm 版本和 CRM 精确依赖升级须等用户选定许可证后进行。
+
+## 2026-11-06 StatusTabs underline 标签居中修复
+
+CRM“客户 / 商机”导航的两个等宽 Tab 文字贴近格子左缘，而选中指示线按格子居中。根因是 underline Tab 使用横向 flex 布局但缺少主轴居中；在共享 `underlineTab` 增加 `justifyContent: 'center'`，不改 API、等分宽度、选中指示线、状态所有权或回调。Catalog 增加相同的两项导航示例。
+
+渲染与 DOM 几何记录见[StatusTabs underline 对齐验收](./verification/status-tabs-alignment-2026-11-06/README.md)。375×812、320×720 竖屏及切换交互通过；812×375 的示例截图未显示落在首屏以下的控件，因此该格标记 `UNVERIFIED`。CRM 认证路由与原生 iOS/Android 也未验证。Sunxu 源码已在 `21bda27` 推送；当前 `sunxu@0.1.2` 发布包尚未包含修复，受 `UNLICENSED` 发布门禁约束，本次未发 npm 包或更新 CRM 依赖。

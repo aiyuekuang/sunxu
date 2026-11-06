@@ -1,0 +1,381 @@
+{
+  "schema_version": 1,
+  "target": "http://localhost:5001/",
+  "route_state": "catalog components example, Customer Opportunity underline tabs",
+  "surface_frame_gate": {
+    "status": "NOT APPLICABLE",
+    "reason": "The audited unit is a single inline control; it has no distinct workspace background and primary panel frame relationship.",
+    "rows": []
+  },
+  "interaction": {
+    "action": "Select 商机, verify aria-selected and label centering, then restore 客户",
+    "result": "PASS",
+    "geometry": {
+      "selected": "true",
+      "label": "商机",
+      "tabRect": {
+        "left": 187.5,
+        "top": 427.5,
+        "right": 339,
+        "bottom": 464.5,
+        "width": 151.5,
+        "height": 37
+      },
+      "labelRect": {
+        "left": 248.25,
+        "top": 435.5,
+        "right": 278.25,
+        "bottom": 456.5,
+        "width": 30,
+        "height": 21
+      },
+      "labelCenterDeltaPx": 0
+    },
+    "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/status-tabs-alignment-2026-11-06/375x812-opportunities.png",
+    "screenshot_sha256": "8c66bcbaabd22cc78de0ca98683d35c05177494f520d9d533226230e78d8d0cf"
+  },
+  "seams": [
+    {
+      "route": "/ (catalog components example)",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "state": "customers selected",
+      "previous": "客户 tab cell",
+      "next": "商机 tab cell",
+      "axis": "horizontal",
+      "previous_rect": {
+        "left": 36,
+        "top": 427.5,
+        "right": 187.5,
+        "bottom": 464.5,
+        "width": 151.5,
+        "height": 37
+      },
+      "next_rect": {
+        "left": 187.5,
+        "top": 427.5,
+        "right": 339,
+        "bottom": 464.5,
+        "width": 151.5,
+        "height": 37
+      },
+      "gap_px": 0,
+      "expected": {
+        "kind": "contract",
+        "value": "Non-scrollable underline tabs equally divide the available width; zero inter-cell gap is intentional",
+        "source": "src/core/components/StatusTabs.tsx: underlineWrapper/underlineTab"
+      },
+      "executed_command": "Playwright visible browser, Expo Web catalog at localhost:5001; DOM getBoundingClientRect + computed scroll metrics",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/status-tabs-alignment-2026-11-06/375x812-customers.png",
+      "screenshot_sha256": "6f18bbad9240110b438713f06f32364084aafd7956d96e01a65b1bfce623da6c",
+      "status": "PASS",
+      "visual": {
+        "status": "PASS",
+        "method": "settled unannotated screenshot inspection; cells are one joined navigation strip",
+        "relationship": "joined",
+        "exception": "客户 and 商机 are adjacent cells in one shared underline navigation strip; their common bottom rule and selected underline establish the composite boundary."
+      },
+      "observations": {
+        "container_rect": {
+          "left": 28,
+          "top": 399.5,
+          "right": 347,
+          "bottom": 465.5,
+          "width": 319,
+          "height": 66
+        },
+        "container_scroll_width": 319,
+        "container_client_width": 319,
+        "document_metrics": {
+          "viewportWidth": 375,
+          "documentScrollWidth": 375
+        },
+        "tabs": [
+          {
+            "label": "客户",
+            "selected": "true",
+            "tabRect": {
+              "left": 36,
+              "top": 427.5,
+              "right": 187.5,
+              "bottom": 464.5,
+              "width": 151.5,
+              "height": 37
+            },
+            "labelRect": {
+              "left": 96.75,
+              "top": 435.5,
+              "right": 126.75,
+              "bottom": 456.5,
+              "width": 30,
+              "height": 21
+            },
+            "indicatorRect": {
+              "left": 44,
+              "top": 462.5,
+              "right": 179.5,
+              "bottom": 464.5,
+              "width": 135.5,
+              "height": 2
+            },
+            "labelCenterDeltaPx": 0,
+            "indicatorCenterDeltaPx": 0
+          },
+          {
+            "label": "商机",
+            "selected": "false",
+            "tabRect": {
+              "left": 187.5,
+              "top": 427.5,
+              "right": 339,
+              "bottom": 464.5,
+              "width": 151.5,
+              "height": 37
+            },
+            "labelRect": {
+              "left": 248.25,
+              "top": 435.5,
+              "right": 278.25,
+              "bottom": 456.5,
+              "width": 30,
+              "height": 21
+            },
+            "indicatorRect": null,
+            "labelCenterDeltaPx": 0,
+            "indicatorCenterDeltaPx": null
+          }
+        ]
+      }
+    },
+    {
+      "route": "/ (catalog components example)",
+      "viewport": {
+        "width": 320,
+        "height": 720
+      },
+      "state": "customers selected",
+      "previous": "客户 tab cell",
+      "next": "商机 tab cell",
+      "axis": "horizontal",
+      "previous_rect": {
+        "left": 36,
+        "top": 440.5,
+        "right": 160,
+        "bottom": 477.5,
+        "width": 124,
+        "height": 37
+      },
+      "next_rect": {
+        "left": 160,
+        "top": 440.5,
+        "right": 284,
+        "bottom": 477.5,
+        "width": 124,
+        "height": 37
+      },
+      "gap_px": 0,
+      "expected": {
+        "kind": "contract",
+        "value": "Non-scrollable underline tabs equally divide the available width; zero inter-cell gap is intentional",
+        "source": "src/core/components/StatusTabs.tsx: underlineWrapper/underlineTab"
+      },
+      "executed_command": "Playwright visible browser, Expo Web catalog at localhost:5001; DOM getBoundingClientRect + computed scroll metrics",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/status-tabs-alignment-2026-11-06/320x720-customers.png",
+      "screenshot_sha256": "dc005b186f82621b289ab359aa9412dc20ef730537818b659d1fbd80e1c02f00",
+      "status": "PASS",
+      "visual": {
+        "status": "PASS",
+        "method": "settled unannotated screenshot inspection; cells are one joined navigation strip",
+        "relationship": "joined",
+        "exception": "客户 and 商机 are adjacent cells in one shared underline navigation strip; their common bottom rule and selected underline establish the composite boundary."
+      },
+      "observations": {
+        "container_rect": {
+          "left": 28,
+          "top": 412.5,
+          "right": 292,
+          "bottom": 478.5,
+          "width": 264,
+          "height": 66
+        },
+        "container_scroll_width": 264,
+        "container_client_width": 264,
+        "document_metrics": {
+          "viewportWidth": 320,
+          "documentScrollWidth": 320
+        },
+        "tabs": [
+          {
+            "label": "客户",
+            "selected": "true",
+            "tabRect": {
+              "left": 36,
+              "top": 440.5,
+              "right": 160,
+              "bottom": 477.5,
+              "width": 124,
+              "height": 37
+            },
+            "labelRect": {
+              "left": 83,
+              "top": 448.5,
+              "right": 113,
+              "bottom": 469.5,
+              "width": 30,
+              "height": 21
+            },
+            "indicatorRect": {
+              "left": 44,
+              "top": 475.5,
+              "right": 152,
+              "bottom": 477.5,
+              "width": 108,
+              "height": 2
+            },
+            "labelCenterDeltaPx": 0,
+            "indicatorCenterDeltaPx": 0
+          },
+          {
+            "label": "商机",
+            "selected": "false",
+            "tabRect": {
+              "left": 160,
+              "top": 440.5,
+              "right": 284,
+              "bottom": 477.5,
+              "width": 124,
+              "height": 37
+            },
+            "labelRect": {
+              "left": 207,
+              "top": 448.5,
+              "right": 237,
+              "bottom": 469.5,
+              "width": 30,
+              "height": 21
+            },
+            "indicatorRect": null,
+            "labelCenterDeltaPx": 0,
+            "indicatorCenterDeltaPx": null
+          }
+        ]
+      }
+    },
+    {
+      "route": "/ (catalog components example)",
+      "viewport": {
+        "width": 812,
+        "height": 375
+      },
+      "state": "customers selected",
+      "previous": "客户 tab cell",
+      "next": "商机 tab cell",
+      "axis": "horizontal",
+      "previous_rect": {
+        "left": 36,
+        "top": 427.5,
+        "right": 406,
+        "bottom": 464.5,
+        "width": 370,
+        "height": 37
+      },
+      "next_rect": {
+        "left": 406,
+        "top": 427.5,
+        "right": 776,
+        "bottom": 464.5,
+        "width": 370,
+        "height": 37
+      },
+      "gap_px": 0,
+      "expected": {
+        "kind": "contract",
+        "value": "Non-scrollable underline tabs equally divide the available width; zero inter-cell gap is intentional",
+        "source": "src/core/components/StatusTabs.tsx: underlineWrapper/underlineTab"
+      },
+      "executed_command": "Playwright visible browser, Expo Web catalog at localhost:5001; DOM getBoundingClientRect + computed scroll metrics",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/status-tabs-alignment-2026-11-06/812x375-customers.png",
+      "screenshot_sha256": "61a0bded968110526669196fa3fbf6224ea2c5b2a0b758bbcc8ef78629de3685",
+      "status": "UNVERIFIED",
+      "visual": {
+        "status": "UNVERIFIED",
+        "method": "settled screenshot inspection; the tabs are below the visible viewport in the catalog's short landscape layout, so their paint could not be inspected",
+        "relationship": "joined",
+        "exception": "客户 and 商机 are adjacent cells in one shared underline navigation strip; their common bottom rule and selected underline establish the composite boundary."
+      },
+      "observations": {
+        "container_rect": {
+          "left": 28,
+          "top": 399.5,
+          "right": 784,
+          "bottom": 465.5,
+          "width": 756,
+          "height": 66
+        },
+        "container_scroll_width": 756,
+        "container_client_width": 756,
+        "document_metrics": {
+          "viewportWidth": 812,
+          "documentScrollWidth": 812
+        },
+        "tabs": [
+          {
+            "label": "客户",
+            "selected": "true",
+            "tabRect": {
+              "left": 36,
+              "top": 427.5,
+              "right": 406,
+              "bottom": 464.5,
+              "width": 370,
+              "height": 37
+            },
+            "labelRect": {
+              "left": 206,
+              "top": 435.5,
+              "right": 236,
+              "bottom": 456.5,
+              "width": 30,
+              "height": 21
+            },
+            "indicatorRect": {
+              "left": 44,
+              "top": 462.5,
+              "right": 398,
+              "bottom": 464.5,
+              "width": 354,
+              "height": 2
+            },
+            "labelCenterDeltaPx": 0,
+            "indicatorCenterDeltaPx": 0
+          },
+          {
+            "label": "商机",
+            "selected": "false",
+            "tabRect": {
+              "left": 406,
+              "top": 427.5,
+              "right": 776,
+              "bottom": 464.5,
+              "width": 370,
+              "height": 37
+            },
+            "labelRect": {
+              "left": 576,
+              "top": 435.5,
+              "right": 606,
+              "bottom": 456.5,
+              "width": 30,
+              "height": 21
+            },
+            "indicatorRect": null,
+            "labelCenterDeltaPx": 0,
+            "indicatorCenterDeltaPx": null
+          }
+        ]
+      }
+    }
+  ]
+}
