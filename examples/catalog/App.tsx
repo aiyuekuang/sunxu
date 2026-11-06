@@ -37,6 +37,8 @@ import { VisualExamples } from './VisualExamples';
 type ScreenKey = 'list' | 'form' | 'detail' | 'components' | 'visuals';
 type CustomerStatus = 'all' | 'active' | 'paused';
 type ComponentStatus = 'all' | 'waiting' | 'done';
+type TimelineFilterDemo = 'all' | 'calls' | 'followups' | 'others';
+type CustomerOpportunityDemo = 'customers' | 'opportunities';
 
 const screenTabs: { key: ScreenKey; label: string }[] = [
   { key: 'list', label: '列表' },
@@ -61,6 +63,22 @@ const componentTabs: TabItem<ComponentStatus>[] = [
   { key: 'all', label: '全部', count: 24 },
   { key: 'waiting', label: '待跟进', count: 6 },
   { key: 'done', label: '已完成', count: 18 },
+];
+
+const timelineFilterTabs: TabItem<TimelineFilterDemo>[] = [
+  { key: 'all', label: '全部' },
+  { key: 'calls', label: '通话' },
+  { key: 'followups', label: '跟进' },
+  { key: 'others', label: '其他' },
+];
+
+const disabledTimelineFilterTabs = timelineFilterTabs.map((tab) =>
+  tab.key === 'followups' ? { ...tab, disabled: true } : tab,
+);
+
+const customerOpportunityTabs: TabItem<CustomerOpportunityDemo>[] = [
+  { key: 'customers', label: '客户' },
+  { key: 'opportunities', label: '商机' },
 ];
 
 const pickerOptions: PickerOption[] = [
@@ -133,6 +151,9 @@ function ComponentExamples({
   const { colors } = useTheme();
   const [date, setDate] = useState(today);
   const [status, setStatus] = useState<ComponentStatus>('all');
+  const [timelineFilter, setTimelineFilter] = useState<TimelineFilterDemo>('all');
+  const [disabledTimelineFilter, setDisabledTimelineFilter] = useState<TimelineFilterDemo>('all');
+  const [customerOpportunity, setCustomerOpportunity] = useState<CustomerOpportunityDemo>('customers');
   const [search, setSearch] = useState('');
   const [pickerValue, setPickerValue] = useState('lin');
   const [entityValue, setEntityValue] = useState<EntityFilterValue | null>(null);
@@ -188,6 +209,36 @@ function ComponentExamples({
             variant="segment"
             countBadge
             density="compact"
+          />
+        </View>
+
+        <View style={styles.componentSection} testID="demo-status-tabs-pill">
+          <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>StatusTabs · Pill 筛选</AppText>
+          <StatusTabs
+            tabs={timelineFilterTabs}
+            activeKey={timelineFilter}
+            onChange={setTimelineFilter}
+            variant="pill"
+          />
+        </View>
+
+        <View style={styles.componentSection} testID="demo-status-tabs-underline">
+          <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>StatusTabs · Underline 导航</AppText>
+          <StatusTabs
+            tabs={customerOpportunityTabs}
+            activeKey={customerOpportunity}
+            onChange={setCustomerOpportunity}
+            variant="underline"
+          />
+        </View>
+
+        <View style={styles.componentSection} testID="demo-status-tabs-disabled">
+          <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>StatusTabs · 禁用态</AppText>
+          <StatusTabs
+            tabs={disabledTimelineFilterTabs}
+            activeKey={disabledTimelineFilter}
+            onChange={setDisabledTimelineFilter}
+            variant="pill"
           />
         </View>
 

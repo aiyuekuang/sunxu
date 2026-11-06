@@ -196,13 +196,25 @@ export function StatusTabs<T extends string = string>({
             { borderRadius: Radius.sm },
             isCompact && styles.tabCompact,
             !scrollable && sizing !== 'hug' && styles.tabFlex,
-            active ? { backgroundColor: colors.primary } : null,
+            active
+              ? {
+                  backgroundColor: tab.disabled
+                    ? colors.surfaceSecondary
+                    : colors.primary,
+                }
+              : null,
+            tab.disabled && styles.tabDisabled,
           ]}
           onPress={() => handleTabPress(tab.key)}
-          activeOpacity={0.7}
+          activeOpacity={tab.disabled ? 1 : 0.7}
           hitSlop={HIT_SLOP}
+          disabled={tab.disabled}
           accessibilityRole={isOverflowTab ? 'button' : 'tab'}
-          accessibilityState={isOverflowTab ? undefined : { selected: active }}
+          accessibilityState={
+            isOverflowTab
+              ? { disabled: tab.disabled }
+              : { selected: active, disabled: tab.disabled }
+          }
           aria-selected={isOverflowTab ? undefined : active}
           accessibilityLabel={
             isOverflowTab
@@ -214,7 +226,13 @@ export function StatusTabs<T extends string = string>({
             <Text
               style={[
                 styles.tabText,
-                { color: active ? colors.textOnPrimary : colors.textSecondary },
+                {
+                  color: tab.disabled
+                    ? colors.textMuted
+                    : active
+                      ? colors.textOnPrimary
+                      : colors.textSecondary,
+                },
                 active && { fontWeight: '600' },
               ]}
             >
@@ -228,16 +246,23 @@ export function StatusTabs<T extends string = string>({
                 style={[
                   styles.countBadge,
                   {
-                    backgroundColor: active
-                      ? colors.surface
-                      : colors.surfaceSecondary,
+                    backgroundColor:
+                      tab.disabled || !active
+                        ? colors.surfaceSecondary
+                        : colors.surface,
                   },
                 ]}
               >
                 <Text
                   style={[
                     styles.countBadgeText,
-                    { color: active ? colors.primary : colors.textSecondary },
+                    {
+                      color: tab.disabled
+                        ? colors.textMuted
+                        : active
+                          ? colors.primary
+                          : colors.textSecondary,
+                    },
                   ]}
                 >
                   {tab.count}
@@ -313,7 +338,15 @@ export function StatusTabs<T extends string = string>({
         containerStyle,
       ]}
     >
-      <View style={[styles.track, { backgroundColor: colors.background }]}>{renderTabs()}</View>
+      <View
+        style={[
+          styles.track,
+          sizing === 'stretch' && styles.trackStretch,
+          { backgroundColor: colors.background },
+        ]}
+      >
+        {renderTabs()}
+      </View>
     </View>
   );
 }
@@ -340,6 +373,10 @@ const styles = StyleSheet.create({
     borderRadius: Radius.sm,
     padding: 2,
     gap: Spacing.xs,
+  },
+  trackStretch: {
+    flex: 1,
+    minWidth: 0,
   },
   tab: {
     alignItems: 'center',
@@ -375,6 +412,9 @@ const styles = StyleSheet.create({
   tabFlex: {
     flex: 1,
   },
+  tabDisabled: {
+    opacity: 0.5,
+  },
   tabText: {
     fontSize: FontSize.sm,
     fontWeight: '500',
@@ -386,6 +426,7 @@ const styles = StyleSheet.create({
   underlineTab: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 4,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
