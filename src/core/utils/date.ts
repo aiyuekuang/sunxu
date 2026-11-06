@@ -6,6 +6,46 @@
  */
 import dayjs from 'dayjs';
 
+export type DatePeriod = 'day' | 'week' | 'month' | 'year';
+
+/** Return the Monday-based start date for a selected reporting period. */
+export function startOfDatePeriod(
+  value: string | Date | dayjs.Dayjs,
+  period: DatePeriod,
+): dayjs.Dayjs {
+  const date = dayjs(value);
+  if (period === 'week') {
+    const mondayOffset = (date.day() + 6) % 7;
+    return date.subtract(mondayOffset, 'day').startOf('day');
+  }
+  return date.startOf(period);
+}
+
+/** Return an inclusive date range, optionally capped at a maximum date. */
+export function getDatePeriodRange(
+  value: string | Date | dayjs.Dayjs,
+  period: DatePeriod,
+  maximumDate?: string,
+): [startDate: string, endDate: string] {
+  const start = startOfDatePeriod(value, period);
+  if (!start.isValid()) return ['', ''];
+
+  let end = start.add(1, period).subtract(1, 'day').startOf('day');
+  const maximum = maximumDate ? dayjs(maximumDate).startOf('day') : null;
+  if (maximum?.isValid() && end.isAfter(maximum, 'day')) end = maximum;
+
+  return [start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD')];
+}
+
+/** Shift to the adjacent period and return its first date. */
+export function shiftDatePeriod(
+  value: string | Date | dayjs.Dayjs,
+  period: DatePeriod,
+  direction: -1 | 1,
+): string {
+  return startOfDatePeriod(value, period).add(direction, period).format('YYYY-MM-DD');
+}
+
 // ─── 解析 ─────────────────────────────────────────────────────────────────────
 
 /** 解析 API 返回的日期字符串，无效返回 null */

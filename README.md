@@ -33,6 +33,8 @@ export function ExampleApp() {
 
 所有容器默认使用 Sunxu 语义主题和顶部安全区。底部操作区可搭配 `BottomActionBar`，由操作栏本身处理底部安全区。
 
+`DateNavigator` 可按日、周、月或年切换；未设置 `period` 时仍按天切换。传入 `maximumDate` 可限制日期选择，并在到达最后一个可用周期时禁用向后切换。日期锚点和数据请求仍由宿主管理。
+
 ## 地图与图表
 
 `MapScreenContainer` 提供全屏底图和安全区叠层插槽；`sunxu/maps` 提供当前定位坐标、定位按钮、常用地图控件、地点标记和当前位置标记。Sunxu 不内置地图厂商 SDK，宿主将 SDK 的地图视图、Marker 与相机控制接到插槽和回调中。
