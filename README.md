@@ -29,13 +29,41 @@ export function ExampleApp() {
 
 `ListScreenContainer` 将搜索/筛选工具栏放在其控制的结果区紧邻位置；`FormPage` 自动处理键盘滚动，返回行为通过 `onBack` 传入；`DetailScreenContainer` 提供可滚动内容和固定页头/底部操作区；`ScreenContainer` 用于按插槽组合其他页面骨架。
 
+`PageHeader` 和 `HeaderIconButton` 提供标准页头及右侧图标动作；`FormScreenContainer`、`ListScreenContainer`、`DetailScreenContainer` 与 `ScreenContainer` 均可直接组合使用。
+
 所有容器默认使用 Sunxu 语义主题和顶部安全区。底部操作区可搭配 `BottomActionBar`，由操作栏本身处理底部安全区。
+
+## 地图与图表
+
+`MapScreenContainer` 提供全屏底图和安全区叠层插槽；`sunxu/maps` 提供当前定位坐标、定位按钮、常用地图控件、地点标记和当前位置标记。Sunxu 不内置地图厂商 SDK，宿主将 SDK 的地图视图、Marker 与相机控制接到插槽和回调中。
+
+`ChartPanel` 与 `ChartLegend` 提供统一图表容器和加载/空/错误态。`sunxu/charts` 在 [react-native-gifted-charts](https://github.com/Abhinandan-Kushwaha/react-native-gifted-charts) 上提供主题化柱、线、饼和雷达图。需要地图定位时安装 `expo-location`；需要图表渲染时安装 `react-native-gifted-charts`、`react-native-svg` 和 `expo-linear-gradient`（Gifted Charts 导入时要求提供渐变实现）。
+
+```tsx
+import { ChartPanel, MapScreenContainer } from 'sunxu';
+import { MapLocationButton, MapMarker } from 'sunxu/maps';
+import { SunxuBarChart } from 'sunxu/charts';
+
+<MapScreenContainer topTrailing={
+  <MapLocationButton onLocation={(point) => mapCamera.animateTo(point)} />
+}>
+  <VendorMapView>
+    <VendorMarker coordinate={coordinate}><MapMarker label="客户位置" /></VendorMarker>
+  </VendorMapView>
+</MapScreenContainer>
+
+<ChartPanel title="月度跟进">
+  <SunxuBarChart data={monthlyValues} width={320} height={200} />
+</ChartPanel>
+```
+
+地图坐标统一使用 `{ latitude, longitude }`。宿主负责转换到所选地图 SDK 的坐标系，并处理相机动画、底图密钥、路线和地理编码等 provider/业务能力。
 
 ## 基线组件筛选
 
 MES 固定基线原始盘点共 393 项：筛选后保留 49 个跨项目共享组件/工具，排除 MES 领域模块、宿主集成、页面私有组件和带数据请求/导航耦合的树列表。Sunxu 新增标准页面容器。每个基线文件的来源提交、状态、目标路径或排除原因见[逐文件迁移账本](https://github.com/aiyuekuang/sunxu/blob/main/docs/migrations/mes-components.md)。
 
-Expo Web 示例已在 375×812 竖屏、812×375 横屏和浅/深主题下渲染；截图、控制台结果和几何/溢出数据见[容器预览记录](https://github.com/aiyuekuang/sunxu/blob/main/docs/verification/component-containers.md)。原生 iOS/Android 的安全区、键盘和无障碍渲染仍为 **UNVERIFIED**。
+Expo Web 示例已在 375×812 竖屏、812×375 横屏和浅/深主题下渲染；截图、控制台结果和几何/溢出数据见[容器预览记录](https://github.com/aiyuekuang/sunxu/blob/main/docs/verification/component-containers.md)。原生 iOS/Android 的安全区、键盘和无障碍渲染仍为 **UNVERIFIED**。 地图、定位控件和图表另有[地图图表验收记录](https://github.com/aiyuekuang/sunxu/blob/main/docs/verification/maps-charts.md)。
 
 ## 包与授权
 

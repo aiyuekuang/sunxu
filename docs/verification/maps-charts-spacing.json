@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "surface_frame_gate": {
+    "status": "PASS",
+    "rows": [
+      {
+        "route": "/ · 地图图表页签",
+        "state": "初始滚动位置；浅色主题；375×812 CSS px",
+        "workspace": "MapScreenContainer 所在地图模块",
+        "content": "MapScreenContainer 地图画布",
+        "viewport": {
+          "width": 375,
+          "height": 812
+        },
+        "workspace_rect": {
+          "left": 12,
+          "top": 77,
+          "right": 363,
+          "bottom": 448,
+          "width": 351,
+          "height": 371
+        },
+        "content_rect": {
+          "left": 12,
+          "top": 106,
+          "right": 363,
+          "bottom": 406,
+          "width": 351,
+          "height": 300
+        },
+        "relationship": "joined",
+        "required_sides": [],
+        "insets_px": {},
+        "expected": {
+          "kind": "contract",
+          "value": "地图画布填满宿主模块宽度，并保留在模块内容区域内",
+          "source": "src/core/components/MapScreenContainer.tsx; examples/catalog/VisualExamples.tsx"
+        },
+        "visual": {
+          "status": "PASS",
+          "method": "检查竖屏浏览器截图像素并与 MapScreenContainer / section DOM 边界对比。",
+          "exception": "地图画布按地图组件契约横向填满宿主模块；此处验证父子边界与纵向位置，不要求横向留白。"
+        },
+        "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/maps-charts-portrait-light.png",
+        "screenshot_sha256": "b4e58e73bac9436938158776426264265f9a5730933af8629eef9187e726e5ae",
+        "status": "PASS"
+      }
+    ]
+  },
+  "seams": [
+    {
+      "route": "/ · 地图图表页签",
+      "state": "初始滚动位置；浅色主题；375×812 CSS px",
+      "previous": "地图模块标题",
+      "next": "MapScreenContainer 地图画布",
+      "executed_command": "TARGET_URL=http://localhost:8091/ node run.js /tmp/playwright-test-sunxu-catalog.js (cwd: /Users/suconnect/.codex/skills/playwright-skill)",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/maps-charts-portrait-light.png",
+      "screenshot_sha256": "b4e58e73bac9436938158776426264265f9a5730933af8629eef9187e726e5ae",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "axis": "vertical",
+      "previous_rect": {
+        "left": 20,
+        "top": 77,
+        "right": 355,
+        "bottom": 98,
+        "width": 335,
+        "height": 21
+      },
+      "next_rect": {
+        "left": 12,
+        "top": 106,
+        "right": 363,
+        "bottom": 406,
+        "width": 351,
+        "height": 300
+      },
+      "gap_px": 8,
+      "expected": {
+        "kind": "token",
+        "value": "Spacing.sm = 8 px",
+        "source": "src/core/theme/tokens.ts:7; examples/catalog/VisualExamples.tsx:141-143"
+      },
+      "visual": {
+        "relationship": "separate",
+        "status": "PASS",
+        "method": "检查真实浏览器 PNG 中的可见色带，并与 Playwright getBoundingClientRect 几何数据对照。",
+        "observed_clear_band_px": 8
+      },
+      "status": "PASS"
+    },
+    {
+      "route": "/ · 地图图表页签",
+      "state": "初始滚动位置；浅色主题；375×812 CSS px",
+      "previous": "MapScreenContainer 地图画布",
+      "next": "地图定位说明",
+      "executed_command": "TARGET_URL=http://localhost:8091/ node run.js /tmp/playwright-test-sunxu-catalog.js (cwd: /Users/suconnect/.codex/skills/playwright-skill)",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/maps-charts-portrait-light.png",
+      "screenshot_sha256": "b4e58e73bac9436938158776426264265f9a5730933af8629eef9187e726e5ae",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "axis": "vertical",
+      "previous_rect": {
+        "left": 12,
+        "top": 106,
+        "right": 363,
+        "bottom": 406,
+        "width": 351,
+        "height": 300
+      },
+      "next_rect": {
+        "left": 20,
+        "top": 414,
+        "right": 355,
+        "bottom": 448,
+        "width": 335,
+        "height": 34
+      },
+      "gap_px": 8,
+      "expected": {
+        "kind": "token",
+        "value": "Spacing.sm = 8 px",
+        "source": "src/core/theme/tokens.ts:7; examples/catalog/VisualExamples.tsx:141-143"
+      },
+      "visual": {
+        "relationship": "separate",
+        "status": "PASS",
+        "method": "检查真实浏览器 PNG 中的可见色带，并与 Playwright getBoundingClientRect 几何数据对照。",
+        "observed_clear_band_px": 8
+      },
+      "status": "PASS"
+    },
+    {
+      "route": "/ · 地图图表页签",
+      "state": "纵向滚动 140 px；浅色主题；375×812 CSS px",
+      "previous": "柱状图标题",
+      "next": "柱状图卡片表面",
+      "executed_command": "TARGET_URL=http://localhost:8091/ node run.js /tmp/playwright-test-sunxu-catalog.js (cwd: /Users/suconnect/.codex/skills/playwright-skill)",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/maps-charts-bar-panel-portrait-light.png",
+      "screenshot_sha256": "b863e647cdc49b494da8ec44fc156fd282ee9dd030e79d9c9b6ec3cb1143dd7c",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "axis": "vertical",
+      "previous_rect": {
+        "left": 24,
+        "top": 324,
+        "right": 113.6796875,
+        "bottom": 339,
+        "width": 89.6796875,
+        "height": 15
+      },
+      "next_rect": {
+        "left": 20,
+        "top": 342,
+        "right": 355,
+        "bottom": 641.5,
+        "width": 335,
+        "height": 299.5
+      },
+      "gap_px": 3,
+      "expected": {
+        "kind": "contract",
+        "value": "DetailCard.titleRow marginBottom = 3 px",
+        "source": "src/core/components/DetailCard.tsx:121-127"
+      },
+      "visual": {
+        "relationship": "separate",
+        "status": "PASS",
+        "method": "检查真实浏览器 PNG 中的可见色带，并与 Playwright getBoundingClientRect 几何数据对照。",
+        "observed_clear_band_px": 3
+      },
+      "status": "PASS"
+    }
+  ]
+}

@@ -80,3 +80,26 @@ CRM 宿主对 49 个再导出组件与来源基线逐文件比对后，修正与
 - 触控热区修复：`FilterBar.advChip`（36px 无 hitSlop，高级筛选面板选项）补 `hitSlop={top:4,bottom:4}` 达到 44 有效热区；`MultiEntityPickerField.fieldWrapper` 42px 恢复 `MIN_TOUCH_TARGET`。其余紧凑视觉样式（StatusTabs 34/32、FilterActionButton 36、FormLabel 28 等）均已有 hitSlop 补偿、有效热区 ≥44，属既定设计模式，不再改动。
 - 行为语义说明：`FilterBar` 快捷行的 `advancedExtra` 改为无条件参与行可见性判断（来源基线把它与 `!hideAdvancedButton` 绑定，导致 CRM 通话页"按客户筛选"等传入内容从未渲染）。此为有意的语义修正，宿主如不传 `advancedExtra` 不受影响。
 - 潜伏 API 差异备忘：`OfflineIndicator` 改为必填 props（不再自接 store）；`FormPage.onBack` 不再默认 `navigation.goBack()`；`EntityPickerModal` 分类侧栏改为 `categoryLayout="sidebar"` 显式开启（默认快捷筛选），默认搜索占位改为"搜索..."。上述项当前 CRM 均无调用方或无实际影响，记录以备后续消费方排查。
+
+## 2026-11-06 通用地图与图表组件套件
+
+按跨 App 复用需求新增通用视觉能力：
+
+- `MapScreenContainer` 提供全屏地图画布、头部/角落控件/底部信息插槽与安全区避让；现有 `PageHeader` 和列表、表单、详情容器继续作为通用页面基础。
+- `sunxu/maps` 提供 `useCurrentLocation`、`MapLocationButton`、`MapControlButton`、`MapControlStack`、`MapZoomControls`、`MapMarker` 和 `MapCurrentLocationMarker`。定位在用户明确点击后申请前台权限并获取一次坐标；不给组件启动后台定位。
+- `ChartPanel` 和 `ChartLegend` 提供图表区域、主题化图例以及加载、空、错误/重试状态。`sunxu/charts` 增加主题适配的柱、线、饼、雷达图，使用 React Native 原生 `react-native-gifted-charts` 渲染。
+- 地图厂商 View/Marker、相机/缩放 API、密钥、坐标系转换、路线/地理编码与业务数据仍由宿主 App 注入；Sunxu 的位置坐标契约为 `{ latitude, longitude }`。Apache ECharts 的 Web Canvas/SVG 运行时没有并入原生组件包。
+- `expo-location`、`react-native-gifted-charts`、`react-native-svg` 和 `expo-linear-gradient` 按地图/图表入口作为可选 peer dependencies，避免未使用相应子路径的 App 被迫加载它们。Gifted Charts 运行时要求安装 Expo Linear Gradient 或 React Native Linear Gradient；catalog 固定使用 Expo 实现。
+- `examples/catalog` 的“地图图表”页示范页面容器、地图叠层、标记、前台定位调用与柱/线/饼/雷达图。预览地图底图是明确标注的宿主插槽示意，不声称完成厂商地图渲染验收。
+
+验证记录见[地图与图表组件渲染验收](./verification/maps-charts.md)，包含竖屏/横屏截图、定位模拟、DOM 几何/溢出及组件间距 ledger。原生 SDK Marker/相机行为仍需各宿主地图供应商适配后单独验收。npm 版本和 CRM 依赖更新继续受授权规则约束。
+
+## 2026-11-06 SwipeableRow 无障碍修正
+
+`SwipeableRow` 继续由宿主传入行操作和回调；通用组件提供左滑露出右侧操作、点击关闭操作区后执行回调。修正如下：
+
+- 行没有 `onPress` 时直接渲染 `children`，不再额外套一层无回调的 `TouchableOpacity`，避免无障碍树把子控件合并为无操作的单一行。
+- 行有 `onPress` 时才提供按钮角色。
+- 左滑操作按钮暴露按钮角色和对应标签，并至少保持 44dp 高度。
+
+运行时手势展开仍需在原生宿主设备上检查；类型检查通过前不发布新包。当前公开包授权门禁见[授权与发布](#验证授权与发布)。

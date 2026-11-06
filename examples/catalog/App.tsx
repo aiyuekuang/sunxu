@@ -32,8 +32,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { useState } from 'react';
 import dayjs from 'dayjs';
+import { VisualExamples } from './VisualExamples';
 
-type ScreenKey = 'list' | 'form' | 'detail' | 'components';
+type ScreenKey = 'list' | 'form' | 'detail' | 'components' | 'visuals';
 type CustomerStatus = 'all' | 'active' | 'paused';
 type ComponentStatus = 'all' | 'waiting' | 'done';
 
@@ -41,6 +42,7 @@ const screenTabs: { key: ScreenKey; label: string }[] = [
   { key: 'list', label: '列表' },
   { key: 'form', label: '表单' },
   { key: 'components', label: '组件' },
+  { key: 'visuals', label: '地图图表' },
 ];
 
 const customerTabs: TabItem<CustomerStatus>[] = [
@@ -376,6 +378,10 @@ function Catalog({ isDark, onToggleTheme }: { isDark: boolean; onToggleTheme: ()
         onToggleTheme={onToggleTheme}
       />
     );
+  }
+
+  if (screen === 'visuals') {
+    return <VisualExamples onBack={() => setScreen('list')} footer={<ExampleTabs current={screen} onChange={setScreen} />} />;
   }
 
   const visibleCustomers = customers.filter((item) => {
