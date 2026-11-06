@@ -4,7 +4,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
 import { Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
-import { PageHeader } from './PageHeader';
+import { PageHeader, type HeaderAction } from './PageHeader';
 
 export type ScreenScrollMode = 'none' | 'scroll' | 'keyboard';
 
@@ -73,6 +73,8 @@ export interface TitledScreenContainerProps extends Omit<ScreenContainerProps, '
   title: string;
   onBack?: () => void;
   headerRight?: React.ReactNode;
+  /** Count-aware actions for the page header; one stays visible, multiple use overflow. */
+  headerActions?: readonly HeaderAction[];
 }
 
 /** Detail-page layout: a safe header, scrollable content and an optional fixed footer. */
@@ -80,13 +82,14 @@ export function DetailScreenContainer({
   title,
   onBack,
   headerRight,
+  headerActions,
   ...screenProps
 }: TitledScreenContainerProps) {
   return (
     <ScreenContainer
       {...screenProps}
       scrollMode={screenProps.scrollMode ?? 'scroll'}
-      header={<PageHeader title={title} onBack={onBack} right={headerRight} noSafeArea />}
+      header={<PageHeader title={title} onBack={onBack} right={headerRight} actions={headerActions} noSafeArea />}
     />
   );
 }
@@ -95,6 +98,8 @@ export interface ListScreenContainerProps extends Omit<ScreenContainerProps, 'he
   title: string;
   onBack?: () => void;
   headerRight?: React.ReactNode;
+  /** Count-aware actions for the page header; one stays visible, multiple use overflow. */
+  headerActions?: readonly HeaderAction[];
   /** Search, tabs and filters stay directly above the results they control. */
   toolbar?: React.ReactNode;
 }
@@ -104,6 +109,7 @@ export function ListScreenContainer({
   title,
   onBack,
   headerRight,
+  headerActions,
   toolbar,
   children,
   footer,
@@ -115,7 +121,7 @@ export function ListScreenContainer({
 
   return (
     <ScreenContainer
-      header={<PageHeader title={title} onBack={onBack} right={headerRight} noSafeArea />}
+      header={<PageHeader title={title} onBack={onBack} right={headerRight} actions={headerActions} noSafeArea />}
       footer={footer}
       safeAreaEdges={safeAreaEdges}
       style={style}

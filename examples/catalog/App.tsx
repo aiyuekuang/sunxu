@@ -162,19 +162,34 @@ function ComponentExamples({
   const [immersiveModalVisible, setImmersiveModalVisible] = useState(false);
   const [feedback, setFeedback] = useState('');
 
+  const resetExamples = () => {
+    setDate(today);
+    setStatus('all');
+    setTimelineFilter('all');
+    setDisabledTimelineFilter('all');
+    setCustomerOpportunity('customers');
+    setSearch('');
+    setPickerValue('lin');
+    setEntityValue(null);
+    setPhotos([]);
+    setFillModalVisible(false);
+    setImmersiveModalVisible(false);
+    setFeedback('示例状态已重置');
+  };
+
   return (
     <DetailScreenContainer
       title="组件示例"
       onBack={() => onChange('list')}
-      headerRight={
-        <Pressable
-          onPress={onToggleTheme}
-          accessibilityRole="button"
-          accessibilityLabel={isDark ? '切换浅色主题' : '切换深色主题'}
-        >
-          <AppText style={{ color: colors.primary }}>{isDark ? '浅色' : '深色'}</AppText>
-        </Pressable>
-      }
+      headerActions={[
+        {
+          id: 'toggle-theme',
+          label: isDark ? '切换浅色主题' : '切换深色主题',
+          icon: 'contrast-outline',
+          onPress: onToggleTheme,
+        },
+        { id: 'reset-examples', label: '重置示例', icon: 'refresh-outline', onPress: resetExamples },
+      ]}
       footer={<ExampleTabs current={current} onChange={onChange} />}
     >
       <View style={styles.componentDemo}>
@@ -445,16 +460,9 @@ function Catalog({ isDark, onToggleTheme }: { isDark: boolean; onToggleTheme: ()
   return (
     <ListScreenContainer
       title="客户档案"
-      headerRight={
-        <Pressable
-          style={styles.addButton}
-          onPress={() => setScreen('form')}
-          accessibilityRole="button"
-          accessibilityLabel="新增客户"
-        >
-          <AppText style={styles.addText}>新增</AppText>
-        </Pressable>
-      }
+      headerActions={[
+        { id: 'create-customer', label: '新增客户', icon: 'add-outline', onPress: () => setScreen('form') },
+      ]}
       toolbar={
         <View style={styles.listToolbar}>
           <SearchBar value={keyword} onChangeText={setKeyword} placeholder="搜索客户名称或编码" />
@@ -511,8 +519,6 @@ const styles = StyleSheet.create({
   root: { flex: 1 },
   listToolbar: { gap: 4 },
   customerList: { padding: 12, gap: 10 },
-  addText: { color: '#1677FF', fontWeight: '600' },
-  addButton: { minWidth: 44, minHeight: 44, alignItems: 'center', justifyContent: 'center' },
   exampleTabs: { flexDirection: 'row', justifyContent: 'space-around' },
   exampleTab: { minWidth: 72, minHeight: 44, alignItems: 'center', justifyContent: 'center' },
   exampleTabText: { color: '#777', fontWeight: '500' },

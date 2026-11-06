@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "status": "PASS WITH UNVERIFIED",
+  "target": "examples/catalog running in Expo Go on iOS Simulator",
+  "runtime": {
+    "device": "iPhone 17 Pro",
+    "os": "iOS 26.1",
+    "viewport_points": {
+      "width": 402,
+      "height": 874
+    },
+    "screenshot_pixels": {
+      "width": 1206,
+      "height": 2622,
+      "scale": 3
+    },
+    "dom_geometry": "NOT APPLICABLE: native React Native rendering"
+  },
+  "measurement_method": "PageHeader and ScreenContainer styles plus safe-area layout for logical slots; native screenshot pixel bounds divided by 3 for the overflow panel. No DOM or native hierarchy instrumentation was injected.",
+  "states": [
+    {
+      "route": "Catalog > List > 客户档案",
+      "state": "one header action, light theme",
+      "screenshot": "iphone-17-pro-single-icon.png",
+      "screenshot_sha256": "d3188805ce65936ae9737d572677583791a1a6f2bc0dea3e42fbf933f7e1ed0c",
+      "geometry_points": {
+        "safe_area_top": 62,
+        "header": {
+          "left": 0,
+          "top": 62,
+          "right": 402,
+          "bottom": 118,
+          "width": 402,
+          "height": 56
+        },
+        "title_column": {
+          "left": 52,
+          "right": 350,
+          "width": 298,
+          "center_x": 201
+        },
+        "right_action_touch_target": {
+          "left": 350,
+          "top": 66,
+          "right": 394,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      },
+      "result": "PASS: icon-only presentation, accessible action name, and action navigation observed"
+    },
+    {
+      "route": "Catalog > 组件 > 组件示例",
+      "state": "two header actions, menu expanded, light theme",
+      "screenshot": "iphone-17-pro-overflow-menu.png",
+      "screenshot_sha256": "9257d5b407dd80a9592ee8ce2f94a9c6b6028fee8631883f98ec495b91f063bb",
+      "geometry_points": {
+        "header_right_touch_target": {
+          "left": 350,
+          "top": 66,
+          "right": 394,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        },
+        "menu_panel": {
+          "left": 138,
+          "top": 114,
+          "right": 394,
+          "bottom": 202,
+          "width": 256,
+          "height": 88
+        },
+        "menu_right_inset": 8,
+        "menu_rows": [
+          {
+            "label": "切换深色主题",
+            "minimum_height": 44
+          },
+          {
+            "label": "重置示例",
+            "minimum_height": 44
+          }
+        ]
+      },
+      "viewport_overflow": {
+        "horizontal": "none observed in this screenshot",
+        "vertical": "none observed in this screenshot",
+        "narrow_portrait_landscape_android": "UNVERIFIED"
+      },
+      "result": "PASS: menu placement, labels/order, theme action and reset action observed"
+    }
+  ],
+  "unverified": [
+    "outside-tap menu dismissal; CUA coordinate input returned noWindowsAvailable",
+    "system back and accessibility escape dismissal on device",
+    "320x720 or other narrow portrait viewport",
+    "landscape viewport",
+    "Android rendering and 48dp touch targets",
+    "dynamic type and end-to-end screen-reader navigation",
+    "native layout inspector frames and content scroll-width instrumentation"
+  ]
+}
