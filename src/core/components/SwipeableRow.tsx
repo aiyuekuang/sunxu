@@ -33,6 +33,8 @@ export function SwipeableRow({ children, rightActions, onPress }: SwipeableRowPr
           <TouchableOpacity
             key={action.label}
             style={[styles.actionButton, { backgroundColor: action.color }]}
+            accessibilityRole="button"
+            accessibilityLabel={action.label}
             onPress={() => {
               swipeRef.current?.close();
               action.onPress();
@@ -56,9 +58,17 @@ export function SwipeableRow({ children, rightActions, onPress }: SwipeableRowPr
       overshootRight={false}
       containerStyle={styles.container}
     >
-      <TouchableOpacity onPress={onPress} activeOpacity={onPress ? 0.7 : 1}>
-        {children}
-      </TouchableOpacity>
+      {onPress ? (
+        <TouchableOpacity
+          onPress={onPress}
+          activeOpacity={0.7}
+          accessibilityRole="button"
+        >
+          {children}
+        </TouchableOpacity>
+      ) : (
+        children
+      )}
     </ReanimatedSwipeable>
   );
 }
@@ -72,6 +82,7 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     width: 56,
+    minHeight: 44,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 3,
