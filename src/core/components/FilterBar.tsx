@@ -37,6 +37,8 @@ export interface FilterConfig {
   key: string;
   label: string;
   options: FilterOption[];
+  /** 是否在快捷下拉中显示“全部”选项，默认 true */
+  includeAllOption?: boolean;
   /** 是否参与筛选记忆，默认 true。设为 false 则该字段不会被保存/恢复 */
   persist?: boolean;
 }
@@ -317,12 +319,17 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
   // 快捷筛选点击
   const handleQuickSelect = useCallback(
     (key: string, value: string) => {
-      const newValues = { ...values, [key]: values[key] === value ? undefined : value };
+      const filter = quickFilters.find((item) => item.key === key);
+      const canClear = filter?.includeAllOption !== false;
+      const newValues = {
+        ...values,
+        [key]: values[key] === value && canClear ? undefined : value,
+      };
       onChange(newValues);
       persistValues(newValues);
       setActiveDropdown(null);
     },
-    [values, onChange, persistValues],
+    [quickFilters, values, onChange, persistValues],
   );
 
   // 高级筛选
@@ -500,28 +507,30 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
                     showsVerticalScrollIndicator={false}
                     nestedScrollEnabled
                   >
-                    <TouchableOpacity
-                      style={[styles.dropdownItem, { borderBottomColor: colors.border }]}
-                      accessibilityRole="radio"
-                      accessibilityState={{ selected: !values[filter.key] }}
-                      onPress={() => {
-                        onChange({ ...values, [filter.key]: undefined });
-                        persistValues({ ...values, [filter.key]: undefined });
-                        setActiveDropdown(null);
-                      }}
-                    >
-                      <Text
-                        style={[
-                          styles.dropdownItemText,
-                          { color: !values[filter.key] ? colors.primary : colors.text },
-                        ]}
+                    {filter.includeAllOption !== false && (
+                      <TouchableOpacity
+                        style={[styles.dropdownItem, { borderBottomColor: colors.border }]}
+                        accessibilityRole="radio"
+                        accessibilityState={{ selected: !values[filter.key] }}
+                        onPress={() => {
+                          onChange({ ...values, [filter.key]: undefined });
+                          persistValues({ ...values, [filter.key]: undefined });
+                          setActiveDropdown(null);
+                        }}
                       >
-                        全部
-                      </Text>
-                      {!values[filter.key] && (
-                        <Ionicons name="checkmark" size={18} color={colors.primary} />
-                      )}
-                    </TouchableOpacity>
+                        <Text
+                          style={[
+                            styles.dropdownItemText,
+                            { color: !values[filter.key] ? colors.primary : colors.text },
+                          ]}
+                        >
+                          全部
+                        </Text>
+                        {!values[filter.key] && (
+                          <Ionicons name="checkmark" size={18} color={colors.primary} />
+                        )}
+                      </TouchableOpacity>
+                    )}
                     {filter.options.map((opt) => {
                       const isSel = values[filter.key] === opt.value;
                       return (
