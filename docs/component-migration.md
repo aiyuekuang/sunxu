@@ -52,7 +52,7 @@ Sunxu 面向多个 React Native / Expo App，提供跨业务可组合的 UI 控�
 
 ## 依赖和可移植性
 
-- 运行时公开入口只有 `sunxu` 和 `sunxu/core`，不提供 MES 或宿主集成子路径。
+- UI 运行时入口为 `sunxu` 和 `sunxu/core`；可选的 `sunxu/query` 仅封装通用 TanStack Query provider、Tab 查询键和失效工具，不承载 MES 或宿主业务。
 - 组件只依赖 props、回调、通用主题 context 和明确声明的 UI peer dependencies；不导入来源 App 的 `@/`、API client、Zustand、登录态或私有配置。
 - 权限控件只消费宿主传入的结果/判断回调，不自行解释权限码。
 - 新增 peer dependency 必须由当前公开运行代码的 import 支撑；不复制来源 App 的完整依赖清单。
@@ -60,7 +60,7 @@ Sunxu 面向多个 React Native / Expo App，提供跨业务可组合的 UI 控�
 ## 验证、授权与发布
 
 - 类型检查不能代替 UI 验收；UI 变更应在可运行示例或真实宿主页面、实际视口及相关状态中检查，并记录截图和几何/溢出数据。
-- 用户于 2026-11-06 选定 MIT，Sunxu 从 `0.1.3` 起使用根目录 `LICENSE` 和 package 元数据 `MIT` 公开发布；`0.1.0`–`0.1.2` 保留各自发布时的 `UNLICENSED` 元数据。包文件白名单仅包含运行时代码、README 和许可证文件，peer dependencies 不捆绑。
+- 用户于 2026-11-06 选定 MIT，Sunxu 从 `0.1.3` 起使用根目录 `LICENSE` 和 package 元数据 `MIT` 公开发布；`0.1.0`–`0.1.2` 保留各自发布时的 `UNLICENSED` 元数据。包文件白名单包含运行时代码、README、许可证和 `docs/tab-query-caching.md`，peer dependencies 不捆绑。
 - 按项目约定在 `main` 开发、提交并推送通过验证的当前任务变更；未来新增第三方代码或资产仍须单独核实再分发权与版权声明。
 
 ## CRM 来源组件盘点与合入结果

@@ -1,0 +1,22 @@
+{
+  "viewport": { "width": 375, "height": 812 },
+  "element": {
+    "testId": "demo-tab-query-cache",
+    "x": 28,
+    "y": 561,
+    "width": 319,
+    "height": 190,
+    "right": 347,
+    "bottom": 751
+  },
+  "dimensions": {
+    "clientWidth": 319,
+    "scrollWidth": 319,
+    "clientHeight": 190,
+    "scrollHeight": 190
+  },
+  "horizontalOverflow": false,
+  "visibleText": "Tab 查询缓存 · 按页签隔离\n全部\n已接通\n未接通\n已接通号码 · 数据版本 2\n切换页签可恢复各自缓存\n模拟话单更新",
+  "pageErrors": [],
+  "consoleErrors": []
+}

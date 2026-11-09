@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "sunxu": ["../../src/index.ts"]
+      "sunxu": ["../../src/index.ts"],
+      "sunxu/query": ["../../src/core/query/index.ts"]
     },
     "noEmit": true
   },

@@ -61,6 +61,12 @@ import { SunxuBarChart } from 'sunxu/charts';
 
 地图坐标统一使用 `{ latitude, longitude }`。宿主负责转换到所选地图 SDK 的坐标系，并处理相机动画、底图密钥、路线和地理编码等 provider/业务能力。
 
+## Tab 列表缓存（可选）
+
+`StatusTabs` 只负责展示和选择，不拥有请求或缓存。需要按 Tab 缓存无限列表时，可选安装 `@tanstack/react-query` 并从 `sunxu/query` 引入 `SunxuQueryProvider`、`createTabQueryFamily`、`useTabInfiniteQuery` 和失效工具。TanStack Query 是可选 peer dependency；只使用 `sunxu/core` 的应用不需要安装它。
+
+缓存键按资源、登录用户、租户、Tab 和筛选条件隔离；Hook 不提供 `placeholderData`，切换 Tab 时不会把上一 Tab 的数据当作当前结果。宿主仍负责创建 `QueryClient`、API 请求、权限、数据新鲜度、业务事件失效以及退出登录时清缓存。详细约定与示例见[Tab 查询缓存规范](./docs/tab-query-caching.md)。
+
 ## 基线组件筛选
 
 MES 固定基线原始盘点共 393 项：筛选后保留 49 个跨项目共享组件/工具，排除 MES 领域模块、宿主集成、页面私有组件和带数据请求/导航耦合的树列表。Sunxu 新增标准页面容器。每个基线文件的来源提交、状态、目标路径或排除原因见[逐文件迁移账本](https://github.com/aiyuekuang/sunxu/blob/main/docs/migrations/mes-components.md)。

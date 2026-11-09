@@ -33,6 +33,9 @@ import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native
 import { useState } from 'react';
 import dayjs from 'dayjs';
 import { VisualExamples } from './VisualExamples';
+import { SunxuQueryProvider } from 'sunxu/query';
+import { TabQueryCacheExample } from './TabQueryCacheExample';
+import { queryClient } from './queryClient';
 
 type ScreenKey = 'list' | 'form' | 'detail' | 'components' | 'visuals';
 type CustomerStatus = 'all' | 'active' | 'paused';
@@ -256,6 +259,8 @@ function ComponentExamples({
             variant="pill"
           />
         </View>
+
+        <TabQueryCacheExample />
 
         <View style={styles.componentSection} testID="demo-picker-field">
           <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>PickerField · 搜索选择</AppText>
@@ -505,9 +510,11 @@ export default function App() {
       <GestureHandlerRootView style={styles.root}>
         <KeyboardProvider>
           <BottomSheetModalProvider>
-          <SunxuProvider isDark={isDark}>
-            <Catalog isDark={isDark} onToggleTheme={() => setIsDark((current) => !current)} />
-            </SunxuProvider>
+            <SunxuQueryProvider client={queryClient}>
+              <SunxuProvider isDark={isDark}>
+                <Catalog isDark={isDark} onToggleTheme={() => setIsDark((current) => !current)} />
+              </SunxuProvider>
+            </SunxuQueryProvider>
           </BottomSheetModalProvider>
         </KeyboardProvider>
       </GestureHandlerRootView>
