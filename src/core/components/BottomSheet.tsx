@@ -54,9 +54,9 @@ interface BottomSheetProps {
   confirmButtonColor?: string;
   /** 副标题，显示在标题下方 */
   subtitle?: string;
-  /** 启用动态高度，弹窗根据内容自适应高度（受 maxHeightRatio 限制） */
+  /** 启用动态高度，适用于短内容选择/说明弹层；带滚动表单时使用默认固定高度布局。 */
   dynamicHeight?: boolean;
-  /** 自定义底部操作栏，固定在底部不随内容滚动。与 confirmText 互斥 */
+  /** 自定义底部操作栏，固定在弹层底部并位于内容滚动区之外。与 confirmText 互斥。 */
   renderFooter?: () => React.ReactNode;
   /** 是否允许从内容区域直接拖动 BottomSheet。默认滚动型表单关闭，动态高度弹窗开启。 */
   enableContentPanningGesture?: boolean;

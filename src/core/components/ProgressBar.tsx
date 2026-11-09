@@ -1,4 +1,4 @@
-import { type DimensionValue, StyleSheet, View } from 'react-native';
+import { type DimensionValue, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { Radius } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 
@@ -13,6 +13,7 @@ interface ProgressBarProps {
   completedColor?: string;
   /** 进行中的颜色，默认 colors.primary */
   activeColor?: string;
+  style?: StyleProp<ViewStyle>;
 }
 
 export function ProgressBar({
@@ -21,6 +22,7 @@ export function ProgressBar({
   height = 4,
   completedColor,
   activeColor,
+  style,
 }: ProgressBarProps) {
   const { colors } = useTheme();
   const pct = target > 0 ? Math.min((current / target) * 100, 100) : 0;
@@ -30,7 +32,7 @@ export function ProgressBar({
     : (activeColor ?? colors.primary);
 
   return (
-    <View style={[styles.track, { height, backgroundColor: colors.border }]}>
+    <View style={[styles.track, { height, backgroundColor: colors.border }, style]}>
       <View
         style={[
           styles.fill,

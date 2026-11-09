@@ -1,7 +1,20 @@
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import type React from 'react';
-import { ActivityIndicator, Modal, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { KeyboardAvoidingView, KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  ActivityIndicator,
+  Modal,
+  Platform,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  type LayoutChangeEvent,
+} from 'react-native';
+import {
+  KeyboardAvoidingView,
+  KeyboardAwareScrollView,
+  KeyboardEvents,
+} from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 import { FontSize, Radius, Spacing } from '../theme/tokens';
@@ -23,14 +36,17 @@ export interface FullScreenModalProps {
   disabled?: boolean;
   /** 确认按钮禁用时给读屏用户的原因提示 */
   confirmDisabledHint?: string;
+  /** 表单启用键盘避让；Android 会扣除系统窗口已产生的位移。 */
   avoidKeyboard?: boolean;
-  /** scroll 保持表单滚动；fill 将内容区交给子组件管理滚动和全高布局。 */
+  /** scroll 由弹窗管理表单滚动；fill 将内容区交给子组件管理滚动和全高布局，底部操作区仍独立固定。 */
   bodyMode?: 'scroll' | 'fill';
   /** 沉浸式内容隐藏页头/副标题/页脚并占满弹窗内容区，供地图或媒体查看使用。 */
   immersive?: boolean;
   subtitle?: string;
+  /** 非表单确认类的页头辅助操作；提交/应用/保存等流程操作应使用固定 footer。 */
   headerRight?: React.ReactNode;
   confirmButtonColor?: string;
+  /** 自定义底部操作区，固定在弹窗底部并位于内容滚动区之外；与 confirmText 互斥。 */
   renderFooter?: () => React.ReactNode;
 }
 
@@ -65,6 +81,92 @@ export function FullScreenModal({
     if (requestCloseRegistry.requestClose()) return;
     onClose();
   };
+  const modalFrameRef = useRef<View>(null);
+  const baselineModalBottomRef = useRef<number | null>(null);
+  const keyboardHeightRef = useRef<number | null>(null);
+  const [systemKeyboardMovement, setSystemKeyboardMovement] = useState(0);
+
+  const measureModalBottom = useCallback((callback: (bottom: number) => void) => {
+    modalFrameRef.current?.measureInWindow((_x, y, _width, height) => {
+      if (!Number.isFinite(y) || !Number.isFinite(height) || height <= 0) {
+        return;
+      }
+      callback(y + height);
+    });
+  }, []);
+
+  const captureModalBaseline = useCallback(() => {
+    if (keyboardHeightRef.current != null) {
+      return;
+    }
+    measureModalBottom((bottom) => {
+      if (keyboardHeightRef.current != null) {
+        return;
+      }
+      baselineModalBottomRef.current = bottom;
+    });
+  }, [measureModalBottom]);
+
+  const updateSystemKeyboardMovement = useCallback(() => {
+    const keyboardHeight = keyboardHeightRef.current;
+    const baselineBottom = baselineModalBottomRef.current;
+    if (keyboardHeight == null || baselineBottom == null) {
+      return;
+    }
+
+    measureModalBottom((currentBottom) => {
+      if (keyboardHeightRef.current !== keyboardHeight) {
+        return;
+      }
+      const movement = Math.min(
+        Math.max(baselineBottom - currentBottom, 0),
+        Math.max(keyboardHeight, 0),
+      );
+      setSystemKeyboardMovement((current) =>
+        Math.abs(current - movement) < 1 ? current : movement,
+      );
+    });
+  }, [measureModalBottom]);
+
+  const handleModalLayout = useCallback(
+    (_event: LayoutChangeEvent) => {
+      if (keyboardHeightRef.current == null) {
+        captureModalBaseline();
+      } else {
+        updateSystemKeyboardMovement();
+      }
+    },
+    [captureModalBaseline, updateSystemKeyboardMovement],
+  );
+
+  useEffect(() => {
+    if (!visible || Platform.OS !== 'android' || !avoidKeyboard) {
+      keyboardHeightRef.current = null;
+      baselineModalBottomRef.current = null;
+      setSystemKeyboardMovement(0);
+      return;
+    }
+
+    const willShowSubscription = KeyboardEvents.addListener('keyboardWillShow', (event) => {
+      keyboardHeightRef.current = event.height;
+      updateSystemKeyboardMovement();
+    });
+    const didShowSubscription = KeyboardEvents.addListener('keyboardDidShow', (event) => {
+      keyboardHeightRef.current = event.height;
+      updateSystemKeyboardMovement();
+    });
+    const didHideSubscription = KeyboardEvents.addListener('keyboardDidHide', () => {
+      keyboardHeightRef.current = null;
+      setSystemKeyboardMovement(0);
+      captureModalBaseline();
+    });
+
+    return () => {
+      willShowSubscription.remove();
+      didShowSubscription.remove();
+      didHideSubscription.remove();
+    };
+  }, [avoidKeyboard, captureModalBaseline, updateSystemKeyboardMovement, visible]);
 
   return (
     <Modal
@@ -72,15 +174,21 @@ export function FullScreenModal({
       animationType="slide"
       presentationStyle="fullScreen"
       onRequestClose={handleRequestClose}
+      onShow={captureModalBaseline}
     >
       <ModalRequestCloseContext.Provider value={requestCloseRegistry}>
         <BottomSheetModalProvider>
           {/* Native Modal 会创建独立视图层级；在这里重新提供 provider，
               确保 PickerField / BottomSheetModal 渲染在当前全屏弹窗之上。 */}
           <KeyboardAvoidingView
+            ref={modalFrameRef}
+            onLayout={handleModalLayout}
             style={[styles.container, { backgroundColor: colors.surface }]}
             behavior={avoidKeyboard ? 'padding' : undefined}
-            keyboardVerticalOffset={0}
+            // On Android, subtract movement already applied by the system window.
+            keyboardVerticalOffset={
+              Platform.OS === 'android' ? -systemKeyboardMovement : 0
+            }
           >
             {!immersive ? (
               <PageHeader title={title} onBack={onClose} right={headerRight} />

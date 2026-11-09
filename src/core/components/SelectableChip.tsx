@@ -1,4 +1,5 @@
-import { type StyleProp, StyleSheet, TouchableOpacity, type ViewStyle } from 'react-native';
+import type React from 'react';
+import { type StyleProp, StyleSheet, TouchableOpacity, View, type ViewStyle } from 'react-native';
 import { FontSize, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { AppText as Text } from './AppText';
@@ -9,6 +10,10 @@ export interface SelectableChipProps {
   selected: boolean;
   onPress: () => void;
   disabled?: boolean;
+  /** 自定义读屏名称；默认使用可见标签。 */
+  accessibilityLabel?: string;
+  /** 可选尾随信息，如筛选数量。 */
+  suffix?: React.ReactNode;
   /** sm=列表/弹层内的紧凑筛选胶囊；md=表单/设置卡内的常规选择胶囊 */
   size?: 'sm' | 'md';
   style?: StyleProp<ViewStyle>;
@@ -28,6 +33,8 @@ export function SelectableChip({
   selected,
   onPress,
   disabled = false,
+  accessibilityLabel,
+  suffix,
   size = 'sm',
   style,
 }: SelectableChipProps) {
@@ -50,14 +57,17 @@ export function SelectableChip({
       onPress={onPress}
       accessibilityRole="button"
       accessibilityState={{ selected, disabled }}
-      accessibilityLabel={label}
+      accessibilityLabel={accessibilityLabel ?? label}
     >
-      <Text
-        style={[styles.chipText, { color: selected ? colors.primary : colors.textSecondary }]}
-        numberOfLines={1}
-      >
-        {label}
-      </Text>
+      <View style={styles.content}>
+        <Text
+          style={[styles.chipText, { color: selected ? colors.primary : colors.textSecondary }]}
+          numberOfLines={1}
+        >
+          {label}
+        </Text>
+        {suffix}
+      </View>
     </TouchableOpacity>
   );
 }
@@ -81,4 +91,5 @@ const styles = StyleSheet.create({
     fontSize: FontSize.xs,
     fontWeight: '500',
   },
+  content: { flexDirection: 'row', alignItems: 'center', gap: Spacing.xs },
 });

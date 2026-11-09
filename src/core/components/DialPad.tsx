@@ -19,7 +19,16 @@ const DIAL_KEYS = [
   { key: '#', letters: '' },
 ] as const;
 
-export interface DialPadProps {
+interface DialPadBaseProps {
+  /** Placeholder shown while the value is empty. */
+  placeholder?: string;
+  /** Disables all keypad and action controls. */
+  disabled?: boolean;
+}
+
+export type DialPadProps = DialPadBaseProps & (
+  | {
+  variant?: 'full';
   /** Current number. The host owns its value and may initialize or reset it. */
   value: string;
   /** Called when a key is appended or the final character is removed. */
@@ -28,39 +37,55 @@ export interface DialPadProps {
   onSubmit: (value: string) => void;
   /** Maximum characters accepted from keypad presses. Defaults to 20. */
   maxLength?: number;
-  /** Placeholder shown while the value is empty. */
-  placeholder?: string;
-  /** Disables all keypad and action controls. */
-  disabled?: boolean;
   /** Shows progress and disables delete/submit while the host processes submission. */
   isSubmitting?: boolean;
-}
+  /** Host-managed key handling, such as routing keys to an active call flow. */
+  onKeyPress?: (key: string) => void;
+  }
+  | {
+  /** Render only the keypad grid for host-owned dial displays and call controls. */
+  variant: 'keypad';
+  /** Optional host-managed key handling, such as routing keys to an active call flow. */
+  onKeyPress: (key: string) => void;
+  value?: string;
+  onChangeText?: (value: string) => void;
+  onSubmit?: (value: string) => void;
+  maxLength?: number;
+  isSubmitting?: never;
+  }
+);
 
 /** Controlled telephone keypad. It only edits and submits the supplied value. */
 export function DialPad({
-  value,
-  onChangeText,
-  onSubmit,
+  value = '',
+  onChangeText = () => undefined,
+  onSubmit = () => undefined,
   maxLength = 20,
   placeholder = '输入号码',
   disabled = false,
   isSubmitting = false,
+  variant = 'full',
+  onKeyPress,
 }: DialPadProps) {
   const { colors } = useTheme();
   const hasValue = value.length > 0;
   const limit = Math.max(0, Math.floor(maxLength));
-  const keypadDisabled = disabled || value.length >= limit;
+  const keypadDisabled = disabled || (!onKeyPress && value.length >= limit);
   const canSubmit = hasValue && !disabled && !isSubmitting;
   const canDelete = hasValue && !disabled && !isSubmitting;
 
   const appendKey = (key: string) => {
     if (keypadDisabled) return;
+    if (onKeyPress) {
+      onKeyPress(key);
+      return;
+    }
     onChangeText((value + key).slice(0, limit));
   };
 
   return (
     <View style={styles.container}>
-      <AppText
+      {variant === 'full' ? <AppText
         style={[
           styles.value,
           { color: hasValue ? colors.text : colors.textMuted },
@@ -71,7 +96,7 @@ export function DialPad({
         accessibilityLabel={hasValue ? `当前号码 ${value}` : placeholder}
       >
         {value || placeholder}
-      </AppText>
+      </AppText> : null}
 
       <View style={styles.grid}>
         {[0, 1, 2, 3].map((rowIndex) => (
@@ -118,7 +143,7 @@ export function DialPad({
         ))}
       </View>
 
-      <View style={styles.actions}>
+      {variant === 'full' ? <View style={styles.actions}>
         <Pressable
           style={({ pressed }) => [
             styles.actionSlot,
@@ -163,7 +188,7 @@ export function DialPad({
           )}
         </Pressable>
         <View style={styles.actionSlot} />
-      </View>
+      </View> : null}
     </View>
   );
 }

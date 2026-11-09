@@ -75,6 +75,7 @@ export function DatePickerField({
 }: DatePickerFieldProps) {
   const { colors, isDark } = useTheme();
   const insets = useSafeAreaInsets();
+  const selectionName = mode === 'time' ? '时间' : mode === 'datetime' ? '日期和时间' : '日期';
   const resolvedShowCurrentShortcut = showCurrentShortcut ?? mode === 'date';
   const showStandaloneCurrentShortcut = !label && resolvedShowCurrentShortcut && !compact;
   const [show, setShow] = useState(false);
@@ -295,13 +296,7 @@ export function DatePickerField({
               ]}
             >
               <View style={[styles.modalHeader, { borderBottomColor: colors.border }]}>
-                <TouchableOpacity onPress={() => setShow(false)}>
-                  <Text style={[styles.modalBtn, { color: colors.textSecondary }]}>取消</Text>
-                </TouchableOpacity>
                 <Text style={[styles.modalTitle, { color: colors.text }]}>{label}</Text>
-                <TouchableOpacity onPress={handleIOSConfirm}>
-                  <Text style={[styles.modalBtn, { color: colors.primary }]}>确定</Text>
-                </TouchableOpacity>
               </View>
               <DateTimePicker
                 value={iosDate}
@@ -313,6 +308,24 @@ export function DatePickerField({
                 themeVariant={isDark ? 'dark' : 'light'}
                 style={styles.iosPicker}
               />
+              <View style={[styles.modalFooter, { borderTopColor: colors.border }]}>
+                <TouchableOpacity
+                  style={styles.modalFooterButton}
+                  onPress={() => setShow(false)}
+                  accessibilityRole="button"
+                  accessibilityLabel={`取消${selectionName}选择`}
+                >
+                  <Text style={[styles.modalBtn, { color: colors.textSecondary }]}>取消</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.modalFooterButton}
+                  onPress={handleIOSConfirm}
+                  accessibilityRole="button"
+                  accessibilityLabel={`确定${selectionName}选择`}
+                >
+                  <Text style={[styles.modalBtn, { color: colors.primary }]}>确定</Text>
+                </TouchableOpacity>
+              </View>
             </Pressable>
           </Pressable>
         </Modal>
@@ -383,8 +396,6 @@ const styles = StyleSheet.create({
     // paddingBottom is set dynamically via insets.bottom
   },
   modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.md,
@@ -394,8 +405,22 @@ const styles = StyleSheet.create({
     fontSize: FontSize.md,
     fontWeight: '600',
   },
+  modalFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: Spacing.base,
+    paddingTop: Spacing.sm,
+    borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  modalFooterButton: {
+    minWidth: 88,
+    minHeight: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   modalBtn: {
     fontSize: FontSize.base,
+    fontWeight: '600',
   },
   iosPicker: {
     height: 216,

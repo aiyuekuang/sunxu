@@ -13,8 +13,8 @@ export function LoadingView() {
 interface InlineLoadingProps {
   /** 覆盖默认颜色（主题色），常用于按钮内白色 spinner */
   color?: string;
-  /** small（默认）或 large */
-  size?: 'small' | 'large';
+  /** 传递给 React Native ActivityIndicator 的尺寸；小尺寸可以传具体数字 */
+  size?: 'small' | 'large' | number;
   /** 外层容器样式，用于位置微调 */
   style?: ViewStyle;
 }

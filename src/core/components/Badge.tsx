@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { AppText as Text } from './AppText';
 import { useTheme } from '../theme/useTheme';
 import { FontSize, Spacing, Radius } from '../theme/tokens';
@@ -13,9 +13,10 @@ interface BadgeProps {
   /** 自定义背景色，配合 color 使用 */
   bg?: string;
   size?: 'sm' | 'md';
+  style?: StyleProp<ViewStyle>;
 }
 
-export function Badge({ label, variant = 'default', color, bg, size = 'md' }: BadgeProps) {
+export function Badge({ label, variant = 'default', color, bg, size = 'md', style }: BadgeProps) {
   const { colors } = useTheme();
 
   const variantMap: Record<BadgeVariant, { bg: string; text: string }> = {
@@ -33,7 +34,7 @@ export function Badge({ label, variant = 'default', color, bg, size = 'md' }: Ba
   const isSmall = size === 'sm';
 
   return (
-    <View style={[styles.badge, { backgroundColor: finalBg }, isSmall && styles.badgeSm]}>
+    <View style={[styles.badge, { backgroundColor: finalBg }, isSmall && styles.badgeSm, style]}>
       <Text style={[styles.label, { color: finalText }, isSmall && styles.labelSm]}>{label}</Text>
     </View>
   );

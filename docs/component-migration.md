@@ -50,6 +50,14 @@ Sunxu 面向多个 React Native / Expo App，提供跨业务可组合的 UI 控�
 - **可访问性**：页头返回由宿主提供回调；表单提交按钮暴露按钮角色、名称和忙碌/禁用状态；插槽内交互由控件自身提供标签和焦点顺序。
 - **验证**：类型检查通过；完整示例 App 的设备截图和几何/溢出记录未完成时，视觉验收为 `UNVERIFIED`。
 
+## 弹窗表单固定操作区
+
+- 弹窗表单中的确定、应用、保存、取消等流程操作统一固定在弹窗底部，与表单滚动区分离；滚动内容必须留在固定 footer 上方，不得让操作按钮随滚动内容移出视口。
+- `FullScreenModal` 使用 `confirmText` 或 `renderFooter` 提供固定底栏；`bodyMode="scroll"` 由组件管理内容滚动，`bodyMode="fill"` 时由宿主内容管理滚动，footer 仍由弹窗单独放置。
+- `BottomSheet` 使用 `confirmText` 或 `renderFooter` 提供固定底栏；长表单使用默认滚动内容区，`dynamicHeight` 仅用于短内容选择或说明弹层。
+- 新增或修改弹窗表单时，优先扩展上述组件，不得在滚动 children 中放确认类操作，也不得把确认操作放入标题栏。组件自己的系统/平台选择器同样遵守此位置约束。
+- 即时选择并立即生效的列表项、相机/媒体查看等没有表单确认闭环的弹层，不额外增加固定操作区。
+
 ## 依赖和可移植性
 
 - UI 运行时入口为 `sunxu` 和 `sunxu/core`；可选的 `sunxu/query` 仅封装通用 TanStack Query provider、Tab 查询键和失效工具，不承载 MES 或宿主业务。
@@ -134,6 +142,12 @@ CRM“客户 / 商机”导航的两个等宽 Tab 文字贴近格子左缘，而
 
 `DateNavigator` 新增可选 `period`（日/周/月/年）和 `maximumDate`。前后按钮以所选周期为单位移动，周一作为周起始；切换周期时锚定到该周期首日，最大日期约束同步限制日期选择与前进操作。未传这些属性的原调用继续按天移动且允许查看未来日期，周期选项和日期状态仍由宿主控制。
 
+## 2026-11-09 弹窗表单固定底栏
+
+- `FilterBar` 高级筛选改用共享 `BottomSheet`；筛选项在滚动区，重置/应用操作通过固定 footer 展示。
+- iOS `DatePickerField` 的取消/确定操作移到选择器弹窗底部。`FullScreenModal` 和 `BottomSheet` 的 API 注释明确 footer 与内容滚动区分离；Catalog 示例改用固定完成按钮并增加长筛选项示例。
+- `npm run typecheck` 通过。渲染验收为 `UNVERIFIED`：Expo Web 可打开 Catalog，但单次交互未能定位到可见的“应用高级筛选”按钮；未收集截图和 DOM 几何。iOS 原生日期选择器也未完成实际渲染核对。记录见[弹窗表单底栏验收](./verification/modal-form-footer-2026-11-09/README.md)。
+
 ## 2026-11-09 CRM 通用组合控件提取
 
 ### 组件盘点
@@ -160,3 +174,29 @@ CRM“客户 / 商机”导航的两个等宽 Tab 文字贴近格子左缘，而
 - **Recovery/composition**：组件不读取音源、不管理播放实例；宿主可以在暂停/切换记录时重设时间或从错误中恢复。可放入列表卡片、详情卡片或弹层；不负责卡片/标题、安全区、媒体权限和播放错误。最近邻替代是 CRM 私有 `CallRecordingPlayer`；它已在通话、客户动态和驾驶舱重复出现，改为中性 `AudioPlayer` 保留回调边界并统一状态/可访问性实现。
 
 `examples/catalog` 在地图图表示例页展示两组件，真实渲染与几何证据见[组合控件验收](./verification/composite-controls-2026-11-09/README.md)。该示例在 Expo Web 上验证布局和回调；原生 iOS/Android 设备、系统读屏与完整 Dynamic Type 档位仍需宿主验收。CRM 侧保留 SIM/API/错误处理，只把通用 UI 迁入 Sunxu。
+
+## 2026-11-09 Android 全屏弹窗键盘避让
+
+`FullScreenModal` 的 `avoidKeyboard` 在 Android 上根据弹窗根视图实际底边位移计算系统已完成的键盘避让量，并通过负 `keyboardVerticalOffset` 从键盘控制器的 padding 补偿中扣除这部分，避免系统窗口 resize/pan 与组件再次完整上移叠加。键盘关闭后重新采集基线；iOS 行为及固定 footer、表单滚动职责不变，未增加公开 API 或宿主业务依赖。
+
+Catalog 增加含多个输入框和固定保存栏的键盘避让表单，可用于复核低位输入框聚焦时的可见区域。小米 2510DRK44C（MIUI V816）原生 APK 构建成功，但设备以 `INSTALL_FAILED_USER_RESTRICTED` 拒绝安装；未取得渲染截图和窗口几何数据，因此设备视觉验收为 `UNVERIFIED`。
+
+## 2026-11-09 Sunxu 操作组件与 CRM 单条拜访接入
+
+- 新增通用 `ActionButton`、`IconActionButton`、`ActionMenu`、`ChoiceSheet`、`SectionCard`、`MetricCard`、`Divider`、`ScalePressable` 和根级 `ToastHost`。它们只处理展示、交互状态和回调，不读取 CRM 数据或权限。
+- `ChoiceSheet` 的选择项留在滚动区，“取消 / 确定”通过 `BottomSheet.renderFooter` 固定在底部；表单确认流程不能跟随选项滚出视口。
+- CRM 每条拜访计划现在使用共享 `ListCard` 和 `ActionButton`；单条计划自己提供开始、结束和路线恢复操作。结束表单使用 `FullScreenModal` 固定底栏。Sunxu 不承担拜访 API、状态校验和定位业务。
+- Catalog 新增操作菜单、单选弹层、按钮状态、轻按反馈、摘要卡片、分隔线和 Toast 示例，供可视核对。
+- Sunxu 源码版本升至 `0.1.8`。npm registry 当前尚无该版本；CRM 使用精确 Git commit 作为依赖，本次不发布 npm 包。
+
+## 2026-11-09 Tel App 通用组件接入扩展
+
+Tel App 接入检查中发现可共享而宿主先前自绘的加载、按压反馈、分隔线、Toast 容器和拨号键盘能力，现由 Sunxu 公共组件承接；Tel App 直接消费公开 API，不保留同义通用包装。
+
+- `InlineLoading.size` 支持 React Native 加载指示器的字符串尺寸与具体数字尺寸，主题颜色仍由 Sunxu 提供；Catalog 展示 12、16 和 large 三种尺寸。
+- `DialPad` 增加宿主键盘模式 `variant="keypad"` 与 `onKeyPress`，按键结果仍由宿主处理，不调用电话、权限或 SIM API。
+- `StatusTabs` 的 `TabItem` 暴露 `testID`；`Badge` 与 `ProgressBar` 提供标准 `style` 接入点；`SelectableChip` 提供 `accessibilityLabel` 和 `suffix` 插槽。
+- 新增可复用 `ScalePressable`、主题化 `Divider` 与根级 `ToastHost`，并在 `src/core/index.ts` 导出。
+- 类型检查通过前，不发布新 Sunxu 包。Tel App 当前从相邻仓库以 `link:../../sunxu` 实时依赖共享源码，避免复制本地 Git 历史和示例依赖；发布和版本升级由各自项目流程单独处理。
+
+Tel App 的真实设备/模拟器路由截图、长列表与弹层状态的几何/溢出证据未纳入 Sunxu catalog，本次宿主视觉验收仍标记为 `UNVERIFIED`，不能以类型检查替代。

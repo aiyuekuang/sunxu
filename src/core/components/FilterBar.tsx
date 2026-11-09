@@ -1,5 +1,4 @@
 import { Ionicons } from '@expo/vector-icons';
-import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {
   useCallback,
@@ -10,7 +9,6 @@ import React, {
   useState,
 } from 'react';
 import {
-  BackHandler,
   Dimensions,
   Modal,
   Pressable,
@@ -27,6 +25,7 @@ import { DatePickerField } from './DatePickerField';
 import { DateRangeQuickSelect } from './DateRangeQuickSelect';
 import { FilterActionButton } from './FilterActionButton';
 import { FilterQuickControl } from './FilterQuickControl';
+import { BottomSheet } from './BottomSheet';
 
 export interface FilterOption {
   label: string;
@@ -172,7 +171,6 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [advancedVisible, setAdvancedVisible] = useState(false);
   const [saveEnabled, setSaveEnabled] = useState(false);
-  const sheetRef = useRef<BottomSheetModal>(null);
   const [localAdvanced, setLocalAdvanced] = useState<Record<string, string | undefined>>({});
   const quickRowRef = useRef<View>(null);
   const [dropdownTop, setDropdownTop] = useState(140);
@@ -343,7 +341,6 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
     }
     setLocalAdvanced(advVals);
     setAdvancedVisible(true);
-    setTimeout(() => sheetRef.current?.present(), 50);
   }, [advancedExtraKeys, advancedFilters, values]);
 
   const handleAdvancedApply = useCallback(() => {
@@ -370,7 +367,6 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
     }
     onChange(newValues);
     persistValues(newValues);
-    sheetRef.current?.dismiss();
     setAdvancedVisible(false);
   }, [
     advancedExtraKeys,
@@ -386,15 +382,6 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
     setLocalAdvanced({});
     onResetAll?.();
   }, [onResetAll]);
-
-  useEffect(() => {
-    if (!advancedVisible) return;
-    const sub = BackHandler.addEventListener('hardwareBackPress', () => {
-      sheetRef.current?.dismiss();
-      return true;
-    });
-    return () => sub.remove();
-  }, [advancedVisible]);
 
   const handleSaveToggle = useCallback(
     async (enabled: boolean) => {
@@ -421,19 +408,6 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
     openAdvanced,
     saveEnabled,
   ]);
-
-  const renderBackdrop = useCallback(
-    (props: React.ComponentProps<typeof BottomSheetBackdrop>) => (
-      <BottomSheetBackdrop
-        {...props}
-        disappearsOnIndex={-1}
-        appearsOnIndex={0}
-        opacity={0.5}
-        pressBehavior="close"
-      />
-    ),
-    [],
-  );
 
   return (
     <>
@@ -497,7 +471,7 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
                 appearance="plain"
                 count={advancedActiveCount}
                 onPress={openAdvanced}
-                accessibilityLabel="打开筛选"
+                accessibilityLabel="打开高级筛选"
               />
             </View>
           )}
@@ -578,161 +552,157 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
         </Modal>
       )}
 
-      {/* 高级筛选弹窗 */}
-      {advancedVisible && (
-        <BottomSheetModal
-          ref={sheetRef}
-          onDismiss={() => setAdvancedVisible(false)}
-          enableDynamicSizing
-          enablePanDownToClose
-          backdropComponent={renderBackdrop}
-          backgroundStyle={{ backgroundColor: colors.surface }}
-          handleIndicatorStyle={{ backgroundColor: colors.textMuted }}
-        >
-          <BottomSheetView style={styles.advContainer}>
-            {/* Header */}
-            <View style={[styles.advHeader, { borderBottomColor: colors.border }]}>
-              <TouchableOpacity
-                style={styles.advHeaderButton}
-                onPress={handleAdvancedReset}
-                accessibilityRole="button"
+      {/* 高级筛选：筛选项独立滚动，重置/应用固定在弹层底部。 */}
+      <BottomSheet
+        visible={advancedVisible}
+        onClose={() => setAdvancedVisible(false)}
+        title="高级筛选"
+        maxHeightRatio={0.82}
+        renderFooter={() => (
+          <View style={styles.advFooter}>
+            <TouchableOpacity
+              style={[styles.advFooterButton, styles.advResetButton, { borderColor: colors.border }]}
+              onPress={handleAdvancedReset}
+              accessibilityRole="button"
+              accessibilityLabel="重置高级筛选"
+            >
+              <Text style={[styles.advHeaderBtn, { color: colors.textSecondary }]}>重置</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.advFooterButton,
+                styles.advApplyButton,
+                { backgroundColor: advancedDateRangeInvalid ? colors.surfaceSecondary : colors.primary },
+              ]}
+              onPress={handleAdvancedApply}
+              disabled={advancedDateRangeInvalid}
+              accessibilityRole="button"
+              accessibilityState={{ disabled: advancedDateRangeInvalid }}
+              accessibilityLabel="应用高级筛选"
+            >
+              <Text
+                style={[
+                  styles.advHeaderBtn,
+                  {
+                    color: advancedDateRangeInvalid ? colors.textTertiary : colors.textOnPrimary,
+                    fontWeight: '600',
+                  },
+                ]}
               >
-                <Text style={[styles.advHeaderBtn, { color: colors.textSecondary }]}>重置</Text>
-              </TouchableOpacity>
-              <Text style={[styles.advTitle, { color: colors.text }]}>高级筛选</Text>
-              <TouchableOpacity
-                style={styles.advHeaderButton}
-                onPress={handleAdvancedApply}
-                disabled={advancedDateRangeInvalid}
-                accessibilityRole="button"
-                accessibilityState={{ disabled: advancedDateRangeInvalid }}
-              >
-                <Text
-                  style={[
-                    styles.advHeaderBtn,
-                    {
-                      color: advancedDateRangeInvalid ? colors.textTertiary : colors.primary,
-                      fontWeight: '600',
-                    },
-                  ]}
-                >
-                  应用
-                </Text>
-              </TouchableOpacity>
-            </View>
-
-            {/* 筛选项 */}
-            {advancedFilters.map((filter) => (
-              <View key={filter.key} style={styles.advGroup}>
-                <Text style={[styles.advLabel, { color: colors.text }]}>{filter.label}</Text>
-                {isDateRange(filter) ? (
-                  <View style={styles.dateRangeGroup}>
-                    <View style={styles.dateRangeRow}>
-                      <DatePickerField
-                        label=""
-                        compact
-                        value={localAdvanced[filter.startKey]}
-                        onChange={(value) =>
-                          setLocalAdvanced((current) => ({
-                            ...current,
-                            [filter.startKey]: value,
-                          }))
-                        }
-                        placeholder="开始日期"
-                        maximumDate={localAdvanced[filter.endKey] || undefined}
-                        containerStyle={styles.dateField}
-                      />
-                      <Text style={[styles.dateRangeSep, { color: colors.textMuted }]}>—</Text>
-                      <DatePickerField
-                        label=""
-                        compact
-                        value={localAdvanced[filter.endKey]}
-                        onChange={(value) =>
-                          setLocalAdvanced((current) => ({
-                            ...current,
-                            [filter.endKey]: value,
-                          }))
-                        }
-                        placeholder="结束日期"
-                        minimumDate={localAdvanced[filter.startKey] || undefined}
-                        containerStyle={styles.dateField}
-                      />
-                    </View>
-                    <DateRangeQuickSelect
-                      onSelect={([startDate, endDate]) =>
-                        setLocalAdvanced((current) => ({
-                          ...current,
-                          [filter.startKey]: startDate,
-                          [filter.endKey]: endDate,
-                        }))
-                      }
-                    />
-                  </View>
-                ) : (
-                  <View style={styles.advOptions}>
-                    {filter.options.map((opt) => {
-                      const isSel = localAdvanced[filter.key] === opt.value;
-                      return (
-                        <TouchableOpacity
-                          key={opt.value}
-                          style={[
-                            styles.advChip,
-                            { backgroundColor: isSel ? colors.primary : colors.surfaceSecondary },
-                          ]}
-                          hitSlop={{ top: 4, right: 0, bottom: 4, left: 0 }}
-                          accessibilityRole="radio"
-                          accessibilityState={{ selected: isSel }}
-                          onPress={() =>
-                            setLocalAdvanced((prev) => ({
-                              ...prev,
-                              [filter.key]: prev[filter.key] === opt.value ? undefined : opt.value,
-                            }))
-                          }
-                        >
-                          <Text
-                            style={[
-                              styles.advChipText,
-                              { color: isSel ? colors.textOnPrimary : colors.textSecondary },
-                            ]}
-                          >
-                            {opt.label}
-                          </Text>
-                        </TouchableOpacity>
-                      );
-                    })}
-                  </View>
-                )}
-              </View>
-            ))}
-
-            {advancedExtra?.({
-              values: localAdvanced,
-              setValue: (key, value) =>
-                setLocalAdvanced((current) => ({ ...current, [key]: value })),
-            })}
-
-            {/* 记住筛选开关 */}
-            {storageKey && (
-              <View style={[styles.saveRow, { borderTopColor: colors.border }]}>
-                <View>
-                  <Text style={[styles.saveLabel, { color: colors.text }]}>记住筛选条件</Text>
-                  <Text style={[styles.saveHint, { color: colors.textSecondary }]}>
-                    下次进入页面自动应用
-                  </Text>
+                应用
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      >
+        {/* 筛选项 */}
+        {advancedFilters.map((filter) => (
+          <View key={filter.key} style={styles.advGroup}>
+            <Text style={[styles.advLabel, { color: colors.text }]}>{filter.label}</Text>
+            {isDateRange(filter) ? (
+              <View style={styles.dateRangeGroup}>
+                <View style={styles.dateRangeRow}>
+                  <DatePickerField
+                    label=""
+                    compact
+                    value={localAdvanced[filter.startKey]}
+                    onChange={(value) =>
+                      setLocalAdvanced((current) => ({
+                        ...current,
+                        [filter.startKey]: value,
+                      }))
+                    }
+                    placeholder="开始日期"
+                    maximumDate={localAdvanced[filter.endKey] || undefined}
+                    containerStyle={styles.dateField}
+                  />
+                  <Text style={[styles.dateRangeSep, { color: colors.textMuted }]}>—</Text>
+                  <DatePickerField
+                    label=""
+                    compact
+                    value={localAdvanced[filter.endKey]}
+                    onChange={(value) =>
+                      setLocalAdvanced((current) => ({
+                        ...current,
+                        [filter.endKey]: value,
+                      }))
+                    }
+                    placeholder="结束日期"
+                    minimumDate={localAdvanced[filter.startKey] || undefined}
+                    containerStyle={styles.dateField}
+                  />
                 </View>
-                <Switch
-                  value={saveEnabled}
-                  onValueChange={handleSaveToggle}
-                  trackColor={{ false: colors.border, true: `${colors.primary}80` }}
-                  thumbColor={saveEnabled ? colors.primary : colors.border}
+                <DateRangeQuickSelect
+                  onSelect={([startDate, endDate]) =>
+                    setLocalAdvanced((current) => ({
+                      ...current,
+                      [filter.startKey]: startDate,
+                      [filter.endKey]: endDate,
+                    }))
+                  }
                 />
               </View>
+            ) : (
+              <View style={styles.advOptions}>
+                {filter.options.map((opt) => {
+                  const isSel = localAdvanced[filter.key] === opt.value;
+                  return (
+                    <TouchableOpacity
+                      key={opt.value}
+                      style={[
+                        styles.advChip,
+                        { backgroundColor: isSel ? colors.primary : colors.surfaceSecondary },
+                      ]}
+                      hitSlop={{ top: 4, right: 0, bottom: 4, left: 0 }}
+                      accessibilityRole="radio"
+                      accessibilityState={{ selected: isSel }}
+                      onPress={() =>
+                        setLocalAdvanced((prev) => ({
+                          ...prev,
+                          [filter.key]: prev[filter.key] === opt.value ? undefined : opt.value,
+                        }))
+                      }
+                    >
+                      <Text
+                        style={[
+                          styles.advChipText,
+                          { color: isSel ? colors.textOnPrimary : colors.textSecondary },
+                        ]}
+                      >
+                        {opt.label}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
             )}
+          </View>
+        ))}
 
-            <View style={{ height: Spacing.xl }} />
-          </BottomSheetView>
-        </BottomSheetModal>
-      )}
+        {advancedExtra?.({
+          values: localAdvanced,
+          setValue: (key, value) =>
+            setLocalAdvanced((current) => ({ ...current, [key]: value })),
+        })}
+
+        {/* 记住筛选开关 */}
+        {storageKey && (
+          <View style={[styles.saveRow, { borderTopColor: colors.border }]}>
+            <View>
+              <Text style={[styles.saveLabel, { color: colors.text }]}>记住筛选条件</Text>
+              <Text style={[styles.saveHint, { color: colors.textSecondary }]}>
+                下次进入页面自动应用
+              </Text>
+            </View>
+            <Switch
+              value={saveEnabled}
+              onValueChange={handleSaveToggle}
+              trackColor={{ false: colors.border, true: `${colors.primary}80` }}
+              thumbColor={saveEnabled ? colors.primary : colors.border}
+            />
+          </View>
+        )}
+      </BottomSheet>
     </>
   );
 });
@@ -798,28 +768,28 @@ const styles = StyleSheet.create({
   },
 
   // --- 高级筛选弹窗 ---
-  advContainer: {
-    paddingHorizontal: Spacing.md,
-  },
-  advHeader: {
+  advFooter: {
+    flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: Spacing.sm,
-    borderBottomWidth: StyleSheet.hairlineWidth,
+    justifyContent: 'space-between',
   },
-  advTitle: {
-    fontSize: FontSize.base,
-    fontWeight: '600',
+  advFooterButton: {
+    minHeight: MIN_TOUCH_TARGET,
+    minWidth: 88,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: Spacing.md,
+    borderRadius: Radius.sm,
+  },
+  advResetButton: {
+    borderWidth: StyleSheet.hairlineWidth,
+  },
+  advApplyButton: {
+    minWidth: 112,
   },
   advHeaderBtn: {
     fontSize: FontSize.sm,
-  },
-  advHeaderButton: {
-    minWidth: MIN_TOUCH_TARGET,
-    minHeight: MIN_TOUCH_TARGET,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   advGroup: {
     marginTop: Spacing.md,

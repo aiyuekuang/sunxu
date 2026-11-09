@@ -31,6 +31,8 @@ export function ExampleApp() {
 
 `PageHeader` 和 `HeaderIconButton` 提供标准页头及右侧动作。需要按数量收纳时，在 `ListScreenContainer`、`DetailScreenContainer` 或 `FormScreenContainer` 使用 `headerActions`：单个动作以图标直显，多个动作收进右侧“更多操作”下拉菜单；旧的 `headerRight` 自定义插槽继续可用。
 
+弹窗表单使用 `FullScreenModal` 或 `BottomSheet` 的 `confirmText` / `renderFooter` 放置确定、应用、保存等操作；操作区固定在弹窗底部，表单内容单独滚动。确认类流程操作不放在标题栏。
+
 所有容器默认使用 Sunxu 语义主题和顶部安全区。底部操作区可搭配 `BottomActionBar`，由操作栏本身处理底部安全区。
 
 `DateNavigator` 可按日、周、月或年切换；未设置 `period` 时仍按天切换。传入 `maximumDate` 可限制日期选择，并在到达最后一个可用周期时禁用向后切换。日期锚点和数据请求仍由宿主管理。

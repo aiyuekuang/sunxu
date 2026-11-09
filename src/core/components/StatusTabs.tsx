@@ -15,6 +15,7 @@ export interface TabItem<T extends string = string> {
   key: T;
   label: string;
   count?: number;
+  testID?: string;
   /** 可选图标（underline 导航 Tab 常用） */
   icon?: keyof typeof Ionicons.glyphMap;
   /** 置灰不可点击（如权限不足的业务分类） */
@@ -113,6 +114,7 @@ export function StatusTabs<T extends string = string>({
         return (
           <TouchableOpacity
             key={tab.key}
+            testID={tab.testID}
             style={[styles.underlineTab, !scrollable && sizing !== 'hug' && styles.tabFlex]}
             onPress={() => {
               if (!tab.disabled) handleTabPress(tab.key);
@@ -191,6 +193,7 @@ export function StatusTabs<T extends string = string>({
       return (
         <TouchableOpacity
           key={tab.key}
+          testID={tab.testID}
           style={[
             styles.tab,
             { borderRadius: Radius.sm },

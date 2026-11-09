@@ -1,27 +1,39 @@
 import {
   AppText,
+  ActionButton,
+  ActionMenu,
   Badge,
   BottomActionBar,
+  ChoiceSheet,
   DateNavigator,
   DetailCard,
   DetailActionBar,
   DetailScreenContainer,
+  Divider,
   EntityFilterChip,
   Field,
+  FilterBar,
   FullScreenModal,
   FormField,
   FormPage,
   InfoRow,
+  InlineLoading,
+  IconActionButton,
   ListCard,
   ListScreenContainer,
+  MetricCard,
   PickerField,
   PhotoPicker,
   SearchBar,
+  ScalePressable,
+  SectionCard,
   StatusTabs,
   SunxuProvider,
+  ToastHost,
   type EntityFilterValue,
   type EntityPickerFetchFn,
   type PickerOption,
+  type AdvancedFilterConfig,
   type TabItem,
   useTheme,
 } from 'sunxu';
@@ -36,6 +48,7 @@ import { VisualExamples } from './VisualExamples';
 import { SunxuQueryProvider } from 'sunxu/query';
 import { TabQueryCacheExample } from './TabQueryCacheExample';
 import { queryClient } from './queryClient';
+import Toast from 'react-native-toast-message';
 
 type ScreenKey = 'list' | 'form' | 'detail' | 'components' | 'visuals';
 type CustomerStatus = 'all' | 'active' | 'paused';
@@ -93,6 +106,77 @@ const pickerOptions: PickerOption[] = [
   { label: '李顾问', value: 'li' },
   { label: '孙经理', value: 'sun' },
   { label: '吴专员', value: 'wu' },
+];
+
+const demoAdvancedFilters: AdvancedFilterConfig[] = [
+  {
+    key: 'status',
+    label: '状态',
+    options: [
+      { label: '进行中', value: 'active' },
+      { label: '已暂停', value: 'paused' },
+    ],
+  },
+  {
+    key: 'region',
+    label: '地区',
+    options: [
+      { label: '华东', value: 'east' },
+      { label: '华南', value: 'south' },
+      { label: '华北', value: 'north' },
+    ],
+  },
+  {
+    key: 'source',
+    label: '来源',
+    options: [
+      { label: '线上', value: 'online' },
+      { label: '线下', value: 'offline' },
+      { label: '推荐', value: 'referral' },
+    ],
+  },
+  {
+    key: 'level',
+    label: '客户等级',
+    options: [
+      { label: 'A 级', value: 'a' },
+      { label: 'B 级', value: 'b' },
+      { label: 'C 级', value: 'c' },
+    ],
+  },
+  {
+    key: 'owner',
+    label: '负责人',
+    options: [
+      { label: '林经理', value: 'lin' },
+      { label: '陈女士', value: 'chen' },
+      { label: '周先生', value: 'zhou' },
+    ],
+  },
+  {
+    key: 'scale',
+    label: '团队规模',
+    options: [
+      { label: '1–20 人', value: 'small' },
+      { label: '21–100 人', value: 'medium' },
+      { label: '100 人以上', value: 'large' },
+    ],
+  },
+  {
+    key: 'activity',
+    label: '近期活动',
+    options: [
+      { label: '有跟进', value: 'followed' },
+      { label: '无跟进', value: 'unfollowed' },
+    ],
+  },
+  {
+    type: 'date_range',
+    key: 'created',
+    label: '创建日期',
+    startKey: 'createdFrom',
+    endKey: 'createdTo',
+  },
 ];
 
 type DemoEntity = { id: string; name: string; categoryId: string; detail: string };
@@ -158,11 +242,17 @@ function ComponentExamples({
   const [disabledTimelineFilter, setDisabledTimelineFilter] = useState<TimelineFilterDemo>('all');
   const [customerOpportunity, setCustomerOpportunity] = useState<CustomerOpportunityDemo>('customers');
   const [search, setSearch] = useState('');
+  const [advancedFilterValues, setAdvancedFilterValues] = useState<
+    Record<string, string | undefined>
+  >({});
   const [pickerValue, setPickerValue] = useState('lin');
   const [entityValue, setEntityValue] = useState<EntityFilterValue | null>(null);
   const [photos, setPhotos] = useState<string[]>([]);
   const [fillModalVisible, setFillModalVisible] = useState(false);
   const [immersiveModalVisible, setImmersiveModalVisible] = useState(false);
+  const [keyboardModalVisible, setKeyboardModalVisible] = useState(false);
+  const [choiceSheetVisible, setChoiceSheetVisible] = useState(false);
+  const [choiceValue, setChoiceValue] = useState('active');
   const [feedback, setFeedback] = useState('');
 
   const resetExamples = () => {
@@ -172,11 +262,15 @@ function ComponentExamples({
     setDisabledTimelineFilter('all');
     setCustomerOpportunity('customers');
     setSearch('');
+    setAdvancedFilterValues({});
     setPickerValue('lin');
     setEntityValue(null);
     setPhotos([]);
     setFillModalVisible(false);
     setImmersiveModalVisible(false);
+    setKeyboardModalVisible(false);
+    setChoiceSheetVisible(false);
+    setChoiceValue('active');
     setFeedback('示例状态已重置');
   };
 
@@ -196,6 +290,73 @@ function ComponentExamples({
       footer={<ExampleTabs current={current} onChange={onChange} />}
     >
       <View style={styles.componentDemo}>
+        <View style={styles.componentSection} testID="demo-shared-actions">
+          <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>Sunxu · 通用操作与摘要</AppText>
+          <SectionCard
+            title="共享业务卡片"
+            subtitle="状态和操作结果仍由宿主页面负责"
+            headerRight={
+              <ActionMenu
+                title="客户操作"
+                actions={[
+                  { id: 'edit', label: '编辑资料', icon: 'pencil-outline', onPress: () => setFeedback('已触发编辑') },
+                  { id: 'archive', label: '归档客户', icon: 'archive-outline', destructive: true, onPress: () => setFeedback('已触发归档') },
+                ]}
+              />
+            }
+          >
+            <View style={styles.controlButtonRow}>
+              <ActionButton icon="play" onPress={() => setFeedback('开始操作已触发')}>开始拜访</ActionButton>
+              <IconActionButton
+                icon="map-marker-outline"
+                tone="primary"
+                variant="tinted"
+                accessibilityLabel="查看路线示例"
+                onPress={() => setFeedback('已打开路线示例')}
+              />
+            </View>
+            <Divider />
+            <View style={styles.metricRow}>
+              <MetricCard label="待跟进" value={6} style={styles.metric} />
+              <MetricCard label="已完成" value={18} accentColor={colors.success} style={styles.metric} />
+            </View>
+            <ScalePressable
+              accessibilityRole="button"
+              accessibilityLabel="打开轻按反馈示例"
+              onPress={() => setFeedback('轻按反馈已触发')}
+              style={[styles.scaleExample, { backgroundColor: colors.surfaceSecondary }]}
+            >
+              <AppText style={{ color: colors.text }}>轻按反馈 · 尊重系统减弱动态设置</AppText>
+            </ScalePressable>
+            <View style={styles.controlButtonRow}>
+              <ActionButton variant="outlined" onPress={() => setChoiceSheetVisible(true)}>选择状态</ActionButton>
+              <ActionButton variant="secondary" onPress={() => Toast.show({ type: 'success', text1: '示例提示', text2: 'Toast 由 Sunxu host 提供' })}>显示提示</ActionButton>
+            </View>
+          </SectionCard>
+          {feedback ? <AppText testID="demo-shared-action-feedback" style={{ color: colors.textSecondary }}>{feedback}</AppText> : null}
+          <ChoiceSheet
+            visible={choiceSheetVisible}
+            title="选择客户状态"
+            value={choiceValue}
+            options={[
+              { key: 'active', label: '合作中', count: 18 },
+              { key: 'waiting', label: '待跟进', count: 6 },
+              { key: 'paused', label: '已暂停', disabled: true },
+            ]}
+            onClose={() => setChoiceSheetVisible(false)}
+            onConfirm={setChoiceValue}
+          />
+        </View>
+
+        <View style={styles.componentSection} testID="demo-inline-loading">
+          <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>InlineLoading · 主题加载态</AppText>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 20 }}>
+            <InlineLoading size={12} />
+            <InlineLoading size={16} />
+            <InlineLoading size="large" />
+          </View>
+        </View>
+
         <View style={styles.componentSection} testID="demo-date-navigator">
           <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>DateNavigator · 按天切换</AppText>
           <DateNavigator value={date} todayValue={today} onChange={setDate} label="跟进日期" />
@@ -227,6 +388,16 @@ function ComponentExamples({
             variant="segment"
             countBadge
             density="compact"
+          />
+        </View>
+
+        <View style={styles.componentSection} testID="demo-filter-bar-fixed-footer">
+          <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>FilterBar · 高级筛选</AppText>
+          <FilterBar
+            quickFilters={[]}
+            advancedFilters={demoAdvancedFilters}
+            values={advancedFilterValues}
+            onChange={setAdvancedFilterValues}
           />
         </View>
 
@@ -307,8 +478,16 @@ function ComponentExamples({
         </View>
 
         <View style={styles.componentSection} testID="demo-full-screen-modal">
-          <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>FullScreenModal · fill / immersive</AppText>
+          <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>FullScreenModal · 键盘避让 / fill / immersive</AppText>
           <View style={styles.modalButtons}>
+            <Pressable
+              style={[styles.demoButton, { backgroundColor: colors.primary }]}
+              onPress={() => setKeyboardModalVisible(true)}
+              accessibilityRole="button"
+              accessibilityLabel="打开键盘避让弹窗示例"
+            >
+              <AppText style={[styles.demoButtonText, { color: colors.textOnPrimary }]}>键盘避让表单</AppText>
+            </Pressable>
             <Pressable
               style={[styles.demoButton, { backgroundColor: colors.primary }]}
               onPress={() => setFillModalVisible(true)}
@@ -332,19 +511,26 @@ function ComponentExamples({
       </View>
 
       <FullScreenModal
+        visible={keyboardModalVisible}
+        onClose={() => setKeyboardModalVisible(false)}
+        title="键盘避让表单"
+        avoidKeyboard
+        confirmText="保存"
+        onConfirm={() => setKeyboardModalVisible(false)}
+      >
+        <FormField label="客户名称" placeholder="请输入客户名称" testID="keyboard-modal-name" />
+        <FormField label="联系人" placeholder="请输入联系人" testID="keyboard-modal-contact" />
+        <FormField label="联系电话" placeholder="请输入联系电话" keyboardType="phone-pad" testID="keyboard-modal-phone" />
+        <FormField label="备注" placeholder="请输入备注" testID="keyboard-modal-notes" />
+      </FullScreenModal>
+
+      <FullScreenModal
         visible={fillModalVisible}
         onClose={() => setFillModalVisible(false)}
         title="填充内容区"
         bodyMode="fill"
-        headerRight={
-          <Pressable
-            onPress={() => setFillModalVisible(false)}
-            accessibilityRole="button"
-            accessibilityLabel="完成并关闭填充弹窗"
-          >
-              <AppText style={[styles.accessoryText, { color: colors.primary }]}>完成</AppText>
-          </Pressable>
-        }
+        confirmText="完成"
+        onConfirm={() => setFillModalVisible(false)}
       >
         <View style={styles.fillModalContent}>
           <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>子内容占满弹窗剩余空间</AppText>
@@ -513,6 +699,7 @@ export default function App() {
             <SunxuQueryProvider client={queryClient}>
               <SunxuProvider isDark={isDark}>
                 <Catalog isDark={isDark} onToggleTheme={() => setIsDark((current) => !current)} />
+                <ToastHost />
               </SunxuProvider>
             </SunxuQueryProvider>
           </BottomSheetModalProvider>
@@ -543,6 +730,10 @@ const styles = StyleSheet.create({
   componentSection: { gap: 8 },
   componentSectionTitle: { fontSize: 14, fontWeight: '600' },
   componentHint: { fontSize: 12, lineHeight: 18 },
+  controlButtonRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  metricRow: { flexDirection: 'row', gap: 8 },
+  metric: { flex: 1 },
+  scaleExample: { minHeight: 48, borderRadius: 10, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 12 },
   accessoryButton: { minWidth: 44, minHeight: 44, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 8 },
   accessoryText: { fontWeight: '600' },
   modalButtons: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
