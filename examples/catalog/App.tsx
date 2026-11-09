@@ -76,7 +76,7 @@ const customers = [
 ];
 
 const componentTabs: TabItem<ComponentStatus>[] = [
-  { key: 'all', label: '全部', count: 24 },
+  { key: 'all', label: '全部', count: 24, accessibilityHint: '显示所有客户跟进记录' },
   { key: 'waiting', label: '待跟进', count: 6 },
   { key: 'done', label: '已完成', count: 18 },
 ];
@@ -203,6 +203,8 @@ const fetchDemoCategories = async () => [
 ];
 
 function ExampleTabs({ current, onChange }: { current: ScreenKey; onChange: (key: ScreenKey) => void }) {
+  const { colors } = useTheme();
+
   return (
     <BottomActionBar style={styles.exampleTabs}>
       {screenTabs.map((tab) => (
@@ -214,7 +216,12 @@ function ExampleTabs({ current, onChange }: { current: ScreenKey; onChange: (key
           accessibilityLabel={`${tab.label}页面示例`}
           accessibilityState={{ selected: current === tab.key }}
         >
-          <AppText style={[styles.exampleTabText, current === tab.key && styles.exampleTabTextActive]}>
+          <AppText
+            style={[
+              styles.exampleTabText,
+              current === tab.key && { color: colors.primary, fontWeight: '700' },
+            ]}
+          >
             {tab.label}
           </AppText>
         </Pressable>
@@ -242,6 +249,7 @@ function ComponentExamples({
   const [disabledTimelineFilter, setDisabledTimelineFilter] = useState<TimelineFilterDemo>('all');
   const [customerOpportunity, setCustomerOpportunity] = useState<CustomerOpportunityDemo>('customers');
   const [search, setSearch] = useState('');
+  const [quickPeriod, setQuickPeriod] = useState('today');
   const [advancedFilterValues, setAdvancedFilterValues] = useState<
     Record<string, string | undefined>
   >({});
@@ -333,6 +341,11 @@ function ComponentExamples({
               <ActionButton variant="secondary" onPress={() => Toast.show({ type: 'success', text1: '示例提示', text2: 'Toast 由 Sunxu host 提供' })}>显示提示</ActionButton>
             </View>
           </SectionCard>
+          <SectionCard>
+            <AppText style={{ color: colors.textSecondary }}>
+              当前任务和筛选条件已说明内容时，容器负责分组即可，不重复添加标题。
+            </AppText>
+          </SectionCard>
           {feedback ? <AppText testID="demo-shared-action-feedback" style={{ color: colors.textSecondary }}>{feedback}</AppText> : null}
           <ChoiceSheet
             visible={choiceSheetVisible}
@@ -394,10 +407,24 @@ function ComponentExamples({
         <View style={styles.componentSection} testID="demo-filter-bar-fixed-footer">
           <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>FilterBar · 高级筛选</AppText>
           <FilterBar
-            quickFilters={[]}
+            quickFilters={[
+              {
+                key: 'period',
+                label: '快捷时间',
+                includeAllOption: false,
+                options: [
+                  { label: '今天', value: 'today' },
+                  { label: '近 3 天', value: 'last3days' },
+                  { label: '本周', value: 'thisWeek' },
+                ],
+              },
+            ]}
             advancedFilters={demoAdvancedFilters}
-            values={advancedFilterValues}
-            onChange={setAdvancedFilterValues}
+            values={{ ...advancedFilterValues, period: quickPeriod }}
+            onChange={(values) => {
+              setAdvancedFilterValues(values);
+              if (values.period) setQuickPeriod(values.period);
+            }}
           />
         </View>
 
@@ -716,7 +743,6 @@ const styles = StyleSheet.create({
   exampleTabs: { flexDirection: 'row', justifyContent: 'space-around' },
   exampleTab: { minWidth: 72, minHeight: 44, alignItems: 'center', justifyContent: 'center' },
   exampleTabText: { color: '#777', fontWeight: '500' },
-  exampleTabTextActive: { color: '#1677FF', fontWeight: '700' },
   notes: {
     minHeight: 88,
     padding: 12,

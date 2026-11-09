@@ -202,3 +202,24 @@ Tel App 接入检查中发现可共享而宿主先前自绘的加载、按压反
 - 类型检查通过前，不发布新 Sunxu 包。Tel App 当前从相邻仓库以 `link:../../sunxu` 实时依赖共享源码，避免复制本地 Git 历史和示例依赖；发布和版本升级由各自项目流程单独处理。
 
 Tel App 的真实设备/模拟器路由截图、长列表与弹层状态的几何/溢出证据未纳入 Sunxu catalog，本次宿主视觉验收仍标记为 `UNVERIFIED`，不能以类型检查替代。
+
+## 2026-11-09 SectionCard 标题与 FilterBar 快捷筛选约定
+
+- `SectionCard.title` 改为可选。它表达内容分组，不强制产生可见标题；只有标题能补充页面上下文、区分业务对象/任务/状态时才显示。当前 Tab、导航或邻近筛选已明确主题时省略标题，避免重复使用“概览”“信息”等泛化词。无标题且无副标题/右侧动作时不渲染 header，也不保留 header 与 body 之间的空隙。
+- Catalog 同时展示有标题和无标题的 `SectionCard`，说明标题选择与容器外观分开。
+- `FilterBar` 的快捷选项可设置 `includeAllOption: false`：隐藏“全部”，并避免再次点击当前选项时清空选择。默认 `true` 保持普通筛选可清除的原契约。
+- 通话记录页已有“通话”主 Tab 和清晰的快捷/高级筛选、状态切换，移除没有额外业务辨识价值的“通话概览”容器标题，保留内容分组。
+- `StatusTabs` 只负责选项、计数和选择状态，不添加可见解释行；业务差异写进标签/指标，必要的辅助解释用 `TabItem.accessibilityHint` 提供给读屏。Catalog 的 StatusTabs 示例只展示选项本身。
+
+## 2026-11-09 默认主题色对齐东健 CRM
+
+- `SunxuProvider` 未传宿主主题时，默认浅色主色改为 `#007D35`、主色浅底改为 `#E6F7EC`；深色主色改为 `#1F7A45`、主色浅底改为 `#10271A`。标签栏激活色与对应主题主色一致。
+- Catalog 示例页的当前标签改为读取 `colors.primary`，避免继续硬编码旧蓝色。宿主显式传入的主题不变；`info`、`success` 等语义状态色也保留原值。
+- CRM 当前主题定义来源：`../dongjian-crm/app/src/constants/colors.ts`。渲染与几何/溢出验收见[默认主题色验收](./verification/theme-default-brand-green-2026-11-09/README.md)。
+
+## Sunxu 0.1.9 组件库核对
+
+- `SectionCard.title` 可省略；没有标题、副标题或右侧操作时不产生空 header 或额外间距。
+- `StatusTabs` 为 TabItem 增加仅供读屏使用的 `accessibilityHint`，不增加可见说明行。
+- 默认主题色和 Catalog 组件示例对齐 CRM；快捷 FilterBar 示例覆盖隐藏“全部”并保留当前选择的配置。
+- Catalog 在 375×812 Expo Web 视口下通过可见布局和快捷筛选切换检查。无标题分组和主色截图、DOM 几何及横向溢出记录见[验收记录](./verification/theme-default-brand-green-2026-11-09/README.md)。快捷筛选展开态截图只留在当前 CUA 检查记录，未归档到仓库；原生 Android/iOS 和深色主题复核仍为 `UNVERIFIED`。本次未发布 npm 包。

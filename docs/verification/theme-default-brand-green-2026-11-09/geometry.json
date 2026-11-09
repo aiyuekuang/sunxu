@@ -1,0 +1,40 @@
+{
+  "date": "2026-11-09",
+  "route": "Expo Web Catalog → 组件示例",
+  "url": "http://localhost:8097/",
+  "viewport": { "width": 375, "height": 812 },
+  "document": {
+    "clientWidth": 375,
+    "scrollWidth": 375,
+    "horizontalOverflow": false
+  },
+  "scrollContainer": {
+    "clientWidth": 375,
+    "scrollWidth": 375,
+    "clientHeight": 694,
+    "scrollHeight": 1893,
+    "horizontalOverflow": false
+  },
+  "screenshot": "light-375x812.png",
+  "sectionCardWithoutTitle": {
+    "card": { "x": 28, "y": 432, "width": 319, "height": 60, "right": 347, "bottom": 492 },
+    "content": { "x": 37, "y": 441, "width": 301, "height": 42, "right": 338, "bottom": 483 },
+    "headerRendered": false
+  },
+  "filterBar": {
+    "heading": { "x": 28, "y": 105, "width": 319, "height": 20, "right": 347, "bottom": 125 },
+    "quickControl": { "x": 36, "y": 132.5, "width": 48, "height": 36, "right": 84, "bottom": 168.5 },
+    "advancedButton": { "x": 303, "y": 132.5, "width": 36, "height": 36, "right": 339, "bottom": 168.5 },
+    "expandedOptions": [
+      { "label": "今天", "x": 0, "y": 169.5, "width": 375, "height": 44, "selected": true },
+      { "label": "近 3 天", "x": 0, "y": 213.5, "width": 375, "height": 44, "selected": false },
+      { "label": "本周", "x": 0, "y": 257.5, "width": 375, "height": 44, "selected": false }
+    ],
+    "allOptionRendered": false,
+    "selectionSwitchVerified": true,
+    "selectionRestoredTo": "今天",
+    "expandedStateScreenshot": "CUA tool output only; not persisted"
+  },
+  "pageErrors": [],
+  "consoleErrors": []
+}

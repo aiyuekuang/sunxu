@@ -5,7 +5,8 @@ import { useTheme } from '../theme/useTheme';
 import { AppText } from './AppText';
 
 export interface SectionCardProps {
-  title: string;
+  /** Only include a visible heading when it adds context beyond the page and its controls. */
+  title?: string;
   subtitle?: string;
   children: React.ReactNode;
   required?: boolean;
@@ -17,7 +18,10 @@ export interface SectionCardProps {
   subtitleStyle?: StyleProp<TextStyle>;
 }
 
-/** A titled content section with optional supporting text and trailing actions. */
+/**
+ * Groups related content on one surface. A heading is optional: omit it when the
+ * page context or adjacent controls already identify the content.
+ */
 export function SectionCard({
   title,
   subtitle,
@@ -31,18 +35,37 @@ export function SectionCard({
   subtitleStyle,
 }: SectionCardProps) {
   const { colors } = useTheme();
+  const showHeader = Boolean(title || subtitle || headerRight);
+
   return (
     <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }, style]}>
-      <View style={[styles.header, headerStyle]}>
-        <View style={styles.headerMain}>
-          <AppText style={[styles.title, { color: colors.text }, titleStyle]}>
-            {title}{required ? <AppText style={{ color: colors.error }}> *</AppText> : null}
-          </AppText>
-          {subtitle ? <AppText style={[styles.subtitle, { color: colors.textSecondary }, subtitleStyle]}>{subtitle}</AppText> : null}
+      {showHeader ? (
+        <View style={[styles.header, headerStyle]}>
+          {title || subtitle ? (
+            <View style={styles.headerMain}>
+              {title ? (
+                <AppText style={[styles.title, { color: colors.text }, titleStyle]}>
+                  {title}{required ? <AppText style={{ color: colors.error }}> *</AppText> : null}
+                </AppText>
+              ) : null}
+              {subtitle ? (
+                <AppText
+                  style={[
+                    styles.subtitle,
+                    !title && styles.subtitleWithoutTitle,
+                    { color: colors.textSecondary },
+                    subtitleStyle,
+                  ]}
+                >
+                  {subtitle}
+                </AppText>
+              ) : null}
+            </View>
+          ) : null}
+          {headerRight ? <View style={styles.headerRight}>{headerRight}</View> : null}
         </View>
-        {headerRight ? <View style={styles.headerRight}>{headerRight}</View> : null}
-      </View>
-      <View style={[styles.body, bodyStyle]}>{children}</View>
+      ) : null}
+      <View style={[styles.body, showHeader && styles.bodyWithHeader, bodyStyle]}>{children}</View>
     </View>
   );
 }
@@ -58,5 +81,7 @@ const styles = StyleSheet.create({
   headerRight: { flexShrink: 0, justifyContent: 'center' },
   title: { fontSize: FontSize.base, lineHeight: 22, fontWeight: '700' },
   subtitle: { marginTop: Spacing.xs, fontSize: FontSize.xs, lineHeight: 18 },
-  body: { marginTop: Spacing.xs, gap: Spacing.sm },
+  subtitleWithoutTitle: { marginTop: 0 },
+  body: { gap: Spacing.sm },
+  bodyWithHeader: { marginTop: Spacing.xs },
 });

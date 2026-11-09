@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "target": "http://localhost:8097/",
+  "route_state": "Catalog component example, FilterBar quick dropdown collapsed at 375x812",
+  "surface_frame_gate": {
+    "status": "NOT APPLICABLE",
+    "reason": "This change audits shared inline components in the existing Catalog frame; it does not change the workspace or primary panel frame.",
+    "rows": []
+  },
+  "seams": [
+    {
+      "route": "/ (Catalog component example)",
+      "viewport": { "width": 375, "height": 812 },
+      "state": "FilterBar quick dropdown collapsed; Today selected",
+      "previous": "FilterBar component heading",
+      "next": "Quick filter control",
+      "axis": "vertical",
+      "previous_rect": { "left": 28, "top": 105, "right": 347, "bottom": 125, "width": 319, "height": 20 },
+      "next_rect": { "left": 36, "top": 132.5, "right": 84, "bottom": 168.5, "width": 48, "height": 36 },
+      "gap_px": 7.5,
+      "expected": {
+        "kind": "contract",
+        "value": "Catalog component section keeps its heading and control in one group with compact vertical spacing.",
+        "source": "examples/catalog/App.tsx: componentSection"
+      },
+      "executed_command": "CUA Playwright DOM getBoundingClientRect and scroll metrics; Expo Web Catalog at localhost:8097",
+      "screenshot": "CUA tool output showing the 375x812 FilterBar section; screenshot not persisted",
+      "status": "UNVERIFIED",
+      "visual": {
+        "status": "UNVERIFIED",
+        "method": "Live screenshot inspection; no durable screenshot file was retained for this scrolled state.",
+        "relationship": "joined",
+        "exception": "The heading and quick control belong to one catalog example group; the measured 7.5px gap is its internal heading-to-control spacing."
+      },
+      "observations": {
+        "document_client_width": 375,
+        "document_scroll_width": 375,
+        "scroll_container_client_width": 375,
+        "scroll_container_scroll_width": 375,
+        "horizontal_overflow": false
+      }
+    }
+  ]
+}

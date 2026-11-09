@@ -16,6 +16,8 @@ export interface TabItem<T extends string = string> {
   label: string;
   count?: number;
   testID?: string;
+  /** Optional screen-reader guidance; this is not rendered as a visible caption. */
+  accessibilityHint?: string;
   /** 可选图标（underline 导航 Tab 常用） */
   icon?: keyof typeof Ionicons.glyphMap;
   /** 置灰不可点击（如权限不足的业务分类） */
@@ -54,6 +56,11 @@ interface StatusTabsProps<T extends string = string> {
   style?: StyleProp<ViewStyle>;
 }
 
+/**
+ * Presents selectable labels/counts only. Keep visible explanations out of the
+ * tab row; put essential scope in the labels and screen-reader-only guidance in
+ * `TabItem.accessibilityHint`.
+ */
 export function StatusTabs<T extends string = string>({
   tabs,
   activeKey,
@@ -134,6 +141,7 @@ export function StatusTabs<T extends string = string>({
                 ? `${tab.label}，更多选项`
                 : `${tab.label}${tab.count != null ? `，${tab.count}` : ''}`
             }
+            accessibilityHint={tab.accessibilityHint}
           >
             {tab.icon ? <Ionicons name={tab.icon} size={16} color={tabColor} /> : null}
             <Text
@@ -224,6 +232,7 @@ export function StatusTabs<T extends string = string>({
               ? `${tab.label}，更多选项`
               : `${tab.label}${tab.count != null ? `，${tab.count}` : ''}`
           }
+          accessibilityHint={tab.accessibilityHint}
         >
           <View style={styles.tabContent}>
             <Text

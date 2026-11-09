@@ -1,8 +1,8 @@
 export const Colors = {
   light: {
-    // ── 主色 Ant Design 5 Blue ──────────────────────────────────────────────
-    primary: '#1677FF',
-    primarySurface: '#E8F3FF',
+    // ── 默认品牌色 ────────────────────────────────────────────────────────
+    primary: '#007D35',
+    primarySurface: '#E6F7EC',
 
     // ── 页面 & 卡片背景 ────────────────────────────────────────────────────
     // 灰色页面背景是中国 App 最显著的特征（钉钉/飞书/支付宝）
@@ -42,7 +42,7 @@ export const Colors = {
     tabBarBg: '#FFFFFF',
     tabBarBorder: '#EBEBEB',
     tabBar: '#FFFFFF',
-    tabBarActive: '#1677FF',
+    tabBarActive: '#007D35',
     tabBarInactive: '#BBBBBB',
 
     // ── 对比色（用于 primary/success/error 背景上的文字） ────────────────
@@ -59,8 +59,8 @@ export const Colors = {
     skeletonHighlight: '#F5F5F5',
   },
   dark: {
-    primary: '#4096FF',
-    primarySurface: '#111D2C',
+    primary: '#1F7A45',
+    primarySurface: '#10271A',
 
     // OLED 真黑 + iOS 深色层级
     background: '#0F0F0F',
@@ -94,7 +94,7 @@ export const Colors = {
     tabBarBg: '#1C1C1E',
     tabBarBorder: '#2C2C2E',
     tabBar: '#1C1C1E',
-    tabBarActive: '#4096FF',
+    tabBarActive: '#1F7A45',
     tabBarInactive: '#555555',
 
     textOnPrimary: '#FFFFFF',
