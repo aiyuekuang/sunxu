@@ -223,3 +223,12 @@ Tel App 的真实设备/模拟器路由截图、长列表与弹层状态的几�
 - `StatusTabs` 为 TabItem 增加仅供读屏使用的 `accessibilityHint`，不增加可见说明行。
 - 默认主题色和 Catalog 组件示例对齐 CRM；快捷 FilterBar 示例覆盖隐藏“全部”并保留当前选择的配置。
 - Catalog 在 375×812 Expo Web 视口下通过可见布局和快捷筛选切换检查。无标题分组和主色截图、DOM 几何及横向溢出记录见[验收记录](./verification/theme-default-brand-green-2026-11-09/README.md)。快捷筛选展开态截图只留在当前 CUA 检查记录，未归档到仓库；原生 Android/iOS 和深色主题复核仍为 `UNVERIFIED`。本次未发布 npm 包。
+
+## 2026-11-10 Avatar 与 ProfileIdentity
+
+- 新增通用 `Avatar`：优先展示宿主传入的头像 URL，图片缺失或加载失败时回退到姓名首字母；可选点按回调、最小触控区域、禁用态、上传忙碌态和无障碍名称。组件不调用照片选择、权限或上传 API。
+- 新增组合组件 `ProfileIdentity`：将 `Avatar`、显示姓名和宿主提供的 `metadata` 插槽组成身份摘要。点击头像的行为由宿主回调提供；组件不拥有整行导航、资料字段、权限或保存逻辑。
+- 两组件通过 `src/core/index.ts` 公共导出；Catalog 覆盖姓名回退、可更换头像、上传中和身份摘要示例。`metadata` 可承载 CRM 的组织/职位字段或 Tel App 的坐席/分机字段，字段含义和数据源仍归宿主。
+- Expo Web Catalog 在 375×812、320×720 和 812×375 浅色视口，以及 375×812 深色主题完成渲染；点击回调、忙碌态禁用和 `aria-busy` 已验证。`npm run typecheck`、Web 导出及 spacing ledger 校验通过。截图与几何记录见[Avatar 与 ProfileIdentity 验收](./verification/profile-identity-2026-11-10/README.md)。
+- 有效头像 URL 显示/失败回退、东健 CRM/Tel App 真实资料路由接入、原生 iOS/Android、系统读屏和动态字体仍为 `UNVERIFIED`。
+- 既有 `PhotoPicker` 继续承担多图业务证据流程，不与头像选择合并。宿主应只在后端支持自助头像时提供 `onAvatarPress`。

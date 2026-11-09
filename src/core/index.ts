@@ -1,5 +1,6 @@
 export * from './components/AppText';
 export * from './components/AppToast';
+export * from './components/Avatar';
 export * from './components/ActionButton';
 export * from './components/ActionMenu';
 export * from './components/AudioPlayer';
@@ -49,6 +50,7 @@ export * from './components/PermissionGuard';
 export * from './components/PhotoPicker';
 export * from './components/PickerField';
 export * from './components/ProgressBar';
+export * from './components/ProfileIdentity';
 export * from './components/QuickNumInput';
 export * from './components/ScanCameraModal';
 export * from './components/ScanInput';

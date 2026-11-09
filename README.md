@@ -37,6 +37,22 @@ export function ExampleApp() {
 
 `DateNavigator` 可按日、周、月或年切换；未设置 `period` 时仍按天切换。传入 `maximumDate` 可限制日期选择，并在到达最后一个可用周期时禁用向后切换。日期锚点和数据请求仍由宿主管理。
 
+## 身份与头像
+
+`Avatar` 展示头像图片或姓名首字母，并提供可选的点按、上传中和无障碍状态。`ProfileIdentity` 将头像、姓名和宿主提供的身份摘要组合成紧凑横向布局。图片选择、裁剪、上传、用户字段权限、导航和保存接口由宿主 App 负责；这两个组件不读取账号数据或系统照片权限。
+
+```tsx
+import { AppText, ProfileIdentity } from 'sunxu/core';
+
+<ProfileIdentity
+  displayName={user.realName || user.username}
+  avatarUri={user.avatarUrl}
+  metadata={<AppText>{`坐席 ${user.seatNumber} · 分机 ${user.extension}`}</AppText>}
+  onAvatarPress={openHostAvatarPicker}
+  avatarLoading={uploadingAvatar}
+/>
+```
+
 ## 地图与图表
 
 `MapScreenContainer` 提供全屏底图和安全区叠层插槽；`sunxu/maps` 提供当前定位坐标、定位按钮、常用地图控件、地点标记和当前位置标记。Sunxu 不内置地图厂商 SDK，宿主将 SDK 的地图视图、Marker 与相机控制接到插槽和回调中。

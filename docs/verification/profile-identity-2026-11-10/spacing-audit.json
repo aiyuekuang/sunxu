@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "target": "http://localhost:8082/",
+  "route_state": "Expo Web Catalog / 组件页面示例 / Avatar · ProfileIdentity",
+  "surface_frame_gate": {
+    "status": "NOT APPLICABLE",
+    "reason": "This change adds shared inline components inside the existing Catalog frame; it does not change the page or primary content frame.",
+    "rows": []
+  },
+  "seams": [
+    {
+      "route": "/ (Expo Web Catalog / 组件页面示例)",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "state": "Avatar · ProfileIdentity, light theme, fresh page load at 375x812",
+      "previous": "ProfileIdentity avatar target (64px)",
+      "next": "ProfileIdentity name and metadata column",
+      "axis": "horizontal",
+      "previous_rect": {
+        "left": 28,
+        "top": 595,
+        "right": 92,
+        "bottom": 659,
+        "width": 64,
+        "height": 64
+      },
+      "next_rect": {
+        "left": 104,
+        "top": 600.5,
+        "right": 347,
+        "bottom": 653.5,
+        "width": 243,
+        "height": 53
+      },
+      "gap_px": 12,
+      "expected": {
+        "kind": "token",
+        "value": "12px (Spacing.md)",
+        "source": "src/core/theme/tokens.ts:8"
+      },
+      "executed_command": "Playwright: /Users/suconnect/.codex/skills/playwright-skill/run.js /tmp/playwright-profile-identity.js; Expo static export served at http://localhost:8082; fresh viewport load, tab selection, document and scroll-container metrics, getBoundingClientRect",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/profile-identity-2026-11-10/375x812-light.png",
+      "screenshot_sha256": "3b0660fb56532ee0424621738f26ab4ca78b719151c04364cfdeddd51dbb9e4d",
+      "status": "PASS",
+      "visual": {
+        "status": "PASS",
+        "method": "Inspection of the saved Expo Web screenshot at the stated viewport",
+        "relationship": "joined",
+        "exception": "Avatar and the name/metadata column are the two parts of one ProfileIdentity composite. The 12px gap is intentional internal spacing from Spacing.md; no independent surface boundary is expected."
+      },
+      "observations": {
+        "document_client_width": 375,
+        "document_scroll_width": 375,
+        "scroll_container_client_width": 375,
+        "scroll_container_scroll_width": 375,
+        "horizontal_overflow": false
+      }
+    },
+    {
+      "route": "/ (Expo Web Catalog / 组件页面示例)",
+      "viewport": {
+        "width": 320,
+        "height": 720
+      },
+      "state": "Avatar · ProfileIdentity, light theme, fresh page load at 320x720",
+      "previous": "ProfileIdentity avatar target (64px)",
+      "next": "ProfileIdentity name and metadata column",
+      "axis": "horizontal",
+      "previous_rect": {
+        "left": 28,
+        "top": 503,
+        "right": 92,
+        "bottom": 567,
+        "width": 64,
+        "height": 64
+      },
+      "next_rect": {
+        "left": 104,
+        "top": 508.5,
+        "right": 292,
+        "bottom": 561.5,
+        "width": 188,
+        "height": 53
+      },
+      "gap_px": 12,
+      "expected": {
+        "kind": "token",
+        "value": "12px (Spacing.md)",
+        "source": "src/core/theme/tokens.ts:8"
+      },
+      "executed_command": "Playwright: /Users/suconnect/.codex/skills/playwright-skill/run.js /tmp/playwright-profile-identity.js; Expo static export served at http://localhost:8082; fresh viewport load, tab selection, document and scroll-container metrics, getBoundingClientRect",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/profile-identity-2026-11-10/320x720-light.png",
+      "screenshot_sha256": "4d3882839495f2a3f93351673c34ad22a9fbc7ed15f2cb8e2d35e6efb6e24ebd",
+      "status": "PASS",
+      "visual": {
+        "status": "PASS",
+        "method": "Inspection of the saved Expo Web screenshot at the stated viewport",
+        "relationship": "joined",
+        "exception": "Avatar and the name/metadata column are the two parts of one ProfileIdentity composite. The 12px gap is intentional internal spacing from Spacing.md; no independent surface boundary is expected."
+      },
+      "observations": {
+        "document_client_width": 320,
+        "document_scroll_width": 320,
+        "scroll_container_client_width": 320,
+        "scroll_container_scroll_width": 320,
+        "horizontal_overflow": false
+      }
+    },
+    {
+      "route": "/ (Expo Web Catalog / 组件页面示例)",
+      "viewport": {
+        "width": 812,
+        "height": 375
+      },
+      "state": "Avatar · ProfileIdentity, light theme, fresh page load at 812x375",
+      "previous": "ProfileIdentity avatar target (64px)",
+      "next": "ProfileIdentity name and metadata column",
+      "axis": "horizontal",
+      "previous_rect": {
+        "left": 28,
+        "top": 119.5,
+        "right": 92,
+        "bottom": 183.5,
+        "width": 64,
+        "height": 64
+      },
+      "next_rect": {
+        "left": 104,
+        "top": 125,
+        "right": 784,
+        "bottom": 178,
+        "width": 680,
+        "height": 53
+      },
+      "gap_px": 12,
+      "expected": {
+        "kind": "token",
+        "value": "12px (Spacing.md)",
+        "source": "src/core/theme/tokens.ts:8"
+      },
+      "executed_command": "Playwright: /Users/suconnect/.codex/skills/playwright-skill/run.js /tmp/playwright-profile-identity.js; Expo static export served at http://localhost:8082; fresh viewport load, tab selection, document and scroll-container metrics, getBoundingClientRect",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/profile-identity-2026-11-10/812x375-light.png",
+      "screenshot_sha256": "245a346e009bc87cba1817aaaf90327808854ddc1829e88f2beb678463c3a8d6",
+      "status": "PASS",
+      "visual": {
+        "status": "PASS",
+        "method": "Inspection of the saved Expo Web screenshot at the stated viewport",
+        "relationship": "joined",
+        "exception": "Avatar and the name/metadata column are the two parts of one ProfileIdentity composite. The 12px gap is intentional internal spacing from Spacing.md; no independent surface boundary is expected."
+      },
+      "observations": {
+        "document_client_width": 812,
+        "document_scroll_width": 812,
+        "scroll_container_client_width": 812,
+        "scroll_container_scroll_width": 812,
+        "horizontal_overflow": false
+      }
+    }
+  ]
+}

@@ -2,6 +2,7 @@ import {
   AppText,
   ActionButton,
   ActionMenu,
+  Avatar,
   Badge,
   BottomActionBar,
   ChoiceSheet,
@@ -24,6 +25,7 @@ import {
   MetricCard,
   PickerField,
   PhotoPicker,
+  ProfileIdentity,
   SearchBar,
   ScalePressable,
   SectionCard,
@@ -359,6 +361,45 @@ function ComponentExamples({
             onClose={() => setChoiceSheetVisible(false)}
             onConfirm={setChoiceValue}
           />
+        </View>
+
+        <View style={styles.componentSection} testID="demo-profile-identity">
+          <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>Avatar · ProfileIdentity</AppText>
+          <ProfileIdentity
+            displayName="林晓"
+            metadata={<AppText style={{ color: colors.textSecondary }}>坐席 08 · 分机 208</AppText>}
+            onAvatarPress={() => setFeedback('头像更换回调已触发；照片选择和上传由宿主处理')}
+            avatarAccessibilityLabel="更换林晓的头像"
+            avatarAccessibilityHint="打开宿主提供的头像选择流程"
+            testID="profile-identity-sample"
+          />
+          <Divider />
+          <View style={styles.avatarStateRow}>
+            <View style={styles.avatarStateItem}>
+              <Avatar name="林晓" size={48} testID="avatar-fallback-sample" />
+              <AppText style={{ color: colors.textSecondary }}>姓名回退</AppText>
+            </View>
+            <View style={styles.avatarStateItem}>
+              <Avatar
+                name="周宁"
+                size={48}
+                onPress={() => setFeedback('头像更换回调已触发')}
+                accessibilityLabel="更换周宁的头像"
+                testID="avatar-action-sample"
+              />
+              <AppText style={{ color: colors.textSecondary }}>可更换</AppText>
+            </View>
+            <View style={styles.avatarStateItem}>
+              <Avatar
+                name="陈工"
+                size={48}
+                onPress={() => setFeedback('上传中的头像不可重复操作')}
+                isLoading
+                testID="avatar-loading-sample"
+              />
+              <AppText style={{ color: colors.textSecondary }}>上传中</AppText>
+            </View>
+          </View>
         </View>
 
         <View style={styles.componentSection} testID="demo-inline-loading">
@@ -755,6 +796,8 @@ const styles = StyleSheet.create({
   componentDemo: { padding: 16, gap: 20 },
   componentSection: { gap: 8 },
   componentSectionTitle: { fontSize: 14, fontWeight: '600' },
+  avatarStateRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 24, flexWrap: 'wrap' },
+  avatarStateItem: { alignItems: 'center', gap: 6 },
   componentHint: { fontSize: 12, lineHeight: 18 },
   controlButtonRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   metricRow: { flexDirection: 'row', gap: 8 },

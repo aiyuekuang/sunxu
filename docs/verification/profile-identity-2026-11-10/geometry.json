@@ -1,0 +1,274 @@
+{
+  "target": "http://localhost:8082",
+  "route": "Expo Web Catalog / 组件示例 / Avatar · ProfileIdentity",
+  "callbackFeedback": "头像更换回调已触发",
+  "darkThemeVerified": true,
+  "geometries": [
+    {
+      "name": "375x812-light",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "section": {
+        "left": 28,
+        "top": 570.5,
+        "right": 347,
+        "bottom": 751,
+        "width": 319,
+        "height": 180.5
+      },
+      "identity": {
+        "left": 28,
+        "top": 595,
+        "right": 347,
+        "bottom": 659,
+        "width": 319,
+        "height": 64
+      },
+      "avatarTarget": {
+        "left": 112,
+        "top": 676,
+        "right": 160,
+        "bottom": 724,
+        "width": 48,
+        "height": 48
+      },
+      "fallbackTarget": {
+        "left": 34,
+        "top": 676,
+        "right": 82,
+        "bottom": 724,
+        "width": 48,
+        "height": 48
+      },
+      "loadingTarget": {
+        "left": 184,
+        "top": 676,
+        "right": 232,
+        "bottom": 724,
+        "width": 48,
+        "height": 48
+      },
+      "identityChildren": [
+        {
+          "left": 28,
+          "top": 595,
+          "right": 92,
+          "bottom": 659,
+          "width": 64,
+          "height": 64
+        },
+        {
+          "left": 104,
+          "top": 600.5,
+          "right": 347,
+          "bottom": 653.5,
+          "width": 243,
+          "height": 53
+        }
+      ],
+      "document": {
+        "clientWidth": 375,
+        "scrollWidth": 375
+      },
+      "scrollContainer": {
+        "rect": {
+          "left": 0,
+          "top": 57,
+          "right": 375,
+          "bottom": 751,
+          "width": 375,
+          "height": 694
+        },
+        "clientWidth": 375,
+        "scrollWidth": 375,
+        "clientHeight": 694,
+        "scrollHeight": 2210
+      },
+      "loadingDisabled": true,
+      "loadingAriaBusy": "true",
+      "actionAvatarAccessibleName": "更换周宁的头像"
+    },
+    {
+      "name": "320x720-light",
+      "viewport": {
+        "width": 320,
+        "height": 720
+      },
+      "section": {
+        "left": 28,
+        "top": 478.5,
+        "right": 292,
+        "bottom": 659,
+        "width": 264,
+        "height": 180.5
+      },
+      "identity": {
+        "left": 28,
+        "top": 503,
+        "right": 292,
+        "bottom": 567,
+        "width": 264,
+        "height": 64
+      },
+      "avatarTarget": {
+        "left": 112,
+        "top": 584,
+        "right": 160,
+        "bottom": 632,
+        "width": 48,
+        "height": 48
+      },
+      "fallbackTarget": {
+        "left": 34,
+        "top": 584,
+        "right": 82,
+        "bottom": 632,
+        "width": 48,
+        "height": 48
+      },
+      "loadingTarget": {
+        "left": 184,
+        "top": 584,
+        "right": 232,
+        "bottom": 632,
+        "width": 48,
+        "height": 48
+      },
+      "identityChildren": [
+        {
+          "left": 28,
+          "top": 503,
+          "right": 92,
+          "bottom": 567,
+          "width": 64,
+          "height": 64
+        },
+        {
+          "left": 104,
+          "top": 508.5,
+          "right": 292,
+          "bottom": 561.5,
+          "width": 188,
+          "height": 53
+        }
+      ],
+      "document": {
+        "clientWidth": 320,
+        "scrollWidth": 320
+      },
+      "scrollContainer": {
+        "rect": {
+          "left": 0,
+          "top": 57,
+          "right": 320,
+          "bottom": 659,
+          "width": 320,
+          "height": 602
+        },
+        "clientWidth": 320,
+        "scrollWidth": 320,
+        "clientHeight": 602,
+        "scrollHeight": 2261
+      },
+      "loadingDisabled": true,
+      "loadingAriaBusy": "true",
+      "actionAvatarAccessibleName": "更换周宁的头像"
+    },
+    {
+      "name": "812x375-light",
+      "viewport": {
+        "width": 812,
+        "height": 375
+      },
+      "section": {
+        "left": 28,
+        "top": 95,
+        "right": 784,
+        "bottom": 275.5,
+        "width": 756,
+        "height": 180.5
+      },
+      "identity": {
+        "left": 28,
+        "top": 119.5,
+        "right": 784,
+        "bottom": 183.5,
+        "width": 756,
+        "height": 64
+      },
+      "avatarTarget": {
+        "left": 112,
+        "top": 200.5,
+        "right": 160,
+        "bottom": 248.5,
+        "width": 48,
+        "height": 48
+      },
+      "fallbackTarget": {
+        "left": 34,
+        "top": 200.5,
+        "right": 82,
+        "bottom": 248.5,
+        "width": 48,
+        "height": 48
+      },
+      "loadingTarget": {
+        "left": 184,
+        "top": 200.5,
+        "right": 232,
+        "bottom": 248.5,
+        "width": 48,
+        "height": 48
+      },
+      "identityChildren": [
+        {
+          "left": 28,
+          "top": 119.5,
+          "right": 92,
+          "bottom": 183.5,
+          "width": 64,
+          "height": 64
+        },
+        {
+          "left": 104,
+          "top": 125,
+          "right": 784,
+          "bottom": 178,
+          "width": 680,
+          "height": 53
+        }
+      ],
+      "document": {
+        "clientWidth": 812,
+        "scrollWidth": 812
+      },
+      "scrollContainer": {
+        "rect": {
+          "left": 0,
+          "top": 57,
+          "right": 812,
+          "bottom": 314,
+          "width": 812,
+          "height": 257
+        },
+        "clientWidth": 812,
+        "scrollWidth": 812,
+        "clientHeight": 257,
+        "scrollHeight": 2119
+      },
+      "loadingDisabled": true,
+      "loadingAriaBusy": "true",
+      "actionAvatarAccessibleName": "更换周宁的头像"
+    }
+  ],
+  "errors": [],
+  "screenshots": [
+    "375x812-light.png",
+    "320x720-light.png",
+    "812x375-light.png",
+    "375x812-avatar-callback.png",
+    "375x812-dark.png"
+  ]
+}
