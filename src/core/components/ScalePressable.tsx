@@ -4,8 +4,11 @@ import {
   Animated,
   Easing,
   Pressable,
+  StyleSheet,
+  View,
   type GestureResponderEvent,
   type PressableProps,
+  type PressableStateCallbackType,
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
@@ -18,10 +21,14 @@ export interface ScalePressableProps extends Omit<PressableProps, 'style' | 'onP
 }
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+const AnimatedView = Animated.createAnimatedComponent(View);
 const PRESS_IN_EASING = Easing.bezier(0.23, 1, 0.32, 1);
 const PRESS_OUT_EASING = Easing.bezier(0.2, 0.8, 0.2, 1);
 
-/** Pressable with a restrained scale response that respects Reduce Motion. */
+/** Pressable with a restrained scale response that respects Reduce Motion.
+ * Layout styles on the touch container are mirrored to the scaled content so
+ * the animation wrapper preserves the caller's row/column composition.
+ */
 export function ScalePressable({
   children,
   style,
@@ -35,6 +42,24 @@ export function ScalePressable({
   const animationRef = useRef<Animated.CompositeAnimation | null>(null);
   const [pressed, setPressed] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
+  const containerStyle = StyleSheet.flatten(style) ?? {};
+  const contentLayoutStyle: ViewStyle = {
+    flexDirection: containerStyle.flexDirection,
+    flexWrap: containerStyle.flexWrap,
+    alignItems: containerStyle.alignItems,
+    alignContent: containerStyle.alignContent,
+    justifyContent: containerStyle.justifyContent,
+    gap: containerStyle.gap,
+    rowGap: containerStyle.rowGap,
+    columnGap: containerStyle.columnGap,
+    alignSelf: 'stretch',
+    flexGrow: containerStyle.justifyContent ? 1 : undefined,
+  };
+  const renderContent = (state: PressableStateCallbackType) => (
+    <AnimatedView style={[contentLayoutStyle, { transform: [{ scale }] }]}>
+      {typeof children === 'function' ? children(state) : children}
+    </AnimatedView>
+  );
 
   useEffect(() => {
     let active = true;
@@ -99,9 +124,9 @@ export function ScalePressable({
       disabled={disabled}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      style={[style, !disabled && pressed ? { opacity: 0.92 } : null, { transform: [{ scale }] }]}
+      style={[style, !disabled && pressed ? { opacity: 0.92 } : null]}
     >
-      {children}
+      {renderContent}
     </AnimatedPressable>
   );
 }
