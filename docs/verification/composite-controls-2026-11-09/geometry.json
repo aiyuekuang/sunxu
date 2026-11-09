@@ -1,0 +1,271 @@
+{
+  "url": "http://localhost:8098",
+  "route": "Catalog → 地图图表",
+  "date": "2026-11-09",
+  "checks": [
+    {
+      "name": "portrait-375x812-light",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "document": {
+        "scrollWidth": 375,
+        "scrollHeight": 812,
+        "clientWidth": 375
+      },
+      "horizontalOverflow": false,
+      "dialPad": {
+        "x": 12,
+        "y": 77,
+        "width": 351,
+        "height": 451,
+        "right": 363,
+        "bottom": 528
+      },
+      "firstDialButton": {
+        "x": 12,
+        "y": 162,
+        "width": 109,
+        "height": 64,
+        "right": 121,
+        "bottom": 226
+      },
+      "deleteButton": {
+        "x": 68,
+        "y": 464,
+        "width": 64,
+        "height": 64,
+        "right": 132,
+        "bottom": 528
+      },
+      "submitButton": {
+        "x": 156,
+        "y": 464,
+        "width": 64,
+        "height": 64,
+        "right": 220,
+        "bottom": 528
+      },
+      "audioPlayer": {
+        "x": 12,
+        "y": 544,
+        "width": 351,
+        "height": 119,
+        "right": 363,
+        "bottom": 663
+      },
+      "audioButton": {
+        "x": 20,
+        "y": 598,
+        "width": 40,
+        "height": 40,
+        "right": 60,
+        "bottom": 638
+      },
+      "scrollables": [
+        {
+          "tag": "div",
+          "testId": null,
+          "className": "css-view-g5y9jx r-WebkitOverflowScrolling-150rngu r-flexDirection-eqz5dr r-flexGrow-16y2uox r-flexSh",
+          "clientWidth": 375,
+          "clientHeight": 694,
+          "scrollWidth": 375,
+          "scrollHeight": 2239,
+          "overflowX": false,
+          "overflowY": true
+        }
+      ],
+      "screenshot": "portrait-375x812-light.png"
+    },
+    {
+      "name": "portrait-320x720-light",
+      "viewport": {
+        "width": 320,
+        "height": 720
+      },
+      "document": {
+        "scrollWidth": 320,
+        "scrollHeight": 720,
+        "clientWidth": 320
+      },
+      "horizontalOverflow": false,
+      "dialPad": {
+        "x": 12,
+        "y": 77,
+        "width": 296,
+        "height": 451,
+        "right": 308,
+        "bottom": 528
+      },
+      "firstDialButton": {
+        "x": 12,
+        "y": 162,
+        "width": 91,
+        "height": 64,
+        "right": 103,
+        "bottom": 226
+      },
+      "deleteButton": {
+        "x": 40,
+        "y": 464,
+        "width": 64,
+        "height": 64,
+        "right": 104,
+        "bottom": 528
+      },
+      "submitButton": {
+        "x": 128,
+        "y": 464,
+        "width": 64,
+        "height": 64,
+        "right": 192,
+        "bottom": 528
+      },
+      "audioPlayer": {
+        "x": 12,
+        "y": 544,
+        "width": 296,
+        "height": 119,
+        "right": 308,
+        "bottom": 663
+      },
+      "audioButton": {
+        "x": 20,
+        "y": 598,
+        "width": 40,
+        "height": 40,
+        "right": 60,
+        "bottom": 638
+      },
+      "scrollables": [
+        {
+          "tag": "div",
+          "testId": null,
+          "className": "css-view-g5y9jx r-WebkitOverflowScrolling-150rngu r-flexDirection-eqz5dr r-flexGrow-16y2uox r-flexSh",
+          "clientWidth": 320,
+          "clientHeight": 602,
+          "scrollWidth": 320,
+          "scrollHeight": 2188,
+          "overflowX": false,
+          "overflowY": true
+        }
+      ],
+      "screenshot": "portrait-320x720-light.png"
+    },
+    {
+      "name": "landscape-812x375-light",
+      "viewport": {
+        "width": 812,
+        "height": 375
+      },
+      "document": {
+        "scrollWidth": 812,
+        "scrollHeight": 375,
+        "clientWidth": 812
+      },
+      "horizontalOverflow": false,
+      "dialPad": {
+        "x": 12,
+        "y": 77,
+        "width": 788,
+        "height": 451,
+        "right": 800,
+        "bottom": 528
+      },
+      "firstDialButton": {
+        "x": 12,
+        "y": 162,
+        "width": 255,
+        "height": 64,
+        "right": 267,
+        "bottom": 226
+      },
+      "deleteButton": {
+        "x": 286,
+        "y": 464,
+        "width": 64,
+        "height": 64,
+        "right": 350,
+        "bottom": 528
+      },
+      "submitButton": {
+        "x": 374,
+        "y": 464,
+        "width": 64,
+        "height": 64,
+        "right": 438,
+        "bottom": 528
+      },
+      "audioPlayer": {
+        "x": 12,
+        "y": 544,
+        "width": 788,
+        "height": 119,
+        "right": 800,
+        "bottom": 663
+      },
+      "audioButton": {
+        "x": 20,
+        "y": 598,
+        "width": 40,
+        "height": 40,
+        "right": 60,
+        "bottom": 638
+      },
+      "scrollables": [
+        {
+          "tag": "div",
+          "testId": null,
+          "className": "css-view-g5y9jx r-WebkitOverflowScrolling-150rngu r-flexDirection-eqz5dr r-flexGrow-16y2uox r-flexSh",
+          "clientWidth": 812,
+          "clientHeight": 257,
+          "scrollWidth": 812,
+          "scrollHeight": 2130,
+          "overflowX": false,
+          "overflowY": true
+        }
+      ],
+      "screenshot": "landscape-812x375-light.png"
+    }
+  ],
+  "interaction": {
+    "submitted": true,
+    "audioPlaying": true,
+    "horizontalOverflow": false
+  },
+  "landscapeReachability": {
+    "deleteButtonVisible": true,
+    "deleteButton": {
+      "x": 286,
+      "y": 154,
+      "width": 64,
+      "height": 64
+    }
+  },
+  "landscapeAudioReachability": {
+    "playerVisible": true,
+    "playButtonVisible": true,
+    "player": {
+      "x": 12,
+      "y": 220,
+      "width": 788,
+      "height": 119
+    },
+    "playButton": {
+      "x": 20,
+      "y": 274,
+      "width": 40,
+      "height": 40
+    }
+  },
+  "screenshots": [
+    "portrait-375x812-light.png",
+    "portrait-320x720-light.png",
+    "landscape-812x375-light.png",
+    "portrait-interaction-state.png",
+    "landscape-controls-visible.png",
+    "landscape-audio-visible.png"
+  ],
+  "pageErrors": []
+}

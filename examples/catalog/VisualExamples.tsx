@@ -2,10 +2,12 @@ import type React from 'react';
 import { useState } from 'react';
 import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import {
+  AudioPlayer,
   AppText,
   ChartLegend,
   ChartPanel,
   DetailScreenContainer,
+  DialPad,
   MapScreenContainer,
   FontSize,
   Radius,
@@ -20,6 +22,10 @@ export function VisualExamples({ onBack, footer }: { onBack: () => void; footer:
   const { colors } = useTheme();
   const { width, height } = useWindowDimensions();
   const [locationMessage, setLocationMessage] = useState('点击定位按钮后，宿主地图驱动器可将镜头移动到坐标');
+  const [dialValue, setDialValue] = useState('');
+  const [dialSubmitted, setDialSubmitted] = useState('');
+  const [audioPlaying, setAudioPlaying] = useState(false);
+  const [audioTime, setAudioTime] = useState(0);
   const chartWidth = Math.max(220, Math.min(width - 104, 420));
   const mapHeight = Math.min(300, Math.max(184, height - 176));
   const legendItems: ChartLegendItem[] = [
@@ -29,8 +35,32 @@ export function VisualExamples({ onBack, footer }: { onBack: () => void; footer:
   ];
 
   return (
-    <DetailScreenContainer title="地图与图表" onBack={onBack} footer={footer}>
+    <DetailScreenContainer title="共享控件与地图图表" onBack={onBack} footer={footer}>
       <View style={styles.content}>
+        <View style={styles.section} testID="demo-dial-pad">
+          <AppText style={[styles.sectionTitle, { color: colors.text }]}>DialPad · 拨号键盘</AppText>
+          <DialPad
+            value={dialValue}
+            onChangeText={setDialValue}
+            onSubmit={setDialSubmitted}
+          />
+          {dialSubmitted ? (
+            <AppText style={[styles.hint, { color: colors.textSecondary }]}>已提交号码：{dialSubmitted}</AppText>
+          ) : null}
+        </View>
+
+        <View style={styles.section} testID="demo-audio-player">
+          <AppText style={[styles.sectionTitle, { color: colors.text }]}>AudioPlayer · 音频播放</AppText>
+          <AudioPlayer
+            title="示例音频"
+            durationSeconds={96}
+            currentTimeSeconds={audioTime}
+            isPlaying={audioPlaying}
+            onToggle={() => setAudioPlaying((current) => !current)}
+            onSeek={setAudioTime}
+          />
+        </View>
+
         <View style={styles.section}>
           <AppText style={[styles.sectionTitle, { color: colors.text }]}>MapScreenContainer · 地图叠层</AppText>
           <MapScreenContainer

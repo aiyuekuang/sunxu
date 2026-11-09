@@ -133,3 +133,30 @@ CRM“客户 / 商机”导航的两个等宽 Tab 文字贴近格子左缘，而
 ## 2026-11-06 DateNavigator 周期导航
 
 `DateNavigator` 新增可选 `period`（日/周/月/年）和 `maximumDate`。前后按钮以所选周期为单位移动，周一作为周起始；切换周期时锚定到该周期首日，最大日期约束同步限制日期选择与前进操作。未传这些属性的原调用继续按天移动且允许查看未来日期，周期选项和日期状态仍由宿主控制。
+
+## 2026-11-09 CRM 通用组合控件提取
+
+### 组件盘点
+
+| Component | Layer / user job | Visible owner | Source of truth | Composition and state owner |
+|---|---|---|---|---|
+| `DialPad` | Composite；输入电话号码、删除末位并把当前号码交给宿主 | 宿主的拨号弹层内容区 | `src/core/components/DialPad.tsx`，Sunxu `0.1.6` | 宿主控制 `value`、SIM 拨号、权限和结果；组件只绘制键盘并回调 |
+| `AudioPlayer` | Composite；查看音频时长/进度并请求播放、暂停或 seek | 宿主的录音/音频内容区 | `src/core/components/AudioPlayer.tsx`，Sunxu `0.1.6` | 宿主管理音源、播放器实例、播放状态和错误；组件只展示状态并回调 |
+
+### `DialPad` 契约
+
+- **Anatomy/API**：号码显示、4×3 电话按键、删除末位按钮、提交按钮。受控 `value`、`onChangeText`、`onSubmit`；可选 `maxLength`（默认 20）、`placeholder`、全局 `disabled` 和 `isSubmitting`。按键追加标准 `1–9`, `*`, `0/+`, `#`；按键不会调用电话或权限 API。
+- **States**：空值显示占位且提交禁用；有值可删除/提交；按压态只改变按键底色/操作透明度；`disabled` 禁止所有按键；`isSubmitting` 显示原生 spinner 并禁用删除/提交，号码按键保留现有 CRM 行为；拨号成功、失败及重试由宿主反馈。选中、焦点可见、加载列表、空结果和 hover 不适用：组件没有选择模型、异步请求、结果集合或桌面指针目标。
+- **Tokens/layout/responsive**：主题背景、文本、次级文本、边线和主色来自 `useTheme`；键盘行间距 10dp、列间距 12dp、按键 64dp，动作按钮 64dp。父容器负责它与标题/表单的间距；行按可用宽度平分，不换行，320dp 及以上窄屏仍可容纳 3 列。
+- **Accessibility**：每个键提供按钮角色、号码/星号/井号名称和添加提示；删除/提交提供描述性名称与禁用/忙碌状态；号码显示读出当前号码。触控面均不小于 64dp。读屏焦点顺序按视觉顺序从号码、按键、删除到提交；不使用颜色作为唯一禁用信号。
+- **Recovery/composition**：宿主通过更新 `value` 清空/恢复输入；可以放入 `BottomSheet` 或其他内容容器，不负责标题、安全区、关闭、授权、SIM 卡选择或错误提示。最近邻替代是页面自行拼按键、输入显示和提交按钮；它使同一职责的几何、可访问名称和 disabled/loading 行为继续散落在宿主，因此统一到共享组件。
+
+### `AudioPlayer` 契约
+
+- **Anatomy/API**：播放/暂停按钮、标题与状态、可选进度拖动/点按区域、已播放和总时长。受控 `isPlaying`，必填 `onToggle`；可选标题、空闲状态文案、时长、当前时间、`isLoading`、`disabled`、`onSeek` 和阻止父级 Pressable 冒泡。默认标题“音频”，宿主可传“通话录音”等语义名称。
+- **States**：默认暂停/播放态由宿主提供；按压有透明度反馈；加载时显示 spinner、禁用播放；禁用态禁止播放与 seek；仅在正在播放、已提供 `onSeek` 且时长大于零时允许拖动/点按及读屏步进；播放源错误和重试由宿主处理。选中、空列表、表单校验、hover 不适用：没有选择或数据集合，也不是表单字段或桌面组件。
+- **Tokens/layout/responsive**：使用语义背景、主色、文字和边线；播放器最小高 58dp，左侧按钮视觉 40dp、触控扩展后 48dp，进度轨道触控高 48dp。长标题允许收缩，右侧状态和时间保持可读；父容器拥有播放器外部间距。
+- **Accessibility**：播放/暂停按钮按标题生成名称并报告 disabled/busy；进度条暴露 adjustable 角色、时长/当前位置和前后 5 秒系统动作；装饰图标不进入读屏树。焦点次序与视觉顺序一致，支持触屏和读屏调整，不提供键盘快捷键。
+- **Recovery/composition**：组件不读取音源、不管理播放实例；宿主可以在暂停/切换记录时重设时间或从错误中恢复。可放入列表卡片、详情卡片或弹层；不负责卡片/标题、安全区、媒体权限和播放错误。最近邻替代是 CRM 私有 `CallRecordingPlayer`；它已在通话、客户动态和驾驶舱重复出现，改为中性 `AudioPlayer` 保留回调边界并统一状态/可访问性实现。
+
+`examples/catalog` 在地图图表示例页展示两组件，真实渲染与几何证据见[组合控件验收](./verification/composite-controls-2026-11-09/README.md)。该示例在 Expo Web 上验证布局和回调；原生 iOS/Android 设备、系统读屏与完整 Dynamic Type 档位仍需宿主验收。CRM 侧保留 SIM/API/错误处理，只把通用 UI 迁入 Sunxu。

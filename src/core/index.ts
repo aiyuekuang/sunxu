@@ -1,5 +1,6 @@
 export * from './components/AppText';
 export * from './components/AppToast';
+export * from './components/AudioPlayer';
 export * from './components/Badge';
 export * from './components/BottomActionBar';
 export * from './components/BottomSheet';
@@ -11,6 +12,7 @@ export * from './components/DateNavigator';
 export * from './components/DateRangeQuickSelect';
 export * from './components/DetailCard';
 export * from './components/DetailActionBar';
+export * from './components/DialPad';
 export * from './components/DrillDownTreePicker';
 export * from './components/EmptyState';
 export * from './components/EntityFilterChip';
