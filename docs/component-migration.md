@@ -238,3 +238,10 @@ Tel App 的真实设备/模拟器路由截图、长列表与弹层状态的几�
 - `IconActionButton.size` 控制按钮布局框，不受平台最小触控尺寸反向撑高；默认布局尺寸仍为 44dp。
 - 组件按 iOS 44pt / Android 48dp 计算扩展 `hitSlop`。`ControlSize.iconButton` 的 32dp 布局框每边扩展 8dp，形成 48dp 触控区域；父级需保留足够间距，避免扩展热区覆盖相邻操作。
 - Catalog 同行展示 32dp 紧凑按钮与 44dp 默认按钮，几何证据记录于[紧凑尺寸验收](./verification/icon-action-button-compact-2026-11-10/README.md)。原生 iOS/Android 的实际命中范围仍为 `UNVERIFIED`。
+
+## 2026-11-10 页头与顶部安全区衔接
+
+- `ScreenContainer` 将顶部安全区交给页头区域绘制：有页头时默认使用主题 `surface`，没有页头时使用页面 `background`。页头、状态栏下方的安全区和主题切换保持同一底色，正文仍使用原页面背景。
+- `ListScreenContainer`、`DetailScreenContainer` 和 `FormScreenContainer` 默认采用此行为。自定义页头可通过 `headerBackgroundColor` 同步页头容器及顶部安全区背景；该属性在标题容器中也同步设置标准 `PageHeader` 的背景。
+- 父级导航已处理顶部安全区时，继续从 `safeAreaEdges` 移除 `top`；容器不会再留第二段顶部空白。底部安全区规则不变。
+- Catalog 的列表、详情和示例页继续使用标准页面容器，作为默认主题表面与顶部安全区的可运行示例；375×812、320×720 浅色和 375×812 深色的截图、DOM 几何及 seam 台账见[页头与顶部安全区验收](./verification/page-header-safearea-2026-11-10/README.md)。原生状态栏区域因 Expo Web inset 为 0px，标记为 `UNVERIFIED`。

@@ -1,0 +1,381 @@
+{
+  "target": "http://localhost:8081/",
+  "runtime": "Expo Web, visible Playwright Chromium",
+  "route": "Catalog default list page using ListScreenContainer",
+  "stabilization": "document.fonts.ready followed by two requestAnimationFrame callbacks",
+  "pageErrors": [],
+  "rows": [
+    {
+      "state": "light",
+      "route": "/",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/page-header-safearea-2026-11-10/375x812-light.png",
+      "geometry": {
+        "viewport": {
+          "width": 375,
+          "height": 812,
+          "rootClientWidth": 375,
+          "rootScrollWidth": 375,
+          "bodyClientWidth": 375,
+          "bodyScrollWidth": 375,
+          "bodyClientHeight": 812,
+          "bodyScrollHeight": 812
+        },
+        "safeAreaTopInsetMeasuredPx": 0,
+        "headerRegion": {
+          "tag": "div",
+          "text": "客户档案\n",
+          "testID": null,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "right": 375,
+            "bottom": 57,
+            "width": 375,
+            "height": 57
+          },
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(0, 0, 0)",
+          "padding": "0px",
+          "borderBottomWidth": "0px",
+          "borderBottomColor": "rgb(0, 0, 0)",
+          "overflowX": "visible"
+        },
+        "pageHeader": {
+          "tag": "div",
+          "text": "客户档案\n",
+          "testID": null,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "right": 375,
+            "bottom": 57,
+            "width": 375,
+            "height": 57
+          },
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(0, 0, 0)",
+          "padding": "4px 8px 8px",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(235, 235, 235)",
+          "overflowX": "visible"
+        },
+        "toolbar": {
+          "tag": "div",
+          "text": "\n全部 (24)\n合作中 (18)\n已暂停 (6)",
+          "testID": null,
+          "rect": {
+            "left": 0,
+            "top": 57,
+            "right": 375,
+            "bottom": 156,
+            "width": 375,
+            "height": 99
+          },
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(0, 0, 0)",
+          "padding": "4px 8px",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(235, 235, 235)",
+          "overflowX": "visible"
+        },
+        "firstResultCard": {
+          "tag": "button",
+          "text": "CUS-2026-0184\n合作中\n青禾精密制造\n林经理 · 138 0000 1840\n近 30 天 12 笔订单",
+          "testID": null,
+          "rect": {
+            "left": 12,
+            "top": 168,
+            "right": 363,
+            "bottom": 259,
+            "width": 351,
+            "height": 91
+          },
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(0, 0, 0)",
+          "padding": "12px",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(245, 245, 245)",
+          "overflowX": "visible"
+        },
+        "secondResultCard": {
+          "tag": "button",
+          "text": "CUS-2026-0167\n合作中\n澄海工业设备\n陈女士 · 138 0000 1670\n近 30 天 12 笔订单",
+          "testID": null,
+          "rect": {
+            "left": 12,
+            "top": 269,
+            "right": 363,
+            "bottom": 360,
+            "width": 351,
+            "height": 91
+          },
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(0, 0, 0)",
+          "padding": "12px",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(245, 245, 245)",
+          "overflowX": "visible"
+        },
+        "horizontalOverflowPx": 0,
+        "seamGapsPx": {
+          "topInsetToHeader": 0,
+          "pageHeaderToToolbar": 0,
+          "toolbarToFirstResult": 12,
+          "firstToSecondResult": 10
+        }
+      }
+    },
+    {
+      "state": "light",
+      "route": "/",
+      "viewport": {
+        "width": 320,
+        "height": 720
+      },
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/page-header-safearea-2026-11-10/320x720-light.png",
+      "geometry": {
+        "viewport": {
+          "width": 320,
+          "height": 720,
+          "rootClientWidth": 320,
+          "rootScrollWidth": 320,
+          "bodyClientWidth": 320,
+          "bodyScrollWidth": 320,
+          "bodyClientHeight": 720,
+          "bodyScrollHeight": 720
+        },
+        "safeAreaTopInsetMeasuredPx": 0,
+        "headerRegion": {
+          "tag": "div",
+          "text": "客户档案\n",
+          "testID": null,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 57,
+            "width": 320,
+            "height": 57
+          },
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(0, 0, 0)",
+          "padding": "0px",
+          "borderBottomWidth": "0px",
+          "borderBottomColor": "rgb(0, 0, 0)",
+          "overflowX": "visible"
+        },
+        "pageHeader": {
+          "tag": "div",
+          "text": "客户档案\n",
+          "testID": null,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 57,
+            "width": 320,
+            "height": 57
+          },
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(0, 0, 0)",
+          "padding": "4px 8px 8px",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(235, 235, 235)",
+          "overflowX": "visible"
+        },
+        "toolbar": {
+          "tag": "div",
+          "text": "\n全部 (24)\n合作中 (18)\n已暂停 (6)",
+          "testID": null,
+          "rect": {
+            "left": 0,
+            "top": 57,
+            "right": 320,
+            "bottom": 173.5,
+            "width": 320,
+            "height": 116.5
+          },
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(0, 0, 0)",
+          "padding": "4px 8px",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(235, 235, 235)",
+          "overflowX": "visible"
+        },
+        "firstResultCard": {
+          "tag": "button",
+          "text": "CUS-2026-0184\n合作中\n青禾精密制造\n林经理 · 138 0000 1840\n近 30 天 12 笔订单",
+          "testID": null,
+          "rect": {
+            "left": 12,
+            "top": 185.5,
+            "right": 308,
+            "bottom": 276.5,
+            "width": 296,
+            "height": 91
+          },
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(0, 0, 0)",
+          "padding": "12px",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(245, 245, 245)",
+          "overflowX": "visible"
+        },
+        "secondResultCard": {
+          "tag": "button",
+          "text": "CUS-2026-0167\n合作中\n澄海工业设备\n陈女士 · 138 0000 1670\n近 30 天 12 笔订单",
+          "testID": null,
+          "rect": {
+            "left": 12,
+            "top": 286.5,
+            "right": 308,
+            "bottom": 377.5,
+            "width": 296,
+            "height": 91
+          },
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(0, 0, 0)",
+          "padding": "12px",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(245, 245, 245)",
+          "overflowX": "visible"
+        },
+        "horizontalOverflowPx": 0,
+        "seamGapsPx": {
+          "topInsetToHeader": 0,
+          "pageHeaderToToolbar": 0,
+          "toolbarToFirstResult": 12,
+          "firstToSecondResult": 10
+        }
+      }
+    },
+    {
+      "state": "dark",
+      "route": "/",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/page-header-safearea-2026-11-10/375x812-dark.png",
+      "geometry": {
+        "viewport": {
+          "width": 375,
+          "height": 812,
+          "rootClientWidth": 375,
+          "rootScrollWidth": 375,
+          "bodyClientWidth": 375,
+          "bodyScrollWidth": 375,
+          "bodyClientHeight": 812,
+          "bodyScrollHeight": 812
+        },
+        "safeAreaTopInsetMeasuredPx": 0,
+        "headerRegion": {
+          "tag": "div",
+          "text": "客户档案\n",
+          "testID": null,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "right": 375,
+            "bottom": 57,
+            "width": 375,
+            "height": 57
+          },
+          "background": "rgb(28, 28, 30)",
+          "color": "rgb(0, 0, 0)",
+          "padding": "0px",
+          "borderBottomWidth": "0px",
+          "borderBottomColor": "rgb(0, 0, 0)",
+          "overflowX": "visible"
+        },
+        "pageHeader": {
+          "tag": "div",
+          "text": "客户档案\n",
+          "testID": null,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "right": 375,
+            "bottom": 57,
+            "width": 375,
+            "height": 57
+          },
+          "background": "rgb(28, 28, 30)",
+          "color": "rgb(0, 0, 0)",
+          "padding": "4px 8px 8px",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(44, 44, 46)",
+          "overflowX": "visible"
+        },
+        "toolbar": {
+          "tag": "div",
+          "text": "\n全部 (24)\n合作中 (18)\n已暂停 (6)",
+          "testID": null,
+          "rect": {
+            "left": 0,
+            "top": 57,
+            "right": 375,
+            "bottom": 156,
+            "width": 375,
+            "height": 99
+          },
+          "background": "rgb(28, 28, 30)",
+          "color": "rgb(0, 0, 0)",
+          "padding": "4px 8px",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(44, 44, 46)",
+          "overflowX": "visible"
+        },
+        "firstResultCard": {
+          "tag": "button",
+          "text": "CUS-2026-0184\n合作中\n青禾精密制造\n林经理 · 138 0000 1840\n近 30 天 12 笔订单",
+          "testID": null,
+          "rect": {
+            "left": 12,
+            "top": 168,
+            "right": 363,
+            "bottom": 259,
+            "width": 351,
+            "height": 91
+          },
+          "background": "rgb(28, 28, 30)",
+          "color": "rgb(0, 0, 0)",
+          "padding": "12px",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(28, 28, 30)",
+          "overflowX": "visible"
+        },
+        "secondResultCard": {
+          "tag": "button",
+          "text": "CUS-2026-0167\n合作中\n澄海工业设备\n陈女士 · 138 0000 1670\n近 30 天 12 笔订单",
+          "testID": null,
+          "rect": {
+            "left": 12,
+            "top": 269,
+            "right": 363,
+            "bottom": 360,
+            "width": 351,
+            "height": 91
+          },
+          "background": "rgb(28, 28, 30)",
+          "color": "rgb(0, 0, 0)",
+          "padding": "12px",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(28, 28, 30)",
+          "overflowX": "visible"
+        },
+        "horizontalOverflowPx": 0,
+        "seamGapsPx": {
+          "topInsetToHeader": 0,
+          "pageHeaderToToolbar": 0,
+          "toolbarToFirstResult": 12,
+          "firstToSecondResult": 10
+        }
+      }
+    }
+  ]
+}

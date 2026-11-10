@@ -1,0 +1,538 @@
+{
+  "schema_version": 1,
+  "overall_status": "PASS WITH UNVERIFIED",
+  "target": {
+    "name": "Sunxu Catalog list page",
+    "route": "http://localhost:8081/ → default customer list",
+    "runtime": "Expo Web, visible Playwright Chromium",
+    "executed_command": "cd /Users/suconnect/.codex/skills/playwright-skill && node run.js /tmp/playwright-page-header-evidence.js",
+    "geometry_artifact": "/Users/suconnect/Desktop/code/sunxu/docs/verification/page-header-safearea-2026-11-10/geometry.json",
+    "access_preflight": "Local public catalog verified by the Sunxu Catalog HTML title and Expo process; no authentication was required."
+  },
+  "surface_frame_gate": {
+    "status": "NOT APPLICABLE",
+    "reason": "The page container is a full-bleed screen: the page background is the root canvas, and the page header is intentionally joined to the top edge rather than placed as a floating panel.",
+    "rows": []
+  },
+  "seams": [
+    {
+      "route": "Catalog / default customer list (ListScreenContainer)",
+      "state": "light, populated list",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "axis": "vertical",
+      "previous": "Android/iOS status bar region and top safe-area inset",
+      "previous_rect": {
+        "left": 0,
+        "top": 0,
+        "right": 375,
+        "bottom": 0,
+        "width": 375,
+        "height": 0
+      },
+      "next": "PageHeader",
+      "next_rect": {
+        "left": 0,
+        "top": 0,
+        "right": 375,
+        "bottom": 57,
+        "width": 375,
+        "height": 57
+      },
+      "gap_px": 0,
+      "expected": {
+        "kind": "contract",
+        "value": "Top safe area and PageHeader share one themed surface; the top inset is owned once by ScreenContainer.",
+        "source": "src/core/components/ScreenContainer.tsx:39-77; src/core/components/PageHeader.tsx:127-139"
+      },
+      "visual": {
+        "relationship": "joined",
+        "status": "UNVERIFIED",
+        "method": "Settled Expo Web screenshot and DOM geometry; browser reported a 0px top safe-area inset, so no native status-bar pixels were present to inspect.",
+        "exception": "The system status area and PageHeader are intentionally one continuous header surface; the native inset render was unavailable in Expo Web."
+      },
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/page-header-safearea-2026-11-10/375x812-light.png",
+      "screenshot_sha256": "ab45e7c97fc462ef482196ba3dabd937e0f5db01ca8dbc3b05d3b760cf8aeab6",
+      "executed_command": "cd /Users/suconnect/.codex/skills/playwright-skill && node run.js /tmp/playwright-page-header-evidence.js",
+      "status": "UNVERIFIED"
+    },
+    {
+      "route": "Catalog / default customer list (ListScreenContainer)",
+      "state": "light, populated list",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "axis": "vertical",
+      "previous": "PageHeader",
+      "previous_rect": {
+        "left": 0,
+        "top": 0,
+        "right": 375,
+        "bottom": 57,
+        "width": 375,
+        "height": 57
+      },
+      "next": "ListScreenContainer search/filter toolbar",
+      "next_rect": {
+        "left": 0,
+        "top": 57,
+        "right": 375,
+        "bottom": 156,
+        "width": 375,
+        "height": 99
+      },
+      "gap_px": 0,
+      "expected": {
+        "kind": "contract",
+        "value": "The list toolbar directly follows the page header; a 1px theme border identifies the joined edge.",
+        "source": "src/core/components/ScreenContainer.tsx:71-80,147-175; src/core/components/PageHeader.tsx:127-139"
+      },
+      "visual": {
+        "relationship": "joined",
+        "status": "PASS",
+        "method": "Settled screenshot inspection plus computed DOM styles; the shared edge is 0px and the PageHeader retains a 1px theme border.",
+        "exception": "PageHeader and its controlled list toolbar are an intentionally joined vertical page stack, separated by the PageHeader border."
+      },
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/page-header-safearea-2026-11-10/375x812-light.png",
+      "screenshot_sha256": "ab45e7c97fc462ef482196ba3dabd937e0f5db01ca8dbc3b05d3b760cf8aeab6",
+      "executed_command": "cd /Users/suconnect/.codex/skills/playwright-skill && node run.js /tmp/playwright-page-header-evidence.js",
+      "status": "PASS"
+    },
+    {
+      "route": "Catalog / default customer list (ListScreenContainer)",
+      "state": "light, populated list",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "axis": "vertical",
+      "previous": "ListScreenContainer search/filter toolbar",
+      "previous_rect": {
+        "left": 0,
+        "top": 57,
+        "right": 375,
+        "bottom": 156,
+        "width": 375,
+        "height": 99
+      },
+      "next": "First customer result card",
+      "next_rect": {
+        "left": 12,
+        "top": 168,
+        "right": 363,
+        "bottom": 259,
+        "width": 351,
+        "height": 91
+      },
+      "gap_px": 12,
+      "expected": {
+        "kind": "contract",
+        "value": "Catalog result content keeps 12px of page background between the toolbar and first card.",
+        "source": "examples/catalog/App.tsx:976"
+      },
+      "visual": {
+        "relationship": "separate",
+        "status": "PASS",
+        "method": "Settled screenshot inspection of the visible page-background band and DOM rectangles; the band measures 12px.",
+        "observed_clear_band_px": 12
+      },
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/page-header-safearea-2026-11-10/375x812-light.png",
+      "screenshot_sha256": "ab45e7c97fc462ef482196ba3dabd937e0f5db01ca8dbc3b05d3b760cf8aeab6",
+      "executed_command": "cd /Users/suconnect/.codex/skills/playwright-skill && node run.js /tmp/playwright-page-header-evidence.js",
+      "status": "PASS"
+    },
+    {
+      "route": "Catalog / default customer list (ListScreenContainer)",
+      "state": "light, populated list",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "axis": "vertical",
+      "previous": "First customer result card",
+      "previous_rect": {
+        "left": 12,
+        "top": 168,
+        "right": 363,
+        "bottom": 259,
+        "width": 351,
+        "height": 91
+      },
+      "next": "Second customer result card",
+      "next_rect": {
+        "left": 12,
+        "top": 269,
+        "right": 363,
+        "bottom": 360,
+        "width": 351,
+        "height": 91
+      },
+      "gap_px": 10,
+      "expected": {
+        "kind": "contract",
+        "value": "Catalog result cards use a 10px vertical gap.",
+        "source": "examples/catalog/App.tsx:976"
+      },
+      "visual": {
+        "relationship": "separate",
+        "status": "PASS",
+        "method": "Settled screenshot inspection of the visible page-background band and DOM rectangles; the card gap measures 10px.",
+        "observed_clear_band_px": 10
+      },
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/page-header-safearea-2026-11-10/375x812-light.png",
+      "screenshot_sha256": "ab45e7c97fc462ef482196ba3dabd937e0f5db01ca8dbc3b05d3b760cf8aeab6",
+      "executed_command": "cd /Users/suconnect/.codex/skills/playwright-skill && node run.js /tmp/playwright-page-header-evidence.js",
+      "status": "PASS"
+    },
+    {
+      "route": "Catalog / default customer list (ListScreenContainer)",
+      "state": "light, populated list",
+      "viewport": {
+        "width": 320,
+        "height": 720
+      },
+      "axis": "vertical",
+      "previous": "Android/iOS status bar region and top safe-area inset",
+      "previous_rect": {
+        "left": 0,
+        "top": 0,
+        "right": 320,
+        "bottom": 0,
+        "width": 320,
+        "height": 0
+      },
+      "next": "PageHeader",
+      "next_rect": {
+        "left": 0,
+        "top": 0,
+        "right": 320,
+        "bottom": 57,
+        "width": 320,
+        "height": 57
+      },
+      "gap_px": 0,
+      "expected": {
+        "kind": "contract",
+        "value": "Top safe area and PageHeader share one themed surface; the top inset is owned once by ScreenContainer.",
+        "source": "src/core/components/ScreenContainer.tsx:39-77; src/core/components/PageHeader.tsx:127-139"
+      },
+      "visual": {
+        "relationship": "joined",
+        "status": "UNVERIFIED",
+        "method": "Settled Expo Web screenshot and DOM geometry; browser reported a 0px top safe-area inset, so no native status-bar pixels were present to inspect.",
+        "exception": "The system status area and PageHeader are intentionally one continuous header surface; the native inset render was unavailable in Expo Web."
+      },
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/page-header-safearea-2026-11-10/320x720-light.png",
+      "screenshot_sha256": "c2adfbcef74216d381a607d5483f02cde0968d368869e086557ac6ae02bdee57",
+      "executed_command": "cd /Users/suconnect/.codex/skills/playwright-skill && node run.js /tmp/playwright-page-header-evidence.js",
+      "status": "UNVERIFIED"
+    },
+    {
+      "route": "Catalog / default customer list (ListScreenContainer)",
+      "state": "light, populated list",
+      "viewport": {
+        "width": 320,
+        "height": 720
+      },
+      "axis": "vertical",
+      "previous": "PageHeader",
+      "previous_rect": {
+        "left": 0,
+        "top": 0,
+        "right": 320,
+        "bottom": 57,
+        "width": 320,
+        "height": 57
+      },
+      "next": "ListScreenContainer search/filter toolbar",
+      "next_rect": {
+        "left": 0,
+        "top": 57,
+        "right": 320,
+        "bottom": 173.5,
+        "width": 320,
+        "height": 116.5
+      },
+      "gap_px": 0,
+      "expected": {
+        "kind": "contract",
+        "value": "The list toolbar directly follows the page header; a 1px theme border identifies the joined edge.",
+        "source": "src/core/components/ScreenContainer.tsx:71-80,147-175; src/core/components/PageHeader.tsx:127-139"
+      },
+      "visual": {
+        "relationship": "joined",
+        "status": "PASS",
+        "method": "Settled screenshot inspection plus computed DOM styles; the shared edge is 0px and the PageHeader retains a 1px theme border.",
+        "exception": "PageHeader and its controlled list toolbar are an intentionally joined vertical page stack, separated by the PageHeader border."
+      },
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/page-header-safearea-2026-11-10/320x720-light.png",
+      "screenshot_sha256": "c2adfbcef74216d381a607d5483f02cde0968d368869e086557ac6ae02bdee57",
+      "executed_command": "cd /Users/suconnect/.codex/skills/playwright-skill && node run.js /tmp/playwright-page-header-evidence.js",
+      "status": "PASS"
+    },
+    {
+      "route": "Catalog / default customer list (ListScreenContainer)",
+      "state": "light, populated list",
+      "viewport": {
+        "width": 320,
+        "height": 720
+      },
+      "axis": "vertical",
+      "previous": "ListScreenContainer search/filter toolbar",
+      "previous_rect": {
+        "left": 0,
+        "top": 57,
+        "right": 320,
+        "bottom": 173.5,
+        "width": 320,
+        "height": 116.5
+      },
+      "next": "First customer result card",
+      "next_rect": {
+        "left": 12,
+        "top": 185.5,
+        "right": 308,
+        "bottom": 276.5,
+        "width": 296,
+        "height": 91
+      },
+      "gap_px": 12,
+      "expected": {
+        "kind": "contract",
+        "value": "Catalog result content keeps 12px of page background between the toolbar and first card.",
+        "source": "examples/catalog/App.tsx:976"
+      },
+      "visual": {
+        "relationship": "separate",
+        "status": "PASS",
+        "method": "Settled screenshot inspection of the visible page-background band and DOM rectangles; the band measures 12px.",
+        "observed_clear_band_px": 12
+      },
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/page-header-safearea-2026-11-10/320x720-light.png",
+      "screenshot_sha256": "c2adfbcef74216d381a607d5483f02cde0968d368869e086557ac6ae02bdee57",
+      "executed_command": "cd /Users/suconnect/.codex/skills/playwright-skill && node run.js /tmp/playwright-page-header-evidence.js",
+      "status": "PASS"
+    },
+    {
+      "route": "Catalog / default customer list (ListScreenContainer)",
+      "state": "light, populated list",
+      "viewport": {
+        "width": 320,
+        "height": 720
+      },
+      "axis": "vertical",
+      "previous": "First customer result card",
+      "previous_rect": {
+        "left": 12,
+        "top": 185.5,
+        "right": 308,
+        "bottom": 276.5,
+        "width": 296,
+        "height": 91
+      },
+      "next": "Second customer result card",
+      "next_rect": {
+        "left": 12,
+        "top": 286.5,
+        "right": 308,
+        "bottom": 377.5,
+        "width": 296,
+        "height": 91
+      },
+      "gap_px": 10,
+      "expected": {
+        "kind": "contract",
+        "value": "Catalog result cards use a 10px vertical gap.",
+        "source": "examples/catalog/App.tsx:976"
+      },
+      "visual": {
+        "relationship": "separate",
+        "status": "PASS",
+        "method": "Settled screenshot inspection of the visible page-background band and DOM rectangles; the card gap measures 10px.",
+        "observed_clear_band_px": 10
+      },
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/page-header-safearea-2026-11-10/320x720-light.png",
+      "screenshot_sha256": "c2adfbcef74216d381a607d5483f02cde0968d368869e086557ac6ae02bdee57",
+      "executed_command": "cd /Users/suconnect/.codex/skills/playwright-skill && node run.js /tmp/playwright-page-header-evidence.js",
+      "status": "PASS"
+    },
+    {
+      "route": "Catalog / default customer list (ListScreenContainer)",
+      "state": "dark, populated list",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "axis": "vertical",
+      "previous": "Android/iOS status bar region and top safe-area inset",
+      "previous_rect": {
+        "left": 0,
+        "top": 0,
+        "right": 375,
+        "bottom": 0,
+        "width": 375,
+        "height": 0
+      },
+      "next": "PageHeader",
+      "next_rect": {
+        "left": 0,
+        "top": 0,
+        "right": 375,
+        "bottom": 57,
+        "width": 375,
+        "height": 57
+      },
+      "gap_px": 0,
+      "expected": {
+        "kind": "contract",
+        "value": "Top safe area and PageHeader share one themed surface; the top inset is owned once by ScreenContainer.",
+        "source": "src/core/components/ScreenContainer.tsx:39-77; src/core/components/PageHeader.tsx:127-139"
+      },
+      "visual": {
+        "relationship": "joined",
+        "status": "UNVERIFIED",
+        "method": "Settled Expo Web screenshot and DOM geometry; browser reported a 0px top safe-area inset, so no native status-bar pixels were present to inspect.",
+        "exception": "The system status area and PageHeader are intentionally one continuous header surface; the native inset render was unavailable in Expo Web."
+      },
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/page-header-safearea-2026-11-10/375x812-dark.png",
+      "screenshot_sha256": "2cbd84c619c0003c0dab27e1b358e42161563c2838f1f0eec1880aa1accd8334",
+      "executed_command": "cd /Users/suconnect/.codex/skills/playwright-skill && node run.js /tmp/playwright-page-header-evidence.js",
+      "status": "UNVERIFIED"
+    },
+    {
+      "route": "Catalog / default customer list (ListScreenContainer)",
+      "state": "dark, populated list",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "axis": "vertical",
+      "previous": "PageHeader",
+      "previous_rect": {
+        "left": 0,
+        "top": 0,
+        "right": 375,
+        "bottom": 57,
+        "width": 375,
+        "height": 57
+      },
+      "next": "ListScreenContainer search/filter toolbar",
+      "next_rect": {
+        "left": 0,
+        "top": 57,
+        "right": 375,
+        "bottom": 156,
+        "width": 375,
+        "height": 99
+      },
+      "gap_px": 0,
+      "expected": {
+        "kind": "contract",
+        "value": "The list toolbar directly follows the page header; a 1px theme border identifies the joined edge.",
+        "source": "src/core/components/ScreenContainer.tsx:71-80,147-175; src/core/components/PageHeader.tsx:127-139"
+      },
+      "visual": {
+        "relationship": "joined",
+        "status": "PASS",
+        "method": "Settled screenshot inspection plus computed DOM styles; the shared edge is 0px and the PageHeader retains a 1px theme border.",
+        "exception": "PageHeader and its controlled list toolbar are an intentionally joined vertical page stack, separated by the PageHeader border."
+      },
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/page-header-safearea-2026-11-10/375x812-dark.png",
+      "screenshot_sha256": "2cbd84c619c0003c0dab27e1b358e42161563c2838f1f0eec1880aa1accd8334",
+      "executed_command": "cd /Users/suconnect/.codex/skills/playwright-skill && node run.js /tmp/playwright-page-header-evidence.js",
+      "status": "PASS"
+    },
+    {
+      "route": "Catalog / default customer list (ListScreenContainer)",
+      "state": "dark, populated list",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "axis": "vertical",
+      "previous": "ListScreenContainer search/filter toolbar",
+      "previous_rect": {
+        "left": 0,
+        "top": 57,
+        "right": 375,
+        "bottom": 156,
+        "width": 375,
+        "height": 99
+      },
+      "next": "First customer result card",
+      "next_rect": {
+        "left": 12,
+        "top": 168,
+        "right": 363,
+        "bottom": 259,
+        "width": 351,
+        "height": 91
+      },
+      "gap_px": 12,
+      "expected": {
+        "kind": "contract",
+        "value": "Catalog result content keeps 12px of page background between the toolbar and first card.",
+        "source": "examples/catalog/App.tsx:976"
+      },
+      "visual": {
+        "relationship": "separate",
+        "status": "PASS",
+        "method": "Settled screenshot inspection of the visible page-background band and DOM rectangles; the band measures 12px.",
+        "observed_clear_band_px": 12
+      },
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/page-header-safearea-2026-11-10/375x812-dark.png",
+      "screenshot_sha256": "2cbd84c619c0003c0dab27e1b358e42161563c2838f1f0eec1880aa1accd8334",
+      "executed_command": "cd /Users/suconnect/.codex/skills/playwright-skill && node run.js /tmp/playwright-page-header-evidence.js",
+      "status": "PASS"
+    },
+    {
+      "route": "Catalog / default customer list (ListScreenContainer)",
+      "state": "dark, populated list",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "axis": "vertical",
+      "previous": "First customer result card",
+      "previous_rect": {
+        "left": 12,
+        "top": 168,
+        "right": 363,
+        "bottom": 259,
+        "width": 351,
+        "height": 91
+      },
+      "next": "Second customer result card",
+      "next_rect": {
+        "left": 12,
+        "top": 269,
+        "right": 363,
+        "bottom": 360,
+        "width": 351,
+        "height": 91
+      },
+      "gap_px": 10,
+      "expected": {
+        "kind": "contract",
+        "value": "Catalog result cards use a 10px vertical gap.",
+        "source": "examples/catalog/App.tsx:976"
+      },
+      "visual": {
+        "relationship": "separate",
+        "status": "PASS",
+        "method": "Settled screenshot inspection of the visible page-background band and DOM rectangles; the card gap measures 10px.",
+        "observed_clear_band_px": 10
+      },
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/page-header-safearea-2026-11-10/375x812-dark.png",
+      "screenshot_sha256": "2cbd84c619c0003c0dab27e1b358e42161563c2838f1f0eec1880aa1accd8334",
+      "executed_command": "cd /Users/suconnect/.codex/skills/playwright-skill && node run.js /tmp/playwright-page-header-evidence.js",
+      "status": "PASS"
+    }
+  ],
+  "unverified": [
+    "Expo Web measured a 0px top safe-area inset. Native Android/iOS status-bar background painting and device inset geometry were not exercised."
+  ]
+}

@@ -18,6 +18,8 @@ export interface ScreenContainerProps {
   scrollMode?: ScreenScrollMode;
   /** The bottom edge is opt-in so BottomActionBar can own its own inset. */
   safeAreaEdges?: Edge[];
+  /** Surface painted behind the header and its top safe area. Defaults to the theme surface when a header exists. */
+  headerBackgroundColor?: string;
   style?: StyleProp<ViewStyle>;
   contentContainerStyle?: StyleProp<ViewStyle>;
 }
@@ -29,10 +31,14 @@ export function ScreenContainer({
   children,
   scrollMode = 'none',
   safeAreaEdges = ['top', 'left', 'right'],
+  headerBackgroundColor,
   style,
   contentContainerStyle,
 }: ScreenContainerProps) {
   const { colors } = useTheme();
+  const hasTopSafeArea = safeAreaEdges.includes('top');
+  const rootSafeAreaEdges = safeAreaEdges.filter((edge) => edge !== 'top');
+  const topBackgroundColor = headerBackgroundColor ?? (header ? colors.surface : colors.background);
   const body =
     scrollMode === 'keyboard' ? (
       <KeyboardAwareScrollView
@@ -59,10 +65,17 @@ export function ScreenContainer({
 
   return (
     <SafeAreaView
-      edges={safeAreaEdges}
+      edges={rootSafeAreaEdges}
       style={[styles.safeArea, { backgroundColor: colors.background }, style]}
     >
-      {header}
+      {hasTopSafeArea || header ? (
+        <SafeAreaView
+          edges={hasTopSafeArea ? ['top'] : []}
+          style={[styles.headerRegion, { backgroundColor: topBackgroundColor }]}
+        >
+          {header}
+        </SafeAreaView>
+      ) : null}
       {body}
       {footer}
     </SafeAreaView>
@@ -89,12 +102,22 @@ export function DetailScreenContainer({
     <ScreenContainer
       {...screenProps}
       scrollMode={screenProps.scrollMode ?? 'scroll'}
-      header={<PageHeader title={title} onBack={onBack} right={headerRight} actions={headerActions} noSafeArea />}
+      header={(
+        <PageHeader
+          title={title}
+          onBack={onBack}
+          right={headerRight}
+          actions={headerActions}
+          noSafeArea
+          style={screenProps.headerBackgroundColor ? { backgroundColor: screenProps.headerBackgroundColor } : undefined}
+        />
+      )}
     />
   );
 }
 
 export interface ListScreenContainerProps extends Omit<ScreenContainerProps, 'header' | 'scrollMode'> {
+  /** Omit when the parent navigator/workspace already names this list. */
   title: string;
   onBack?: () => void;
   headerRight?: React.ReactNode;
@@ -110,6 +133,7 @@ export function ListScreenContainer({
   onBack,
   headerRight,
   headerActions,
+  headerBackgroundColor,
   toolbar,
   children,
   footer,
@@ -121,9 +145,19 @@ export function ListScreenContainer({
 
   return (
     <ScreenContainer
-      header={<PageHeader title={title} onBack={onBack} right={headerRight} actions={headerActions} noSafeArea />}
+      header={title ? (
+        <PageHeader
+          title={title}
+          onBack={onBack}
+          right={headerRight}
+          actions={headerActions}
+          noSafeArea
+          style={headerBackgroundColor ? { backgroundColor: headerBackgroundColor } : undefined}
+        />
+      ) : undefined}
       footer={footer}
       safeAreaEdges={safeAreaEdges}
+      headerBackgroundColor={headerBackgroundColor}
       style={style}
       contentContainerStyle={contentContainerStyle}
     >
@@ -149,6 +183,7 @@ export function FormScreenContainer(props: TitledScreenContainerProps) {
 
 const styles = StyleSheet.create({
   safeArea: { flex: 1 },
+  headerRegion: { flexShrink: 0 },
   flex: { flex: 1, minHeight: 0 },
   scrollContent: { flexGrow: 1, padding: Spacing.md, gap: Spacing.sm },
   toolbar: {
