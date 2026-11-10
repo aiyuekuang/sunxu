@@ -1,8 +1,68 @@
 # 组件盘点与精选规范
 
+## ActionButton 尾随图标契约
+
+- **稳定任务**：执行有可见文案的主要/次要操作，或打开一个有明确标签的下一层内容。
+- **API**：保留现有 `variant`、`size`、`icon`、`loading`、`disabled`、`selected` 与宿主回调；新增可选 `trailingIcon`，用于把 chevron 等方向/披露提示放在可见文案之后，并新增 `expanded` 以将折叠内容状态暴露给读屏。图标不承载独立动作。
+- **状态**：默认、按压、选中、禁用和加载继续由 `ActionButton` 单一实现管理；尾随图标跟随文案前景色，不另行改变状态或点击区域。
+- **布局与可访问性**：按钮仍是一个触控和无障碍节点，图标作为装饰隐藏；文案构成默认名称，必要时由宿主覆盖无障碍名称。常规尺寸目标按 iOS 44pt、Android 48dp；紧凑视觉尺寸通过 hitSlop 补足触控热区。父级控制按钮间距，长文案保留组件既有排版规则。
+- **边界**：不承载列表行详情、图标单独动作、固定详情动作或主新增入口；这些分别由 `ListCard`/`SwipeableRow`、`IconActionButton`、`DetailActionBar`、`FAB` 所有。最近邻替代是用 `ScalePressable` 自绘带箭头的按钮行，产生同义按钮的局部样式分叉。
+
+## ListCard 可展开状态契约
+
+- **稳定任务**：点击结果卡片打开详情或展开卡片内的补充信息。
+- **API**：沿用 `onPress`、`accessibilityLabel` 和 `accessibilityHint`；新增可选 `expanded`，只负责向读屏暴露展开状态，不代替宿主的可见箭头、展开内容或状态管理。
+- **状态**：未提供 `onPress` 时继续渲染静态容器；提供 `onPress` 时成为唯一整卡触控目标；展开/收起由宿主状态控制，并通过 `accessibilityState.expanded` 同步给辅助技术。卡片内部独立动作使用共享按钮并阻断事件冒泡。
+- **边界**：不负责详情路由、数据加载或列表筛选。最近邻替代是 `ScalePressable` 加手绘卡片表面；它绕过 ListCard 的统一容器语义和列表样式。
+
+## ListCard 选择状态契约
+
+- **稳定任务**：在候选实体或可选记录列表里选中一个整卡项目。
+- **API**：新增受控 `selected` 与 `disabled`；宿主继续提供 `onPress`、可访问名称和内容。可按选择语义指定 `accessibilityRole`（如 `radio`/`checkbox`）；复选记录通过 `checked` 暴露勾选状态。`selected` 只展示/宣布选中状态，不存储选择；`disabled` 阻止触发并暴露禁用状态。
+- **状态**：默认显示主题 surface 和细边线；选中使用主题 `primarySurface` 与主色边线区分；按压沿用卡片反馈；禁用通过原生 disabled 与降强调表达。加载、错误和结果为空由列表容器负责。
+- **无障碍与边界**：整卡一个触控目标，选择和禁用状态进入 `accessibilityState`；内部图标动作仍用 `IconActionButton` 并停止冒泡。用于实体选择列表时避免再造一套手绘 radio 卡片；状态/视图筛选仍使用 `StatusTabs`/`SelectableChip`。
+
+## IconActionButton 异步状态契约
+
+- **稳定任务**：触发一个没有可见文字标签的单一图标操作，例如刷新、回拨或置顶。
+- **API**：必填 `icon`、`accessibilityLabel`、`onPress`；可选语义 `tone`、`variant`、`size`、`iconSize`、`selected`、`disabled`、`loading`、`testID`。加载时按钮自动禁用，保留圆形目标尺寸并以主题前景色显示原生进度指示器。
+- **状态**：默认/按压通过共享透明度反馈；选中态由宿主传入并通过无障碍状态暴露，视觉区分由 `variant`/`tone` 表达；禁用降低强调并阻止回调；加载展示 spinner、宣布 busy 并阻止重复提交；成功/失败由宿主 Toast 或页面状态反馈。
+- **布局与可访问性**：图标视觉尺寸与触控热区分离，热区按 iOS 44pt、Android 48dp；图标装饰性隐藏，无障碍名称必填，禁用/选中/忙碌状态同步暴露。父级管理与相邻控件的间距。
+- **边界**：不负责操作结果、数据加载、权限或错误恢复。最近邻替代是宿主自绘 `ScalePressable`、spinner、状态与触控几何，造成同一图标按钮语义分叉；宿主应消费此状态 API。
+
+## Icon 与触控尺寸 token
+
+- 图标 glyph 尺寸使用 `IconSize`（`xs`–`2xl`）；`ControlSize` 决定控件布局尺寸，`MIN_TOUCH_TARGET` / `MIN_TOUCH_TARGET_ANDROID` 决定平台最小触控热区，两者不可共用一个数值 token。
+- `IconActionButton.size` 决定控件布局尺寸；组件按平台目标动态扩展 `hitSlop`，确保有效热区至少为 iOS 44pt、Android 48dp。`ControlSize.iconButton` 为 32dp，配合每边 8dp 的 hitSlop，布局保持 32dp、Android 触控范围达到 48dp；父级仍须为扩展热区留出空间。
+- 组件可组合更大的图标动作/电话动作尺寸 `ControlSize.iconAction` 和 `ControlSize.phoneAction`；紧凑视觉尺寸保留平台触控要求。
+- 业务页与组件示例不得新增裸数字图标尺寸；确需不规则品牌图标尺寸时由组件契约注释说明。
+
+## CheckboxField 与 SettingsRow
+
+- `CheckboxField` 负责带标签的单项复选操作，受控值由宿主保存；行整体是唯一触控目标，并同步宣布 `checked`/`disabled`。独立的二元偏好使用 CheckboxField；成组候选记录使用 ListCard 的 `checkbox` 语义。
+- `SettingsRow` 负责设置页中“图标 + 名称 + 可选说明 + 可选值/状态 + 可选进入箭头”的通用行。提供 `onPress` 时整行成为唯一按钮；不提供时显示为静态信息行。复杂的状态徽标可通过 `accessory` 插槽呈现，`showDisclosure` 控制其后是否仍显示进入箭头。业务权限、数据请求和导航仍由宿主处理；简单状态值可通过 `valueColor` 呈现主题色。
+- 两者都提供 `accessibilityLabel`、可选 `accessibilityHint` 与 `testID`；触控尺寸和主题颜色由 Sunxu 统一管理。最近邻替代是各页面重复拼装复选图标或设置行的 Pressable、文字与箭头。
+
+## 表单、搜索与日期字段触控尺寸
+
+- `FormField`、`SearchBar`、`DatePickerField` 的实际可聚焦/可操作区域至少为 iOS 44pt、Android 48dp；输入节点本身也要达到该高度，不能只把背景容器加高后让原生输入框仍保持约一行文字高度。
+- 密码显隐、清空搜索、清除日期等单独动作使用 `IconActionButton`，拥有独立的 48dp 触控区和描述性无障碍名称；嵌套在字段中的次级动作要阻止冒泡，不能同时触发打开/聚焦父字段。
+- 日期字段的清除按钮与打开选择器是两个不同操作。紧凑筛选样式只减少图标/内边距，不能压低平台触控高度。
+- `FormPage`、`FullScreenModal` 等高层表单容器的确认/保存/取消操作组合 `ActionButton`；容器负责固定位置，按钮视觉和禁用/加载/无障碍状态仍由 ActionButton 管理。
+- 验收 Android 时读取原生可访问节点 bounds；仅看包裹 View 的几何不够。UI 变更同时记录视口、截图、可交互节点尺寸及溢出检查；未渲染的调用页面标记为 `UNVERIFIED`。
+
 ## 组件库目标
 
 Sunxu 面向多个 React Native / Expo App，提供跨业务可组合的 UI 控件和页面容器。新项目应能用同一套主题 token、页头、工具栏、表单滚动和详情布局起步；业务数据获取、路由、权限决策和领域文案留在宿主项目。
+
+## 页面操作与导航直达
+
+- **动作落点明确**：入口文案表达了具体操作（如“写跟进”“编辑”“查看”）时，点击后应直接打开该操作对应的目标表单或详情。当前上下文已提供目标对象和必需数据时，复用这些数据完成直达，不先切换 Tab、打开中间页或详情，再自动弹出目标内容。
+- **一次点击不串联多次切换**：一次用户操作最多触发一次有意义的页面导航或弹层呈现；禁止自动连续跳两次或更多，例如“点击写跟进 → 切到客户 Tab → 再打开写跟进弹层”。如果目标内容需要加载，留在目标界面加载，不把加载过程包装成中间页面跳转。
+- **多步骤必须显式**：确有多个业务步骤时，以明确的向导/步骤界面承载，并让用户逐步触发下一步；不要通过连续自动导航制造用户未选择的步骤。
+- **职责边界**：路由和导航仍由宿主 App 管理，Sunxu 不新增宿主导航依赖；宿主组合 `PageHeader`、页面容器、`FullScreenModal` 或 `BottomSheet` 时遵守上述行为。若业务限制导致无法直达，入口应明确说明需要用户采取的前置动作，而不是先跳到无关页面。
+
+示例：通话记录行已有 `partyId` 和 `callRecordId` 时，“写跟进”直接打开当前页面上的跟进表单并传入这两个 ID；不切换到客户列表，再从客户详情打开表单。
 
 ## MES 基线筛选结果
 
@@ -22,7 +82,7 @@ Sunxu 面向多个 React Native / Expo App，提供跨业务可组合的 UI 控�
 | 容器 | 首屏职责与空间预算 | 内容策略 |
 |---|---|---|
 | `ScreenContainer` | 顶部安全区 + 可选页头 + 主内容 + 固定底部操作区 | 通过 `scrollMode` 选择普通、键盘感知滚动或非滚动；子内容由宿主组合 |
-| `ListScreenContainer` | 页头约 56dp；搜索/筛选工具栏约 44–96dp；余下空间全部给结果 | 工具栏紧贴它控制的列表；列表自行管理虚拟化与刷新 |
+| `ListScreenContainer` | 页头约 56dp；搜索/筛选工具栏约 48–96dp；余下空间全部给结果 | 工具栏紧贴它控制的列表；列表自行管理虚拟化与刷新 |
 | `FormScreenContainer` / `FormPage` | 页头约 56dp；字段滚动；可选固定底部动作 | 键盘感知滚动；导航和提交由 props 提供 |
 | `DetailScreenContainer` | 页头约 56dp；详情信息滚动；可选固定底部动作 | 适合长详情；固定操作由 footer 插槽提供 |
 
@@ -52,11 +112,31 @@ Sunxu 面向多个 React Native / Expo App，提供跨业务可组合的 UI 控�
 
 ## 弹窗表单固定操作区
 
-- 弹窗表单中的确定、应用、保存、取消等流程操作统一固定在弹窗底部，与表单滚动区分离；滚动内容必须留在固定 footer 上方，不得让操作按钮随滚动内容移出视口。
-- `FullScreenModal` 使用 `confirmText` 或 `renderFooter` 提供固定底栏；`bodyMode="scroll"` 由组件管理内容滚动，`bodyMode="fill"` 时由宿主内容管理滚动，footer 仍由弹窗单独放置。
-- `BottomSheet` 使用 `confirmText` 或 `renderFooter` 提供固定底栏；长表单使用默认滚动内容区，`dynamicHeight` 仅用于短内容选择或说明弹层。
-- 新增或修改弹窗表单时，优先扩展上述组件，不得在滚动 children 中放确认类操作，也不得把确认操作放入标题栏。组件自己的系统/平台选择器同样遵守此位置约束。
-- 即时选择并立即生效的列表项、相机/媒体查看等没有表单确认闭环的弹层，不额外增加固定操作区。
+- **Anatomy/API**：`FullScreenModal` 与 `BottomSheet` 由 Sunxu 统一拥有标题、内容区和固定底栏。简单“取消 + 确认”使用 `confirmText` / `onConfirm`；自定义或多操作区通过 `footer: ReactNode` 传入。`footer` 由弹窗拉伸到可用内容宽度，渲染在内容滚动视口之外，并负责底部安全区。`confirmText` 与 `footer` 属于互斥 API，TypeScript 类型会拒绝同时设置；`FullScreenModal` 的 `immersive` 模式也不接受流程按钮。旧 `renderFooter` 只为兼容保留并标记弃用。
+- **内容/操作边界**：确定、应用、保存、取消等流程操作必须留在固定 `footer`，不得放入可滚动 `children` 或标题区。`bodyMode="scroll"` 由 `FullScreenModal` 管理内容滚动；`bodyMode="fill"` 时宿主管理全高内容及其滚动，操作 `footer` 仍由弹窗单独固定。`BottomSheet` 默认将长内容放入滚动区；`dynamicHeight` 只用于短内容选择或说明弹层。
+- **状态、布局与无障碍**：宿主管理 visible、提交/loading、disabled、校验及关闭恢复；容器只提供可见状态和回调承载，不调用业务 API。footer 位于弹窗视口底部，底部 inset 由容器负责；自定义 footer 内容默认拉伸至可用宽度，行内操作可用 `flex: 1` 等分填满剩余空间；窄屏须换行或堆叠且不得缩小触控目标。流程按钮使用 `ActionButton` 或等价共享按钮，提供可访问名称及 disabled/loading 反馈；至少保持平台最小触控高度。
+- **标准调用**：
+
+  ```tsx
+  <FullScreenModal
+    visible={visible}
+    onClose={onCancel}
+    title="编辑记录"
+    footer={(
+      <View style={styles.actions}>
+        <ActionButton variant="secondary" onPress={onCancel}>取消</ActionButton>
+        <ActionButton onPress={onSave}>保存</ActionButton>
+      </View>
+    )}
+  >
+    <FormField label="名称" value={name} onChangeText={setName} />
+    {/* 只放可滚动的表单内容 */}
+  </FullScreenModal>
+  ```
+- **内部状态与恢复**：可见、关闭、提交、loading、disabled 和校验状态由宿主控制；弹窗只呈现回调与状态，不调用业务 API。取消/系统返回由 `onClose` 恢复宿主状态；提交成功或失败由宿主反馈。底栏内按钮继续使用 `ActionButton` 或其他带可访问名称/状态的共享控件。
+- **适用边界**：自定义 React Native Modal 只要含有流程按钮，也必须把按钮区与可滚动内容分开，并自行处理底部安全区。静态内容日期选择器等可在不可滚动选择器之后放独立操作区；系统 `Alert` 由平台安排原生按钮。即时生效选项列表、相机/媒体查看等没有确认闭环的弹层不额外增加固定操作区。
+- **选择依据**：成熟组件同样把流程动作建模为独立区域：React Native Paper 提供 [`Dialog.Actions`](https://callstack.github.io/react-native-paper/docs/components/Dialog/DialogActions)；Gorhom Bottom Sheet 提供 [`footerComponent`](https://gorhom.dev/react-native-bottom-sheet/custom-footer) / [`BottomSheetFooter`](https://gorhom.dev/react-native-bottom-sheet/components/bottomsheetfooter) 并锚定面板底部。Sunxu 包装层沿用插槽语义，同时统一主题、关闭、内容滚动和安全区；不接受把动作按钮塞进 `children` 后依赖页面长度决定是否可见。
+- **Catalog**：`FullScreenModal` 示例用长表单与 `footer` 双按钮；`ChoiceSheet`、`FilterBar` 用自定义 `footer`。窄屏、滚动到底、按钮回调与固定底栏几何记录在对应验收文档。
 
 ## 依赖和可移植性
 
@@ -116,13 +196,39 @@ CRM 宿主对 49 个再导出组件与来源基线逐文件比对后，修正与
 
 ## 2026-11-06 SwipeableRow 无障碍修正
 
-`SwipeableRow` 继续由宿主传入行操作和回调；通用组件提供左滑露出右侧操作、点击关闭操作区后执行回调。修正如下：
+`SwipeableRow` 继续由宿主传入行操作和回调；通用组件提供左滑露出右侧操作，并由行本身执行宿主的详情回调。修正如下：
 
 - 行没有 `onPress` 时直接渲染 `children`，不再额外套一层无回调的 `TouchableOpacity`，避免无障碍树把子控件合并为无操作的单一行。
 - 行有 `onPress` 时才提供按钮角色。
 - 左滑操作按钮暴露按钮角色和对应标签，并至少保持 44dp 高度。
+- 详情行的点击回调由 `SwipeableRow.onPress` 持有；子 `ListCard` 只负责内容和卡片样式。行点击直接调用宿主回调，不额外调用 `close()`；右滑操作按钮才先关闭操作区再执行动作。
+- `SwipeableRow` 的行点击区和操作按钮使用 React Native `TouchableOpacity`。行内展示内容保持非交互，电话、评论等独立操作作为并列子项；避免在整行点击区内再包一层覆盖大面积的 Pressable。
+- `ScalePressable` 的缩放只作用于内部视觉层，外层按压目标保持不变形，避免 Android 列表虚拟化与动画变换造成点击命中区偏移。
+- `BottomSheet` 使用根级 `BottomSheetModalProvider` 提供的 portal host；不要在其内部再嵌套 `PortalProvider`，否则详情等弹层会收到点击状态却无法显示。
+- 主行点击必须立即打开详情，详情接口在弹层内继续加载；行内电话、评论等独立按钮须调用 `event.stopPropagation()`，避免一次点击同时执行行详情。
+
+标准结构：
+
+```tsx
+<SwipeableRow
+  onPress={() => openDetail(item)}
+  accessibilityLabel={`打开${item.name}详情`}
+  rightActions={[{ label: '更多', icon: 'ellipsis-horizontal', color, onPress: () => openMore(item) }]}
+>
+  <ListCard>{/* 纯展示行内容；不要再给它设置整行 onPress */}</ListCard>
+</SwipeableRow>
+```
+
+没有左滑操作时，可直接用 `ListCard.onPress` 承担整行主动作。不要在 `SwipeableRow` 与内层 `ListCard` 同时设置整行点击。
 
 运行时手势展开仍需在原生宿主设备上检查；类型检查通过前不发布新包。当前公开包授权门禁见[授权与发布](#验证授权与发布)。
+
+## 2026-11-09 列表卡片触控与拨号操作样式
+
+- `ListCard` 没有 `onPress` / `onLongPress` 时渲染普通 `View`，不创建禁用态 `TouchableOpacity` 边界；卡片内的详情区、电话键和其他子操作保留各自触控目标。需要整行点击时才使用 `ListCard.onPress`，嵌在 `SwipeableRow` 中的业务行则由 `SwipeableRow.onPress` 统一处理点击。
+- 固定在页面边缘的主操作使用 `FAB`，不要用默认透明的 `IconActionButton` 伪装浮动按钮。`FAB` 支持禁用状态、读屏状态、测试标识和 `StyleProp<ViewStyle>` 定位样式；普通行内图标动作按强调级别显式选 `plain`、`tinted` 或 `filled`。
+- `DialPad` 按键使用 `surfaceSecondary` 和 `border` 形成可辨识的圆形触控面；按压时变为边线色。颜色跟随主题，不由宿主覆盖样式。
+- Catalog 展示拨号图标的填充状态、页面主操作 FAB，以及“整行进入详情 + 左滑更多操作”的标准组合。宿主不再把详情回调嵌在手势行中的内层卡片上。
 
 ## 2026-11-06 StatusTabs 轨道宽度与禁用态修正
 
@@ -147,6 +253,12 @@ CRM“客户 / 商机”导航的两个等宽 Tab 文字贴近格子左缘，而
 - `FilterBar` 高级筛选改用共享 `BottomSheet`；筛选项在滚动区，重置/应用操作通过固定 footer 展示。
 - iOS `DatePickerField` 的取消/确定操作移到选择器弹窗底部。`FullScreenModal` 和 `BottomSheet` 的 API 注释明确 footer 与内容滚动区分离；Catalog 示例改用固定完成按钮并增加长筛选项示例。
 - `npm run typecheck` 通过。渲染验收为 `UNVERIFIED`：Expo Web 可打开 Catalog，但单次交互未能定位到可见的“应用高级筛选”按钮；未收集截图和 DOM 几何。iOS 原生日期选择器也未完成实际渲染核对。记录见[弹窗表单底栏验收](./verification/modal-form-footer-2026-11-09/README.md)。
+
+## 2026-11-10 统一弹窗固定操作区 API
+
+- `FullScreenModal` 和 `BottomSheet` 新增首选 `footer: ReactNode` 插槽，并保留旧 `renderFooter` 作为弃用兼容 API。内置 `confirmText` / `onConfirm` 与自定义 footer 通过互斥 TypeScript 联合类型约束；footer 仍由弹窗放在滚动区外，并负责底部安全区。
+- `FilterBar` 高级筛选和 `ChoiceSheet` 迁移到 `footer`；Catalog 增加可滚动客户表单和固定“取消 / 保存”操作区示例。宿主只向 `children` 提供表单内容，流程按钮通过 `footer` 提交。
+- `npm run typecheck` 通过。Expo Web `/` 在 375×812 与冷启动 320×720 下检查了表单滚动、底栏固定、并列按钮等分填满、44px 按钮、12px 底部间距及取消/保存回调；6 项测量通过 spacing ledger validator。`ChoiceSheet` 的 BottomSheet Web 面板未能显示，原生 iOS/Android 和系统读屏也为 `UNVERIFIED`。同一文档从 375px 动态缩至 320px 时，空 Toast host 曾造成 11px document overflow；冷启动 320px 未复现，动态调整行仍标 `UNVERIFIED`。完整证据见[弹窗固定操作区验收](./verification/modal-footer-contract-2026-11-10/README.md)，总体状态 `PASS WITH UNVERIFIED`。
 
 ## 2026-11-09 CRM 通用组合控件提取
 
@@ -184,7 +296,7 @@ Catalog 增加含多个输入框和固定保存栏的键盘避让表单，可用
 ## 2026-11-09 Sunxu 操作组件与 CRM 单条拜访接入
 
 - 新增通用 `ActionButton`、`IconActionButton`、`ActionMenu`、`ChoiceSheet`、`SectionCard`、`MetricCard`、`Divider`、`ScalePressable` 和根级 `ToastHost`。它们只处理展示、交互状态和回调，不读取 CRM 数据或权限。
-- `ChoiceSheet` 的选择项留在滚动区，“取消 / 确定”通过 `BottomSheet.renderFooter` 固定在底部；表单确认流程不能跟随选项滚出视口。
+- `ChoiceSheet` 的选择项留在滚动区，“取消 / 确定”通过 `BottomSheet` 的固定 footer 插槽承载；表单确认流程不能跟随选项滚出视口。该调用已随 2026-11-10 的 API 收敛改用 `footer`；旧 `renderFooter` 只保留兼容。
 - CRM 每条拜访计划现在使用共享 `ListCard` 和 `ActionButton`；单条计划自己提供开始、结束和路线恢复操作。结束表单使用 `FullScreenModal` 固定底栏。Sunxu 不承担拜访 API、状态校验和定位业务。
 - Catalog 新增操作菜单、单选弹层、按钮状态、轻按反馈、摘要卡片、分隔线和 Toast 示例，供可视核对。
 - Sunxu 源码版本升至 `0.1.8`。npm registry 当前尚无该版本；CRM 使用精确 Git commit 作为依赖，本次不发布 npm 包。
@@ -238,6 +350,33 @@ Tel App 的真实设备/模拟器路由截图、长列表与弹层状态的几�
 - `IconActionButton.size` 控制按钮布局框，不受平台最小触控尺寸反向撑高；默认布局尺寸仍为 44dp。
 - 组件按 iOS 44pt / Android 48dp 计算扩展 `hitSlop`。`ControlSize.iconButton` 的 32dp 布局框每边扩展 8dp，形成 48dp 触控区域；父级需保留足够间距，避免扩展热区覆盖相邻操作。
 - Catalog 同行展示 32dp 紧凑按钮与 44dp 默认按钮，几何证据记录于[紧凑尺寸验收](./verification/icon-action-button-compact-2026-11-10/README.md)。原生 iOS/Android 的实际命中范围仍为 `UNVERIFIED`。
+
+## 2026-11-10 Tel App 页面与操作状态复用
+
+- `ListScreenContainer.title` 改为可选；父级导航或工作区已提供页面名称时省略页头，列表搜索/筛选仍由 `toolbar` 固定在结果区上方。标题缺省时不创建空 `PageHeader`。
+- `SwipeableRow` 的 `SwipeAction` 增加 `disabled` 与 `loading`。忙碌时显示主题色文字上的 spinner，禁用重复触发，并暴露无障碍 disabled/busy 状态；行详情仍由 `SwipeableRow.onPress` 管理，业务操作回调归宿主。
+- `ErrorBoundary` 增加宿主 `fallback` 插槽，并允许 `null` 显式隐藏共享兜底；默认重试改用 Sunxu `ActionButton`。
+- `Skeleton` 读取系统减少动态效果偏好。宿主已有整组动效时可以传 `animated={false}`，继续复用主题骨架色与尺寸；Tel 页面骨架组合保留在宿主。
+- `core/theme/tokens` 新增公共 `ControlSize`、`BorderWidth`、`MotionDuration`、`FontWeight.light` 和 `Spacing.none`、`Radius.none/xs`，用于统一控件高度、描边、动效时长、字重及零/细间距和小圆角。所有 token 由 `sunxu/core` 公开导出。
+- 以上 API 与 Props 类型从 `src/core/index.ts` 公开导出。Catalog 在“组件示例”覆盖左滑忙碌状态和错误兜底，在“共享控件与地图图表”覆盖父级拥有标题时的无标题列表容器及 Skeleton。
+
+Tel App 已改用以上契约，并将列表/表单/工作台容器、错误边界、拨号输入及骨架基础块接入 Sunxu。未登录状态无法访问的 CRM 与通话路由尚无宿主截图、几何和溢出数据，真实路由视觉验收为 `UNVERIFIED`；不能以 Catalog 或类型检查代替。
+
+## 2026-11-10 统一表单字段与分组
+
+- `FormField` 可编辑状态统一使用主题 `surface`、`border` 描边；聚焦与校验错误分别使用 `primary`、`error`，只读状态保留 `surfaceSecondary`。容器拥有共享描边和焦点反馈，Web 输入元素自身的浏览器轮廓被收敛到容器焦点态，避免双层色边。
+- `FormFieldProps` 作为公开类型导出；新增 `containerStyle` 作为字段组布局入口，原 `style` 仍专用于原生输入框；聚焦/失焦回调与组件内部视觉状态并行触发。默认触控高度、圆角和间距使用 Sunxu tokens。
+- `FormSection` 支持可选标题、`testID` 与 children；使用主题 surface、边线、标准标题层级和内部间距，不使用额外阴影。页面容器拥有分组之间的间距，字段组件只负责字段自身间距。
+- `ContentWidth.form` 统一限定表单内容列为 720px 并居中；窄屏仍使用 12px 页面内边距，横屏/平板表单不再铺满整行。
+- Catalog 表单示例按“客户信息 / 系统填写”分组，覆盖必填、错误、多行和只读字段；Tel App 资料页改用 `Avatar`、`FormSection`、`FormField` 与 `ActionButton`，不覆盖共享字段外观，资料保存、密码校验和头像 API 仍由宿主负责。
+- 表单几何和交互状态记录见[统一表单验收](./verification/form-components-2026-11-10/README.md)。Catalog 的 Expo Web 检查不能代替 Tel App 登录后真实资料路由与原生设备验收；未取得宿主运行态证据的项目需标记 `BLOCKED` 或 `UNVERIFIED`。
+
+### `PersistentBottomSheet` 契约
+
+- **Anatomy/API**：非模态、可持续停留的底部工具面板；宿主控制初始 `index`、`snapPoints` 和 `onChange`，可选 `bottomInset`、手势关闭配置、内容/面板/手柄样式；命令 ref 暴露 `expand`、`close` 和 `snapToIndex`。它由 Sunxu 统一主题化并包住原生 BottomSheet 与内容视图。
+- **适用边界**：拨号盘、播放控制等需要在当前页面上持续开合、允许多个吸附高度的工具面板。选择/确认/编辑等临时任务使用 `BottomSheet`，获得模态遮罩、标题和固定操作栏；表单页面使用 `FullScreenModal` 或 `FormScreenContainer`。
+- **状态与可访问性**：索引、开合、业务忙碌状态由宿主维护；关闭、展开和吸附由 ref 控制。面板本身不执行电话、媒体、权限或数据请求。内部操作必须使用带可访问名称和状态的 Sunxu 按钮/字段。
+- **Catalog** 在“共享控件与地图图表”展示可开合常驻面板；Tel App 的软电话通过 `PersistentBottomSheet` 承载拨号和通话控制，不再直接依赖 Gorhom 布局组件。
 
 ## 2026-11-10 页头与顶部安全区衔接
 

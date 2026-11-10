@@ -1,6 +1,7 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type React from 'react';
 import {
+  ActivityIndicator,
   Platform,
   Pressable,
   StyleSheet,
@@ -26,6 +27,7 @@ export interface IconActionButtonProps {
   iconSize?: number;
   disabled?: boolean;
   selected?: boolean;
+  loading?: boolean;
   style?: StyleProp<ViewStyle>;
   testID?: string;
 }
@@ -41,10 +43,12 @@ export function IconActionButton({
   iconSize = 20,
   disabled = false,
   selected = false,
+  loading = false,
   style,
   testID,
 }: IconActionButtonProps) {
   const { colors } = useTheme();
+  const unavailable = disabled || loading;
   const minimumTouchTarget = Platform.OS === 'android' ? MIN_TOUCH_TARGET_ANDROID : MIN_TOUCH_TARGET;
   const hitSlop = Math.max(HIT_SLOP.top, (minimumTouchTarget - size) / 2);
   const color =
@@ -68,18 +72,22 @@ export function IconActionButton({
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
-      accessibilityState={{ disabled, selected }}
-      disabled={disabled}
+      accessibilityState={{ disabled: unavailable, selected, busy: loading }}
+      disabled={unavailable}
       onPress={onPress}
       testID={testID}
       hitSlop={hitSlop}
       style={({ pressed }) => [
         styles.button,
-        { width: size, height: size, borderRadius: size / 2, backgroundColor: fill, opacity: disabled ? 0.45 : pressed ? 0.75 : 1 },
+        { width: size, height: size, borderRadius: size / 2, backgroundColor: fill, opacity: unavailable ? 0.45 : pressed ? 0.75 : 1 },
         style,
       ]}
     >
-      <MaterialCommunityIcons name={icon} size={iconSize} color={variant === 'filled' ? '#FFFFFF' : color} />
+      {loading ? (
+        <ActivityIndicator size="small" color={variant === 'filled' ? '#FFFFFF' : color} />
+      ) : (
+        <MaterialCommunityIcons name={icon} size={iconSize} color={variant === 'filled' ? '#FFFFFF' : color} accessible={false} />
+      )}
     </Pressable>
   );
 }

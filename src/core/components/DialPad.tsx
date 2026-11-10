@@ -108,9 +108,8 @@ export function DialPad({
                   style={({ pressed }) => [
                     styles.key,
                     {
-                      backgroundColor: pressed
-                        ? colors.border
-                        : colors.background,
+                      backgroundColor: pressed ? colors.border : colors.surfaceSecondary,
+                      borderColor: colors.border,
                       opacity: keypadDisabled ? 0.48 : 1,
                     },
                   ]}
@@ -209,6 +208,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 64,
     borderRadius: Radius.full,
+    borderWidth: StyleSheet.hairlineWidth,
     alignItems: 'center',
     justifyContent: 'center',
   },

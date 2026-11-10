@@ -1,11 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
 import type { ReactNode } from 'react';
 import { useRef, useState } from 'react';
-import { Animated, StyleSheet, TouchableOpacity } from 'react-native';
-import { FontSize, Radius, Spacing } from '../theme/tokens';
+import { Animated, StyleSheet } from 'react-native';
+import { FontSize, MIN_TOUCH_TARGET_ANDROID, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { useScaledFontSize } from '../theme/font-scale';
 import { useBottomSheetTextInput } from './BottomSheetContext';
+import { IconActionButton } from './IconActionButton';
 
 interface SearchBarProps {
   value: string;
@@ -89,7 +90,7 @@ export function SearchBar({
       />
       <InputComponent
         key={inputKey}
-        style={[styles.input, { color: colors.text, fontSize: inputFontSize }]}
+        style={[styles.input, { color: colors.text, fontSize: inputFontSize, minHeight: MIN_TOUCH_TARGET_ANDROID }]}
         {...inputProps}
         placeholder={placeholder}
         placeholderTextColor={colors.textMuted}
@@ -105,20 +106,14 @@ export function SearchBar({
         onBlur={handleBlur}
       />
       {value.length > 0 && (
-        <TouchableOpacity
+        <IconActionButton
+          icon="close-circle"
+          size={MIN_TOUCH_TARGET_ANDROID}
+          iconSize={18}
           onPress={() => onChangeText('')}
-          hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
-          style={styles.clearBtn}
-          activeOpacity={0.6}
-          accessibilityRole="button"
           accessibilityLabel="清除搜索"
-        >
-          <Ionicons
-            name="close-circle"
-            size={18}
-            color={focused ? colors.primary : colors.textMuted}
-          />
-        </TouchableOpacity>
+          tone={focused ? 'primary' : 'neutral'}
+        />
       )}
       {rightAccessory}
     </Animated.View>
@@ -131,7 +126,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: Radius.sm,
     paddingHorizontal: Spacing.md,
-    height: 44,
+    minHeight: MIN_TOUCH_TARGET_ANDROID,
     gap: 6,
   },
   icon: {
@@ -141,10 +136,5 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: FontSize.base,
     padding: 0,
-  },
-  clearBtn: {
-    flexShrink: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });

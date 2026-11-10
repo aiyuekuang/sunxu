@@ -6,18 +6,21 @@ import {
   Badge,
   BottomActionBar,
   ChoiceSheet,
+  CheckboxField,
   ControlSize,
   DateNavigator,
   DetailCard,
   DetailActionBar,
   DetailScreenContainer,
   Divider,
+  ErrorBoundary,
   EntityFilterChip,
-  Field,
+  FAB,
   FilterBar,
   FullScreenModal,
   FormField,
   FormPage,
+  FormSection,
   InfoRow,
   InlineLoading,
   IconActionButton,
@@ -30,7 +33,11 @@ import {
   SearchBar,
   ScalePressable,
   SectionCard,
+  SettingsRow,
+  Spacing,
   StatusTabs,
+  Skeleton,
+  SwipeableRow,
   SunxuProvider,
   ToastHost,
   type EntityFilterValue,
@@ -44,7 +51,7 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useState } from 'react';
 import dayjs from 'dayjs';
 import { VisualExamples } from './VisualExamples';
@@ -77,6 +84,11 @@ const customers = [
   { code: 'CUS-2026-0167', name: '澄海工业设备', contact: '陈女士 · 138 0000 1670', status: '合作中' },
   { code: 'CUS-2026-0122', name: '原点科技', contact: '周先生 · 138 0000 1220', status: '待确认' },
 ];
+
+function CatalogErrorExample({ failed }: { failed: boolean }) {
+  if (failed) throw new Error('Sunxu 错误边界演示');
+  return <AppText>页面内容正常；点击上方按钮查看共享错误兜底。</AppText>;
+}
 
 const componentTabs: TabItem<ComponentStatus>[] = [
   { key: 'all', label: '全部', count: 24, accessibilityHint: '显示所有客户跟进记录' },
@@ -265,6 +277,12 @@ function ComponentExamples({
   const [choiceSheetVisible, setChoiceSheetVisible] = useState(false);
   const [choiceValue, setChoiceValue] = useState('active');
   const [feedback, setFeedback] = useState('');
+  const [listCardExpanded, setListCardExpanded] = useState(false);
+  const [listCardSelected, setListCardSelected] = useState(false);
+  const [checkboxValue, setCheckboxValue] = useState(false);
+  const [swipeActionLoading, setSwipeActionLoading] = useState(false);
+  const [iconActionLoading, setIconActionLoading] = useState(false);
+  const [errorExampleActive, setErrorExampleActive] = useState(false);
 
   const resetExamples = () => {
     setDate(today);
@@ -282,6 +300,9 @@ function ComponentExamples({
     setKeyboardModalVisible(false);
     setChoiceSheetVisible(false);
     setChoiceValue('active');
+    setSwipeActionLoading(false);
+    setCheckboxValue(false);
+    setErrorExampleActive(false);
     setFeedback('示例状态已重置');
   };
 
@@ -323,9 +344,98 @@ function ComponentExamples({
                 size={ControlSize.iconButton}
                 tone="primary"
                 variant="tinted"
+                loading={iconActionLoading}
+                accessibilityLabel={iconActionLoading ? '正在加载路线示例' : '查看路线示例'}
                 testID="catalog-icon-action-compact"
-                accessibilityLabel="查看路线示例"
-                onPress={() => setFeedback('已打开路线示例')}
+                onPress={() => {
+                  setIconActionLoading(true);
+                  setTimeout(() => setIconActionLoading(false), 900);
+                  setFeedback('正在加载路线示例');
+                }}
+              />
+              <IconActionButton
+                icon="phone"
+                tone="primary"
+                variant="filled"
+                accessibilityLabel="拨打示例客户"
+                onPress={() => setFeedback('已触发拨打示例')}
+              />
+            </View>
+            <ActionButton
+              variant="text"
+              icon="account-outline"
+              trailingIcon="chevron-right"
+              style={{ alignSelf: 'stretch' }}
+              contentStyle={{ justifyContent: 'space-between', width: '100%' }}
+              labelStyle={{ flex: 1, textAlign: 'left' }}
+              onPress={() => setFeedback('已打开关联客户示例')}
+            >
+              查看关联客户
+            </ActionButton>
+            <ListCard
+              onPress={() => setListCardExpanded((expanded) => !expanded)}
+              expanded={listCardExpanded}
+              accessibilityLabel="客户通话记录示例"
+              accessibilityHint="点击展开或收起补充信息"
+            >
+              <AppText style={{ color: colors.text }}>客户通话记录</AppText>
+              {listCardExpanded ? (
+                <AppText style={{ color: colors.textSecondary }}>已展开通话时间、结果和跟进信息。</AppText>
+              ) : null}
+            </ListCard>
+            <ListCard
+              onPress={() => setListCardSelected((selected) => !selected)}
+              selected={listCardSelected}
+              accessibilityLabel="选择候选实体示例"
+            >
+              <AppText style={{ color: colors.text }}>候选实体选择示例</AppText>
+            </ListCard>
+            <SwipeableRow
+              rightActions={[
+                {
+                  label: swipeActionLoading ? '处理中' : '编辑',
+                  icon: 'create-outline',
+                  color: colors.primary,
+                  disabled: swipeActionLoading,
+                  loading: swipeActionLoading,
+                  onPress: () => {
+                    setSwipeActionLoading(true);
+                    setTimeout(() => setSwipeActionLoading(false), 900);
+                    setFeedback('已触发编辑示例');
+                  },
+                },
+              ]}
+              onPress={() => setFeedback('已打开客户详情示例')}
+              accessibilityLabel="打开客户详情示例"
+              accessibilityHint="向左滑动查看更多操作"
+            >
+              <ListCard>
+                <AppText style={{ color: colors.text }}>点击卡片查看详情</AppText>
+              </ListCard>
+            </SwipeableRow>
+            <View style={styles.errorExample}>
+              <ActionButton
+                variant="outlined"
+                onPress={() => setErrorExampleActive((active) => !active)}
+              >
+                {errorExampleActive ? '恢复错误边界示例' : '查看错误兜底'}
+              </ActionButton>
+              <ErrorBoundary key={String(errorExampleActive)} onError={() => undefined}>
+                <CatalogErrorExample failed={errorExampleActive} />
+              </ErrorBoundary>
+            </View>
+            <View style={styles.skeletonExample}>
+              <AppText style={{ color: colors.textSecondary }}>Skeleton · 尊重系统减少动态效果</AppText>
+              <Skeleton width="68%" height={14} />
+              <Skeleton width="42%" height={14} />
+            </View>
+            <View style={styles.controlButtonRow}>
+              <AppText style={{ color: colors.textSecondary }}>浮动主操作</AppText>
+              <FAB
+                icon="call"
+                accessibilityLabel="打开拨号盘示例"
+                onPress={() => setFeedback('已打开拨号盘示例')}
+                style={{ position: 'relative', right: 0, bottom: 0 }}
               />
             </View>
             <Divider />
@@ -345,6 +455,32 @@ function ComponentExamples({
               <ActionButton variant="outlined" onPress={() => setChoiceSheetVisible(true)}>选择状态</ActionButton>
               <ActionButton variant="secondary" onPress={() => Toast.show({ type: 'success', text1: '示例提示', text2: 'Toast 由 Sunxu host 提供' })}>显示提示</ActionButton>
             </View>
+          </SectionCard>
+          <SectionCard title="表单选择与设置行">
+            <CheckboxField
+              label="记住账号密码"
+              value={checkboxValue}
+              onValueChange={setCheckboxValue}
+            />
+            <SettingsRow
+              icon="account-outline"
+              label="负责人"
+              value="林经理 · 138 0000 1840"
+              onPress={() => setFeedback('已打开负责人选择示例')}
+            />
+            <SettingsRow
+              icon="information-outline"
+              label="当前版本"
+              value="1.0.0"
+            />
+            <SettingsRow
+              icon="shield-check-outline"
+              label="通话记录权限"
+              description="仅用于同步本机拨出记录"
+              accessory={<Badge label="已开启" variant="success" size="sm" />}
+              onPress={() => setFeedback('已打开权限状态示例')}
+              accessibilityLabel="通话记录权限，已开启"
+            />
           </SectionCard>
           <SectionCard>
             <AppText style={{ color: colors.textSecondary }}>
@@ -549,7 +685,7 @@ function ComponentExamples({
         </View>
 
         <View style={styles.componentSection} testID="demo-full-screen-modal">
-          <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>FullScreenModal · 键盘避让 / fill / immersive</AppText>
+          <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>FullScreenModal · 固定操作区 / 键盘避让 / immersive</AppText>
           <View style={styles.modalButtons}>
             <Pressable
               style={[styles.demoButton, { backgroundColor: colors.primary }]}
@@ -563,9 +699,9 @@ function ComponentExamples({
               style={[styles.demoButton, { backgroundColor: colors.primary }]}
               onPress={() => setFillModalVisible(true)}
               accessibilityRole="button"
-              accessibilityLabel="打开填充弹窗示例"
+              accessibilityLabel="打开固定操作栏示例"
             >
-              <AppText style={[styles.demoButtonText, { color: colors.textOnPrimary }]}>打开填充弹窗</AppText>
+              <AppText style={[styles.demoButtonText, { color: colors.textOnPrimary }]}>固定操作栏示例</AppText>
             </Pressable>
             <Pressable
               style={[styles.demoButton, { backgroundColor: colors.primary }]}
@@ -598,15 +734,45 @@ function ComponentExamples({
       <FullScreenModal
         visible={fillModalVisible}
         onClose={() => setFillModalVisible(false)}
-        title="填充内容区"
+        title="编辑客户信息"
         bodyMode="fill"
-        confirmText="完成"
-        onConfirm={() => setFillModalVisible(false)}
+        footer={(
+          <View testID="modal-fixed-footer" style={styles.modalFooterActions}>
+            <ActionButton
+              variant="secondary"
+              style={styles.modalFooterButton}
+              accessibilityLabel="取消编辑客户信息"
+              onPress={() => setFillModalVisible(false)}
+            >
+              取消
+            </ActionButton>
+            <ActionButton
+              style={styles.modalFooterButton}
+              accessibilityLabel="保存客户信息"
+              onPress={() => setFillModalVisible(false)}
+            >
+              保存
+            </ActionButton>
+          </View>
+        )}
       >
-        <View style={styles.fillModalContent}>
-          <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>子内容占满弹窗剩余空间</AppText>
-          <AppText style={[styles.componentHint, { color: colors.textSecondary }]}>宿主可以在这里放置地图、媒体或自管滚动区域。</AppText>
-        </View>
+        <ScrollView
+          testID="modal-scroll-body"
+          style={styles.fillModalScroll}
+          contentContainerStyle={styles.fillModalContent}
+          keyboardShouldPersistTaps="handled"
+        >
+          <FormField label="客户名称" value="青禾精密制造" />
+          <FormField label="联系人" value="林经理" />
+          <FormField label="联系电话" value="138 0000 1840" />
+          <FormField label="客户编码" value="CUS-2026-0184" editable={false} />
+          <FormField label="联系地址" value="苏州市工业园区" />
+          <FormField label="跟进目标" value="确认下季度需求" />
+          <FormField label="客户类型" value="制造业" />
+          <FormField label="客户来源" value="行业推荐" />
+          <FormField label="服务区域" value="苏州" />
+          <FormField label="备注" value="客户信息示例" multiline numberOfLines={3} />
+        </ScrollView>
       </FullScreenModal>
 
       <FullScreenModal
@@ -646,17 +812,41 @@ function Catalog({ isDark, onToggleTheme }: { isDark: boolean; onToggleTheme: ()
         onSubmit={() => setScreen('detail')}
         footer={<ExampleTabs current={screen} onChange={setScreen} />}
       >
-        <FormField label="客户名称" placeholder="请输入客户名称" required />
-        <FormField label="联系人" placeholder="请输入联系人" />
-        <FormField label="联系电话" placeholder="请输入联系电话" keyboardType="phone-pad" />
-        <Field label="备注">
-          <TextInput
-            style={styles.notes}
-            placeholder="补充客户信息"
-            accessibilityLabel="备注"
-            multiline
+        <FormSection title="客户信息" testID="catalog-form-customer">
+          <FormField
+            testID="catalog-form-customer-name"
+            label="客户名称"
+            placeholder="请输入客户名称"
+            required
           />
-        </Field>
+          <FormField
+            testID="catalog-form-contact"
+            label="联系人"
+            placeholder="请输入联系人"
+            error="请填写联系人"
+          />
+          <FormField
+            testID="catalog-form-phone"
+            label="联系电话"
+            placeholder="请输入联系电话"
+            keyboardType="phone-pad"
+          />
+          <FormField
+            testID="catalog-form-notes"
+            label="备注"
+            placeholder="补充客户信息"
+            multiline
+            numberOfLines={3}
+          />
+        </FormSection>
+        <FormSection title="系统填写" testID="catalog-form-readonly">
+          <FormField
+            testID="catalog-form-customer-code"
+            label="客户编号"
+            value="CUS-2026-0184"
+            editable={false}
+          />
+        </FormSection>
       </FormPage>
     );
   }
@@ -787,14 +977,6 @@ const styles = StyleSheet.create({
   exampleTabs: { flexDirection: 'row', justifyContent: 'space-around' },
   exampleTab: { minWidth: 72, minHeight: 44, alignItems: 'center', justifyContent: 'center' },
   exampleTabText: { color: '#777', fontWeight: '500' },
-  notes: {
-    minHeight: 88,
-    padding: 12,
-    textAlignVertical: 'top',
-    borderRadius: 10,
-    color: '#1A1A1A',
-    backgroundColor: '#F5F6F8',
-  },
   statusLine: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 12 },
   componentDemo: { padding: 16, gap: 20 },
   componentSection: { gap: 8 },
@@ -805,13 +987,18 @@ const styles = StyleSheet.create({
   controlButtonRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   metricRow: { flexDirection: 'row', gap: 8 },
   metric: { flex: 1 },
+  errorExample: { gap: 8 },
+  skeletonExample: { gap: 8 },
   scaleExample: { minHeight: 48, borderRadius: 10, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 12 },
   accessoryButton: { minWidth: 44, minHeight: 44, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 8 },
   accessoryText: { fontWeight: '600' },
   modalButtons: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
   demoButton: { minHeight: 44, paddingHorizontal: 14, alignItems: 'center', justifyContent: 'center', borderRadius: 8 },
   demoButtonText: { fontWeight: '600' },
-  fillModalContent: { flex: 1, padding: 16, gap: 8 },
+  fillModalScroll: { flex: 1 },
+  fillModalContent: { padding: 16, gap: 12 },
+  modalFooterActions: { flexDirection: 'row', gap: Spacing.sm },
+  modalFooterButton: { flex: 1 },
   immersiveContent: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 16 },
   immersiveTitle: { color: '#fff', fontSize: 18, fontWeight: '600' },
 });

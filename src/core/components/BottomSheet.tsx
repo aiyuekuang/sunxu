@@ -26,42 +26,79 @@ import { AppText as Text } from './AppText';
 import { BottomSheetInternalContext } from './BottomSheetContext';
 import { useModalRequestCloseContext } from './ModalRequestCloseContext';
 
-interface BottomSheetProps {
+interface BottomSheetBaseProps {
   visible: boolean;
   onClose: () => void;
   /** 弹层动画完成并从 portal 移除后的回调 */
   onDismiss?: () => void;
   title: string;
   children: React.ReactNode;
-  /** 底部确认按钮文字，不传则不显示底部按钮 */
-  confirmText?: string;
-  /** 底部取消按钮文字，默认"取消" */
-  cancelText?: string;
-  onConfirm?: () => void;
   /** 确认按钮 loading */
   loading?: boolean;
   /** 确认按钮禁用 */
   disabled?: boolean;
-  /** 确认按钮禁用时给读屏用户的原因提示 */
-  confirmDisabledHint?: string;
   /** 是否暂时禁止关闭弹层（例如提交中的业务动作） */
   closeDisabled?: boolean;
   /** 是否启用 KeyboardAvoidingView，有输入框时传 true */
   avoidKeyboard?: boolean;
   /** 最大高度比例，默认 0.8 */
   maxHeightRatio?: number;
-  /** 确认按钮颜色，默认 colors.primary */
-  confirmButtonColor?: string;
   /** 副标题，显示在标题下方 */
   subtitle?: string;
   /** 启用动态高度，适用于短内容选择/说明弹层；带滚动表单时使用默认固定高度布局。 */
   dynamicHeight?: boolean;
-  /** 自定义底部操作栏，固定在弹层底部并位于内容滚动区之外。与 confirmText 互斥。 */
-  renderFooter?: () => React.ReactNode;
   /** 是否允许从内容区域直接拖动 BottomSheet。默认滚动型表单关闭，动态高度弹窗开启。 */
   enableContentPanningGesture?: boolean;
 }
 
+type BottomSheetFooterProps =
+  | {
+      /** 提供时，Sunxu 在固定底栏渲染取消与确认按钮。 */
+      confirmText?: string;
+      cancelText?: string;
+      onConfirm?: () => void;
+      confirmDisabledHint?: string;
+      confirmButtonColor?: string;
+      footer?: never;
+      renderFooter?: never;
+    }
+  | {
+      /** 自定义操作区；BottomSheet 会拉伸到可用内容宽度，并固定在滚动区之外、处理底部安全区。 */
+      footer: React.ReactNode;
+      confirmText?: never;
+      cancelText?: never;
+      onConfirm?: never;
+      confirmDisabledHint?: never;
+      confirmButtonColor?: never;
+      renderFooter?: never;
+    }
+  | {
+      /** @deprecated 使用 footer。 */
+      renderFooter: () => React.ReactNode;
+      confirmText?: never;
+      cancelText?: never;
+      onConfirm?: never;
+      confirmDisabledHint?: never;
+      confirmButtonColor?: never;
+      footer?: never;
+    }
+  | {
+      confirmText?: never;
+      cancelText?: never;
+      onConfirm?: never;
+      confirmDisabledHint?: never;
+      confirmButtonColor?: never;
+      footer?: never;
+      renderFooter?: never;
+    };
+
+export type BottomSheetProps = BottomSheetBaseProps & BottomSheetFooterProps;
+
+/**
+ * Modal sheet backed by Gorhom's portal. The app root must mount one
+ * BottomSheetModalProvider; do not nest another PortalProvider inside it or
+ * the modal host is shadowed and the sheet will not render.
+ */
 export function BottomSheet({
   visible,
   onClose,
@@ -80,6 +117,7 @@ export function BottomSheet({
   confirmButtonColor,
   subtitle,
   dynamicHeight = false,
+  footer,
   renderFooter,
   enableContentPanningGesture = dynamicHeight,
 }: BottomSheetProps) {
@@ -189,7 +227,8 @@ export function BottomSheet({
     </View>
   );
 
-  const bodyPadBottom = confirmText || renderFooter ? Spacing.base : insets.bottom || 16;
+  const footerContent = footer ?? renderFooter?.();
+  const bodyPadBottom = confirmText || footerContent != null ? Spacing.base : insets.bottom || 16;
   const confirmButtonDisabled = disabled && !loading;
   const visibleDisabledHint = confirmButtonDisabled
     ? (confirmDisabledHint ?? '请先完善必填项或处理页面提示后再提交')
@@ -247,9 +286,9 @@ export function BottomSheet({
           </View>
         </View>
       )}
-      {!confirmText && renderFooter && (
+      {!confirmText && footerContent != null && (
         <View style={[styles.footer, { paddingBottom: insets.bottom || 16 }]}>
-          {renderFooter()}
+          {footerContent}
         </View>
       )}
     </>
@@ -348,7 +387,8 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
   },
   footer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
+    alignItems: 'stretch',
     gap: Spacing.sm,
     paddingHorizontal: Spacing.base,
     paddingTop: Spacing.sm,

@@ -1,9 +1,10 @@
 import type React from 'react';
 import { useRef } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { FontSize, Radius, Shadow, Spacing } from '../theme/tokens';
+import { StyleSheet, View } from 'react-native';
+import { BorderWidth, ContentWidth, FontSize, FontWeight, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { AppText as Text } from './AppText';
+import { ActionButton } from './ActionButton';
 import { LoadingView } from './LoadingView';
 import { FormScreenContainer } from './ScreenContainer';
 
@@ -56,18 +57,18 @@ export function FormPage({
       headerRight={
         onSubmit ? (
           <View>
-            <TouchableOpacity
-              style={[styles.saveBtn, { backgroundColor: colors.primary, opacity: loading ? 0.6 : 1 }]}
+            <ActionButton
+              variant="primary"
+              size="sm"
+              style={styles.saveBtn}
               onPress={handleSubmit}
               disabled={loading}
-              accessibilityRole="button"
+              loading={loading}
               accessibilityLabel={loading ? '保存中' : submitText}
-              accessibilityState={{ disabled: loading, busy: loading }}
+              textColor={colors.textOnPrimary}
             >
-              <Text style={[styles.saveBtnText, { color: colors.textOnPrimary }]}>
-                {loading ? '保存中...' : submitText}
-              </Text>
-            </TouchableOpacity>
+              {submitText}
+            </ActionButton>
             {errorCount > 0 && (
               <View style={[styles.errorBadge, { backgroundColor: colors.error }]}>
                 <Text style={[styles.errorBadgeText, { color: colors.textOnPrimary }]}>
@@ -84,12 +85,22 @@ export function FormPage({
   );
 }
 
-/** Card-like section for grouping related fields. */
-export function FormSection({ title, children }: { title?: string; children: React.ReactNode }) {
+export interface FormSectionProps {
+  /** Visible section name that helps users find the fields they need. */
+  title?: string;
+  children: React.ReactNode;
+  testID?: string;
+}
+
+/** Themed, space-efficient group for related form fields and actions. */
+export function FormSection({ title, children, testID }: FormSectionProps) {
   const { colors } = useTheme();
   return (
-    <View style={[styles.section, { backgroundColor: colors.surface }]}>
-      {title && <Text style={[styles.sectionTitle, { color: colors.textMuted }]}>{title}</Text>}
+    <View
+      testID={testID}
+      style={[styles.section, { backgroundColor: colors.surface, borderColor: colors.border }]}
+    >
+      {title ? <Text style={[styles.sectionTitle, { color: colors.text }]}>{title}</Text> : null}
       {children}
     </View>
   );
@@ -119,15 +130,10 @@ export function Field({
 
 const styles = StyleSheet.create({
   saveBtn: {
-    minHeight: 44,
+    minHeight: 48,
     justifyContent: 'center',
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.xs + 2,
     borderRadius: Radius.md,
-  },
-  saveBtnText: {
-    fontSize: FontSize.sm,
-    fontWeight: '600',
   },
   errorBadge: {
     position: 'absolute',
@@ -146,21 +152,23 @@ const styles = StyleSheet.create({
     lineHeight: 13,
   },
   content: {
+    alignSelf: 'center',
+    width: '100%',
+    maxWidth: ContentWidth.form,
     padding: Spacing.md,
     gap: Spacing.sm,
     paddingBottom: 32,
   },
   section: {
-    borderRadius: Radius.md,
+    borderWidth: BorderWidth.hairline,
+    borderRadius: Radius.lg,
     padding: Spacing.md,
     gap: Spacing.sm,
-    ...Shadow.sm,
   },
   sectionTitle: {
-    fontSize: FontSize.xs,
-    fontWeight: '600',
-    letterSpacing: 0.6,
-    textTransform: 'uppercase',
+    fontSize: FontSize.base,
+    lineHeight: 22,
+    fontWeight: FontWeight.semibold,
   },
   fieldWrap: { gap: 4 },
   fieldLabel: { fontSize: FontSize.xs, fontWeight: '500' },

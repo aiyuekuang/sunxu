@@ -1,40 +1,79 @@
 import type React from 'react';
-import { type StyleProp, StyleSheet, TouchableOpacity, View, type ViewStyle } from 'react-native';
+import { type AccessibilityRole, type StyleProp, StyleSheet, TouchableOpacity, View, type ViewStyle } from 'react-native';
 import { FontSize, Radius, Shadow, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { AppText as Text } from './AppText';
 
 interface ListCardProps {
+  /** Makes the full card the primary action, usually opening its detail view. */
   onPress?: () => void;
+  /** Optional secondary action for a long press. */
   onLongPress?: () => void;
+  /** Spoken name for the card action when a press handler is provided. */
   accessibilityLabel?: string;
   accessibilityHint?: string;
+  /** Expanded state for cards that reveal inline details. */
+  expanded?: boolean;
+  /** Controlled selection state for entity/record choice lists. */
+  selected?: boolean;
+  /** Role for option lists that expose radio or checkbox selection semantics. */
+  accessibilityRole?: AccessibilityRole;
+  /** Checked state for checkbox-style record selection. */
+  checked?: boolean;
+  /** Prevents the card action and announces the disabled state. */
+  disabled?: boolean;
   style?: StyleProp<ViewStyle>;
   children: React.ReactNode;
 }
 
 /**
- * 通用列表卡片容器，提供统一的圆角、阴影、背景色、间距
+ * Shared list-card surface. Without press handlers it stays a plain View so
+ * nested actions keep their own touch targets; with `onPress`, the full card
+ * becomes the primary action. Avoid nesting another full-card pressable.
  */
 export function ListCard({
   onPress,
   onLongPress,
   accessibilityLabel,
   accessibilityHint,
+  expanded,
+  selected = false,
+  accessibilityRole = 'button',
+  checked,
+  disabled = false,
   style,
   children,
 }: ListCardProps) {
   const { colors } = useTheme();
+
+  const cardStyle = [
+    styles.card,
+    {
+      backgroundColor: selected ? colors.primarySurface : colors.surface,
+      borderColor: selected ? colors.primary : colors.borderLight,
+      opacity: disabled ? 0.5 : 1,
+    },
+    style,
+  ];
+
+  // A disabled TouchableOpacity can still form a responder boundary on some
+  // native versions. Keep visual-only cards as Views so nested controls retain
+  // their own touch targets.
+  if (!onPress && !onLongPress) {
+    return <View style={cardStyle}>{children}</View>;
+  }
+
   return (
     <TouchableOpacity
-      style={[styles.card, { backgroundColor: colors.surface }, style]}
+      style={cardStyle}
       onPress={onPress}
       onLongPress={onLongPress}
-      activeOpacity={onPress ? 0.75 : 1}
-      disabled={!onPress && !onLongPress}
-      accessibilityRole={onPress || onLongPress ? 'button' : undefined}
+      disabled={disabled}
+      activeOpacity={0.75}
+      accessibilityRole={accessibilityRole}
       accessibilityLabel={accessibilityLabel}
       accessibilityHint={accessibilityHint}
+      accessibilityState={{ disabled, selected, expanded, checked }}
     >
       {children}
     </TouchableOpacity>
@@ -122,6 +161,7 @@ ListCard.Actions = CardActions;
 const styles = StyleSheet.create({
   card: {
     borderRadius: Radius.md,
+    borderWidth: StyleSheet.hairlineWidth,
     padding: Spacing.md,
     gap: Spacing.xs,
     ...Shadow.sm,

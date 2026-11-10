@@ -1,13 +1,15 @@
-import { useEffect, useRef } from 'react';
-import { Animated, StyleSheet, View, type ViewStyle } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { AccessibilityInfo, Animated, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { Radius } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 
-interface SkeletonProps {
+export interface SkeletonProps {
   width?: number | `${number}%`;
   height?: number;
   borderRadius?: number;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
+  /** Disable per-placeholder animation when a host animates the whole skeleton group. */
+  animated?: boolean;
 }
 
 export function Skeleton({
@@ -15,20 +17,46 @@ export function Skeleton({
   height = 16,
   borderRadius = Radius.sm,
   style,
+  animated = true,
 }: SkeletonProps) {
   const { colors } = useTheme();
   const anim = useRef(new Animated.Value(0)).current;
+  const [reduceMotion, setReduceMotion] = useState(false);
 
   useEffect(() => {
-    Animated.loop(
+    if (!animated) return;
+    let active = true;
+    void AccessibilityInfo.isReduceMotionEnabled().then((enabled) => {
+      if (active) setReduceMotion(enabled);
+    });
+    const subscription = AccessibilityInfo.addEventListener('reduceMotionChanged', setReduceMotion);
+    return () => {
+      active = false;
+      subscription.remove();
+    };
+  }, [animated]);
+
+  useEffect(() => {
+    if (!animated || reduceMotion) {
+      anim.stopAnimation();
+      anim.setValue(0.35);
+      return;
+    }
+    const loop = Animated.loop(
       Animated.sequence([
         Animated.timing(anim, { toValue: 1, duration: 800, useNativeDriver: true }),
         Animated.timing(anim, { toValue: 0, duration: 800, useNativeDriver: true }),
       ]),
-    ).start();
-  }, [anim]);
+    );
+    loop.start();
+    return () => loop.stop();
+  }, [anim, animated, reduceMotion]);
 
-  const opacity = anim.interpolate({ inputRange: [0, 1], outputRange: [1, 0.4] });
+  const opacity = !animated
+    ? 1
+    : reduceMotion
+    ? 0.78
+    : anim.interpolate({ inputRange: [0, 1], outputRange: [1, 0.4] });
 
   return (
     <Animated.View

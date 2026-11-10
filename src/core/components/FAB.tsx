@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   type LayoutChangeEvent,
+  type StyleProp,
   type ViewStyle,
   View,
 } from 'react-native';
@@ -17,13 +18,15 @@ import { useTheme } from '../theme/useTheme';
 interface FABProps {
   onPress: () => void;
   icon?: keyof typeof Ionicons.glyphMap;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
+  disabled?: boolean;
   /** 允许用户在当前父容器内拖动，并吸附到最近边缘。 */
   draggable?: boolean;
   /** 可选：持久化拖动后的位置，避免每次进入页面都要重新摆放。 */
   storageKey?: string;
   accessibilityLabel?: string;
   accessibilityHint?: string;
+  testID?: string;
 }
 
 interface FABPosition {
@@ -86,10 +89,12 @@ export function FAB({
   onPress,
   icon = 'add',
   style,
+  disabled = false,
   draggable = false,
   storageKey,
   accessibilityLabel,
   accessibilityHint,
+  testID,
 }: FABProps) {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
@@ -157,7 +162,9 @@ export function FAB({
       PanResponder.create({
         onStartShouldSetPanResponder: () => false,
         onMoveShouldSetPanResponder: (_, gestureState) =>
-          draggable && (Math.abs(gestureState.dx) > 4 || Math.abs(gestureState.dy) > 4),
+          draggable &&
+          !disabled &&
+          (Math.abs(gestureState.dx) > 4 || Math.abs(gestureState.dy) > 4),
         onPanResponderGrant: () => {
           dragStartRef.current = positionRef.current;
           didDragRef.current = true;
@@ -198,7 +205,7 @@ export function FAB({
           didDragRef.current = false;
         },
       }),
-    [containerSize.height, containerSize.width, draggable, pan, savePosition],
+    [containerSize.height, containerSize.width, disabled, draggable, pan, savePosition],
   );
 
   const handlePress = useCallback(() => {
@@ -218,14 +225,18 @@ export function FAB({
           bottom: Math.max(insets.bottom, Spacing.base) + Spacing.md,
         },
         { backgroundColor: colors.primary },
+        disabled && styles.disabled,
         Shadow.lg,
         style,
       ]}
       onPress={draggable ? handlePress : onPress}
+      disabled={disabled}
       activeOpacity={0.85}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
       accessibilityHint={accessibilityHint}
+      accessibilityState={{ disabled }}
+      testID={testID}
       {...(draggable ? panResponder.panHandlers : {})}
     >
       <Ionicons name={icon} size={26} color={colors.textOnPrimary} />
@@ -266,6 +277,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  disabled: { opacity: 0.45 },
   fabButton: {
     position: 'relative',
   },

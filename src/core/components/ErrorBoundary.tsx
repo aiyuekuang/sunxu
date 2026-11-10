@@ -1,13 +1,16 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { AppText as Text } from './AppText';
-import { FontSize, Radius, Spacing } from '../theme/tokens';
+import { ActionButton } from './ActionButton';
+import { FontSize, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-interface ErrorBoundaryProps {
+export interface ErrorBoundaryProps {
   children: React.ReactNode;
+  /** Replaces the shared fallback UI when the host owns recovery presentation. */
+  fallback?: React.ReactNode;
   onError?: (error: Error, componentStack?: string) => void;
 }
 
@@ -30,12 +33,7 @@ function FallbackView({ error, onRetry }: FallbackViewProps) {
     <View style={styles.container}>
       <Text style={[styles.title, { color: colors.text }]}>页面出现错误</Text>
       <Text style={[styles.message, { color: colors.textSecondary }]}>{error?.message}</Text>
-      <TouchableOpacity
-        style={[styles.button, { backgroundColor: colors.primary }]}
-        onPress={onRetry}
-      >
-        <Text style={[styles.buttonText, { color: colors.textOnPrimary }]}>重试</Text>
-      </TouchableOpacity>
+      <ActionButton onPress={onRetry}>重试</ActionButton>
     </View>
   );
 }
@@ -62,7 +60,9 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
 
   render() {
     if (this.state.hasError) {
-      return <FallbackView error={this.state.error} onRetry={this.handleRetry} />;
+      return this.props.fallback !== undefined
+        ? this.props.fallback
+        : <FallbackView error={this.state.error} onRetry={this.handleRetry} />;
     }
 
     return this.props.children;
@@ -87,14 +87,5 @@ const styles = StyleSheet.create({
     fontSize: FontSize.base,
     textAlign: 'center',
     marginBottom: Spacing.xl,
-  },
-  button: {
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.md,
-    borderRadius: Radius.sm,
-  },
-  buttonText: {
-    fontSize: FontSize.base,
-    fontWeight: '600',
   },
 });

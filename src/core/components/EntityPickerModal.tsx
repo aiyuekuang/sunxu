@@ -13,8 +13,9 @@ import {
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AppText as Text } from './AppText';
+import { ActionButton } from './ActionButton';
 import { EmptyState } from './EmptyState';
-import { FontSize, HIT_SLOP, MIN_TOUCH_TARGET, Radius, Spacing } from '../theme/tokens';
+import { FontSize, HIT_SLOP, MIN_TOUCH_TARGET_ANDROID, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { hasMoreEntityPickerResults } from '../utils/entity-picker-pagination';
 import { BottomSheet } from './BottomSheet';
@@ -353,12 +354,24 @@ export function EntityPickerModal<T>({
               },
             ]}
           >
-            <TouchableOpacity onPress={onClose} hitSlop={HIT_SLOP} style={styles.headerAction}>
+            <TouchableOpacity
+              onPress={onClose}
+              hitSlop={HIT_SLOP}
+              style={styles.headerAction}
+              accessibilityRole="button"
+              accessibilityLabel="关闭选择器"
+            >
               <Ionicons name="close" size={22} color={colors.textSecondary} />
             </TouchableOpacity>
             <Text style={[styles.headerTitle, { color: colors.text }]}>{title}</Text>
             {clearable && selectedKey ? (
-              <TouchableOpacity onPress={onClear} hitSlop={HIT_SLOP} style={styles.headerAction}>
+              <TouchableOpacity
+                onPress={onClear}
+                hitSlop={HIT_SLOP}
+                style={styles.headerAction}
+                accessibilityRole="button"
+                accessibilityLabel="清除已选项"
+              >
                 <Text style={[styles.clearText, { color: colors.primary }]}>清除</Text>
               </TouchableOpacity>
             ) : (
@@ -402,7 +415,7 @@ export function EntityPickerModal<T>({
                           handleQuickFilterChange(CATEGORY_QUICK_FILTER_KEY, categoryId ?? '')
                         }
                         activeOpacity={0.7}
-                        accessibilityRole="button"
+                        accessibilityRole="radio"
                         accessibilityState={{ selected: isSelected }}
                         accessibilityLabel={item.displayName ?? item.name}
                       >
@@ -508,6 +521,9 @@ export function EntityPickerModal<T>({
                       ]}
                       onPress={() => !isDisabled && handleToggle(item)}
                       activeOpacity={isDisabled ? 1 : 0.6}
+                      accessibilityRole={multi ? 'checkbox' : 'radio'}
+                      accessibilityLabel={`${label}${sublabel ? `，${sublabel}` : ''}${isDisabled ? `，不可选，${disabledReason}` : ''}`}
+                      accessibilityState={{ disabled: isDisabled, selected: sel, checked: multi ? sel : undefined }}
                     >
                       {multi && (
                         <View
@@ -594,6 +610,8 @@ export function EntityPickerModal<T>({
                     <TouchableOpacity
                       style={styles.loadErrorFooter}
                       onPress={() => void load(false, keywordRef.current, true)}
+                      accessibilityRole="button"
+                      accessibilityLabel="重新加载更多选项"
                     >
                       <Ionicons name="refresh-outline" size={16} color={colors.error} />
                       <Text style={[styles.loadErrorText, { color: colors.error }]}>
@@ -638,14 +656,16 @@ export function EntityPickerModal<T>({
               <Text style={[styles.selectedCount, { color: colors.textSecondary }]}>
                 已选 {selected.length} 项
               </Text>
-              <TouchableOpacity
-                style={[styles.confirmBtn, { backgroundColor: colors.primary }]}
+              <ActionButton
+                variant="primary"
+                size="md"
+                style={styles.confirmBtn}
                 onPress={handleConfirm}
+                textColor={colors.textOnPrimary}
+                accessibilityLabel="确认选择"
               >
-                <Text style={[styles.confirmBtnText, { color: colors.textOnPrimary }]}>
-                  确认选择
-                </Text>
-              </TouchableOpacity>
+                确认选择
+              </ActionButton>
             </View>
           )}
           <BottomSheet
@@ -665,7 +685,7 @@ export function EntityPickerModal<T>({
                       style={[styles.quickFilterOption, { borderBottomColor: colors.borderLight }]}
                       onPress={() => handleQuickFilterChange(activeQuickFilter.key, option.value)}
                       activeOpacity={0.7}
-                      accessibilityRole="button"
+                      accessibilityRole="radio"
                       accessibilityState={{ selected: selectedOption }}
                     >
                       <Text
@@ -718,15 +738,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
   headerAction: {
-    width: MIN_TOUCH_TARGET,
-    height: 36,
+    width: MIN_TOUCH_TARGET_ANDROID,
+    height: MIN_TOUCH_TARGET_ANDROID,
     alignItems: 'center',
     justifyContent: 'center',
   },
   headerTitle: { fontSize: FontSize.md, fontWeight: '600' },
-  headerPlaceholder: { width: MIN_TOUCH_TARGET },
+  headerPlaceholder: { width: MIN_TOUCH_TARGET_ANDROID },
   clearText: { fontSize: FontSize.sm, fontWeight: '500' },
-  confirmText: { fontSize: FontSize.sm, fontWeight: '600' },
   searchRow: {
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
@@ -764,7 +783,7 @@ const styles = StyleSheet.create({
   },
   quickFilterOptions: { paddingBottom: Spacing.sm },
   quickFilterOption: {
-    minHeight: MIN_TOUCH_TARGET,
+    minHeight: MIN_TOUCH_TARGET_ANDROID,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -777,6 +796,7 @@ const styles = StyleSheet.create({
   categoryError: {
     alignItems: 'center',
     gap: Spacing.xs,
+    minHeight: MIN_TOUCH_TARGET_ANDROID,
     paddingHorizontal: Spacing.sm,
     paddingVertical: Spacing.md,
   },
@@ -784,6 +804,7 @@ const styles = StyleSheet.create({
   archivePane: { flex: 1, minWidth: 0 },
   archiveList: { flex: 1 },
   item: {
+    minHeight: MIN_TOUCH_TARGET_ANDROID,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: Spacing.base,
@@ -808,6 +829,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: Spacing.xs,
+    minHeight: MIN_TOUCH_TARGET_ANDROID,
     paddingVertical: Spacing.md,
   },
   loadErrorText: { fontSize: FontSize.sm },
@@ -822,9 +844,10 @@ const styles = StyleSheet.create({
   },
   selectedCount: { fontSize: FontSize.sm },
   confirmBtn: {
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.sm,
+    minWidth: 112,
+    minHeight: MIN_TOUCH_TARGET_ANDROID,
+    flexShrink: 0,
+    paddingHorizontal: Spacing.md,
     borderRadius: Radius.sm,
   },
-  confirmBtnText: { fontSize: FontSize.sm, fontWeight: '600' },
 });

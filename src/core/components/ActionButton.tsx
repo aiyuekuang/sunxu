@@ -2,6 +2,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type React from 'react';
 import {
   ActivityIndicator,
+  Platform,
   Pressable,
   StyleSheet,
   View,
@@ -10,7 +11,14 @@ import {
   type TextStyle,
   type ViewStyle,
 } from 'react-native';
-import { FontSize, MIN_TOUCH_TARGET, Radius, Spacing } from '../theme/tokens';
+import {
+  ControlSize,
+  FontSize,
+  MIN_TOUCH_TARGET,
+  MIN_TOUCH_TARGET_ANDROID,
+  Radius,
+  Spacing,
+} from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { AppText } from './AppText';
 
@@ -24,9 +32,11 @@ export interface ActionButtonProps {
   variant?: ActionButtonVariant;
   size?: ActionButtonSize;
   icon?: ActionIcon;
+  trailingIcon?: ActionIcon;
   loading?: boolean;
   disabled?: boolean;
   selected?: boolean;
+  expanded?: boolean;
   buttonColor?: string;
   textColor?: string;
   style?: StyleProp<ViewStyle>;
@@ -44,9 +54,11 @@ export function ActionButton({
   variant = 'primary',
   size = 'md',
   icon,
+  trailingIcon,
   loading = false,
   disabled = false,
   selected = false,
+  expanded,
   buttonColor,
   textColor,
   style,
@@ -58,6 +70,14 @@ export function ActionButton({
 }: ActionButtonProps) {
   const { colors } = useTheme();
   const unavailable = disabled || loading;
+  const minimumTarget = Platform.OS === 'android' ? MIN_TOUCH_TARGET_ANDROID : MIN_TOUCH_TARGET;
+  const compactHitSlop = Math.ceil(Math.max(0, minimumTarget - ControlSize.control) / 2);
+  const buttonMinHeight =
+    size === 'sm'
+      ? ControlSize.control
+      : size === 'lg'
+        ? Math.max(minimumTarget, ControlSize.actionLarge)
+        : minimumTarget;
   const isText = variant === 'text';
   const isOutlined = variant === 'outlined';
   const foreground =
@@ -79,14 +99,15 @@ export function ActionButton({
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel ?? (typeof children === 'string' ? children : undefined)}
       accessibilityHint={accessibilityHint}
-      accessibilityState={{ disabled: unavailable, selected, busy: loading }}
+      accessibilityState={{ disabled: unavailable, selected, expanded, busy: loading }}
       disabled={unavailable}
       onPress={onPress}
       testID={testID}
-      hitSlop={size === 'sm' ? 4 : undefined}
+      hitSlop={size === 'sm' ? compactHitSlop : undefined}
       style={({ pressed }) => [
         styles.button,
         sizeStyles[size],
+        { minHeight: buttonMinHeight },
         {
           backgroundColor: isText || isOutlined ? 'transparent' : background,
           borderColor: isText ? 'transparent' : borderColor,
@@ -99,11 +120,14 @@ export function ActionButton({
         {loading ? (
           <ActivityIndicator size="small" color={textColor ?? (variant === 'primary' || variant === 'danger' ? '#FFFFFF' : colors.primary)} />
         ) : icon ? (
-          <MaterialCommunityIcons name={icon} size={18} color={foreground} />
+          <MaterialCommunityIcons name={icon} size={18} color={foreground} accessible={false} />
         ) : null}
         <AppText style={[styles.label, sizeLabelStyles[size], { color: foreground }, labelStyle]}>
           {children}
         </AppText>
+        {trailingIcon ? (
+          <MaterialCommunityIcons name={trailingIcon} size={18} color={foreground} accessible={false} />
+        ) : null}
       </View>
     </Pressable>
   );
@@ -128,9 +152,9 @@ const styles = StyleSheet.create({
 });
 
 const sizeStyles: Record<ActionButtonSize, ViewStyle> = {
-  sm: { minHeight: 36, paddingVertical: 0 },
+  sm: { minHeight: ControlSize.control, paddingVertical: 0 },
   md: { minHeight: MIN_TOUCH_TARGET },
-  lg: { minHeight: 52 },
+  lg: { minHeight: ControlSize.actionLarge },
 };
 
 const sizeLabelStyles: Record<ActionButtonSize, TextStyle> = {

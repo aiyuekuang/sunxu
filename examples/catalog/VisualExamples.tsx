@@ -1,17 +1,26 @@
 import type React from 'react';
 import { useState } from 'react';
-import { StyleSheet, View, useWindowDimensions } from 'react-native';
+import { ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 import {
   AudioPlayer,
+  ActionButton,
   AppText,
   ChartLegend,
   ChartPanel,
   DetailScreenContainer,
   DialPad,
+  ListCard,
+  ListScreenContainer,
   MapScreenContainer,
+  PersistentBottomSheet,
+  BorderWidth,
+  ControlSize,
   FontSize,
   Radius,
   Spacing,
+  MotionDuration,
+  SearchBar,
+  Skeleton,
   useTheme,
   type ChartLegendItem,
 } from 'sunxu';
@@ -24,8 +33,10 @@ export function VisualExamples({ onBack, footer }: { onBack: () => void; footer:
   const [locationMessage, setLocationMessage] = useState('点击定位按钮后，宿主地图驱动器可将镜头移动到坐标');
   const [dialValue, setDialValue] = useState('');
   const [dialSubmitted, setDialSubmitted] = useState('');
+  const [persistentSheetOpen, setPersistentSheetOpen] = useState(false);
   const [audioPlaying, setAudioPlaying] = useState(false);
   const [audioTime, setAudioTime] = useState(0);
+  const [nestedSearch, setNestedSearch] = useState('');
   const chartWidth = Math.max(220, Math.min(width - 104, 420));
   const mapHeight = Math.min(300, Math.max(184, height - 176));
   const legendItems: ChartLegendItem[] = [
@@ -49,6 +60,25 @@ export function VisualExamples({ onBack, footer }: { onBack: () => void; footer:
           ) : null}
         </View>
 
+        <View style={styles.section} testID="demo-persistent-bottom-sheet">
+          <AppText style={[styles.sectionTitle, { color: colors.text }]}>PersistentBottomSheet · 常驻工具面板</AppText>
+          <ActionButton onPress={() => setPersistentSheetOpen(true)}>打开面板示例</ActionButton>
+          <PersistentBottomSheet
+            index={persistentSheetOpen ? 0 : -1}
+            snapPoints={['42%', '72%']}
+            onChange={(index) => {
+              if (index < 0) setPersistentSheetOpen(false);
+            }}
+          >
+            <View style={styles.persistentSheetContent}>
+              <AppText style={{ color: colors.text }}>常驻工具面板没有模态遮罩或重复页头。</AppText>
+              <ActionButton variant="secondary" onPress={() => setPersistentSheetOpen(false)}>
+                收起面板
+              </ActionButton>
+            </View>
+          </PersistentBottomSheet>
+        </View>
+
         <View style={styles.section} testID="demo-audio-player">
           <AppText style={[styles.sectionTitle, { color: colors.text }]}>AudioPlayer · 音频播放</AppText>
           <AudioPlayer
@@ -59,6 +89,54 @@ export function VisualExamples({ onBack, footer }: { onBack: () => void; footer:
             onToggle={() => setAudioPlaying((current) => !current)}
             onSeek={setAudioTime}
           />
+        </View>
+
+        <View style={styles.section} testID="demo-nested-list-container">
+          <AppText style={[styles.sectionTitle, { color: colors.text }]}>父级已有标题的嵌套列表</AppText>
+          <View style={[styles.listPreview, { borderColor: colors.border }]}>
+            <ListScreenContainer
+              safeAreaEdges={[]}
+              toolbar={
+                <SearchBar
+                  value={nestedSearch}
+                  onChangeText={setNestedSearch}
+                  placeholder="搜索当前列表"
+                />
+              }
+            >
+              <ScrollView contentContainerStyle={styles.nestedList}>
+                <ListCard>
+                  <ListCard.Title>列表容器不重复页头标题</ListCard.Title>
+                  <ListCard.Subtitle>父级导航继续拥有页面名称。</ListCard.Subtitle>
+                </ListCard>
+              </ScrollView>
+            </ListScreenContainer>
+          </View>
+        </View>
+
+        <View style={styles.section} testID="demo-skeleton-reduced-motion">
+          <AppText style={[styles.sectionTitle, { color: colors.text }]}>Skeleton 状态</AppText>
+          <Skeleton width="72%" height={14} />
+          <Skeleton width="44%" height={14} />
+        </View>
+
+        <View style={styles.section} testID="demo-shared-layout-tokens">
+          <AppText style={[styles.sectionTitle, { color: colors.text }]}>共享布局 tokens</AppText>
+          <View
+            style={[
+              styles.tokenSample,
+              {
+                height: ControlSize.control,
+                borderWidth: BorderWidth.default,
+                borderColor: colors.border,
+                borderRadius: Radius.sm,
+              },
+            ]}
+          >
+            <AppText style={{ color: colors.textSecondary }}>
+              控件高 {ControlSize.control} · 快速动效 {MotionDuration.fast}ms
+            </AppText>
+          </View>
         </View>
 
         <View style={styles.section}>
@@ -170,6 +248,10 @@ export function VisualExamples({ onBack, footer }: { onBack: () => void; footer:
 const styles = StyleSheet.create({
   content: { gap: Spacing.base, paddingVertical: Spacing.sm },
   section: { gap: Spacing.sm },
+  listPreview: { height: 196, overflow: 'hidden', borderWidth: StyleSheet.hairlineWidth, borderRadius: Radius.md },
+  nestedList: { padding: Spacing.sm },
+  persistentSheetContent: { gap: Spacing.sm, paddingVertical: Spacing.md },
+  tokenSample: { justifyContent: 'center', paddingHorizontal: Spacing.sm },
   sectionTitle: { fontSize: FontSize.base, fontWeight: '600', marginHorizontal: Spacing.sm },
   map: { height: 300, borderWidth: StyleSheet.hairlineWidth, borderRadius: Radius.lg },
   mapMock: { flex: 1, overflow: 'hidden' },

@@ -13,10 +13,11 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AppText as Text } from './AppText';
-import { FontSize, Radius, Spacing } from '../theme/tokens';
+import { FontSize, MIN_TOUCH_TARGET, MIN_TOUCH_TARGET_ANDROID, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { now, today } from '../utils/date';
 import { type FieldHelpContent, FormLabel } from './FormLabel';
+import { IconActionButton } from './IconActionButton';
 
 export interface DatePickerFieldProps {
   label: string;
@@ -41,7 +42,7 @@ export interface DatePickerFieldProps {
   maximumDate?: string;
   /** 可选择的最小日期或日期时间（YYYY-MM-DD / YYYY-MM-DDTHH:mm:ss） */
   minimumDate?: string;
-  /** 紧凑模式：去掉左侧图标，减小高度和内边距，适用于筛选栏 */
+  /** 紧凑模式：去掉左侧图标并减少内边距，适用于筛选栏；触控高度仍满足平台规范。 */
   compact?: boolean;
   /** 居中模式：文字与箭头整体居中展示，适用于周期导航等窄控件 */
   centered?: boolean;
@@ -75,6 +76,7 @@ export function DatePickerField({
 }: DatePickerFieldProps) {
   const { colors, isDark } = useTheme();
   const insets = useSafeAreaInsets();
+  const touchTarget = Platform.OS === 'android' ? MIN_TOUCH_TARGET_ANDROID : MIN_TOUCH_TARGET;
   const selectionName = mode === 'time' ? '时间' : mode === 'datetime' ? '日期和时间' : '日期';
   const resolvedShowCurrentShortcut = showCurrentShortcut ?? mode === 'date';
   const showStandaloneCurrentShortcut = !label && resolvedShowCurrentShortcut && !compact;
@@ -228,9 +230,10 @@ export function DatePickerField({
         onPress={handlePress}
         activeOpacity={disabled ? 1 : 0.7}
         disabled={disabled}
-        accessibilityLabel={accessibilityLabel ?? (label || undefined)}
+        accessibilityRole="button"
+        accessibilityLabel={accessibilityLabel ?? `${label || selectionName}${visibleText ? `，${visibleText}` : ''}`}
         accessibilityState={{ disabled: Boolean(disabled) }}
-        accessibilityHint={resolvedDisabledReason}
+        accessibilityHint={disabled ? resolvedDisabledReason : `打开${selectionName}选择器`}
       >
         {!compact && (
           <Ionicons
@@ -256,12 +259,16 @@ export function DatePickerField({
                 : '请选择日期')}
         </Text>
         {clearable && visibleText && !disabled ? (
-          <TouchableOpacity
-            onPress={handleClear}
-            hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
-          >
-            <Ionicons name="close-circle" size={compact ? 16 : 18} color={colors.textTertiary} />
-          </TouchableOpacity>
+          <IconActionButton
+            icon="close-circle"
+            size={touchTarget}
+            iconSize={compact ? 16 : 18}
+            onPress={(event) => {
+              event.stopPropagation();
+              handleClear();
+            }}
+            accessibilityLabel={`清除${label || selectionName}`}
+          />
         ) : (
           <Ionicons name="chevron-down" size={compact ? 14 : 16} color={colors.textTertiary} />
         )}
@@ -350,7 +357,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: Radius.sm,
     paddingHorizontal: Spacing.md,
-    height: 44,
+    minHeight: MIN_TOUCH_TARGET_ANDROID,
     gap: Spacing.sm,
   },
   inputWrapperCompact: {
@@ -359,7 +366,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: Radius.sm,
     paddingHorizontal: Spacing.sm,
-    height: 44,
+    minHeight: MIN_TOUCH_TARGET_ANDROID,
     gap: Spacing.xs,
   },
   valueText: {

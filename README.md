@@ -29,9 +29,11 @@ export function ExampleApp() {
 
 `ListScreenContainer` 将搜索/筛选工具栏放在其控制的结果区紧邻位置；`FormPage` 自动处理键盘滚动，返回行为通过 `onBack` 传入；`DetailScreenContainer` 提供可滚动内容和固定页头/底部操作区；`ScreenContainer` 用于按插槽组合其他页面骨架。
 
+页面操作应直达用户选择的目标；一次点击不能先切 Tab 或进入中间页，再自动打开目标表单/弹层。多步骤任务应显示为由用户逐步操作的明确流程，详见[页面操作与导航直达规范](https://github.com/aiyuekuang/sunxu/blob/main/docs/component-migration.md#页面操作与导航直达)。
+
 `PageHeader` 和 `HeaderIconButton` 提供标准页头及右侧动作。需要按数量收纳时，在 `ListScreenContainer`、`DetailScreenContainer` 或 `FormScreenContainer` 使用 `headerActions`：单个动作以图标直显，多个动作收进右侧“更多操作”下拉菜单；旧的 `headerRight` 自定义插槽继续可用。
 
-弹窗表单使用 `FullScreenModal` 或 `BottomSheet` 的 `confirmText` / `renderFooter` 放置确定、应用、保存等操作；操作区固定在弹窗底部，表单内容单独滚动。确认类流程操作不放在标题栏。
+弹窗表单使用 `FullScreenModal` 或 `BottomSheet` 的 `confirmText` 内置底栏，或 `footer` 插槽放置确定、应用、保存等操作；操作区固定在弹窗底部并处理安全区，表单内容单独滚动。自定义操作区占满可用宽度，并列按钮自适应等分。确认类流程操作不放在标题栏或滚动内容中。旧 `renderFooter` 仍兼容并已弃用。
 
 页面容器默认把顶部安全区与页头绘制为同一主题表面，正文仍使用页面背景；业务页面直接使用 `ListScreenContainer`、`DetailScreenContainer` 或 `FormScreenContainer` 即可衔接状态栏区域和页头。自定义页头背景时，通过 `headerBackgroundColor` 同步安全区底色；父级导航已处理顶部安全区时，将 `safeAreaEdges` 配置为不含 `top`，避免重复留白。底部操作区可搭配 `BottomActionBar`，由操作栏本身处理底部安全区。
 
@@ -101,3 +103,9 @@ Expo Web 示例已在 375×812 竖屏、812×375 横屏和浅/深主题下渲染
 - 组件筛选、容器规范与验证记录：[组件迁移规范](https://github.com/aiyuekuang/sunxu/blob/main/docs/component-migration.md)
 - 393 项基线明细：[MES 组件迁移清单](https://github.com/aiyuekuang/sunxu/blob/main/docs/migrations/mes-components.md)
 - 可运行 Expo 示例：[catalog 示例 App](https://github.com/aiyuekuang/sunxu/tree/main/examples/catalog)
+
+`ListScreenContainer` 可在父级已提供页面标题时省略 `title`；`SwipeableRow` 操作支持禁用与忙碌状态；`ErrorBoundary` 支持宿主 fallback；`Skeleton` 遵循系统减少动态效果偏好。API 详情和迁移示例见[组件迁移规范](https://github.com/aiyuekuang/sunxu/blob/main/docs/component-migration.md)。
+
+通用间距、字号、字重、圆角、控件尺寸、描边、阴影和动效时长统一从 `sunxu/core` 的 `Spacing`、`FontSize`、`FontWeight`、`Radius`、`ControlSize`、`BorderWidth`、`Shadow`、`MotionDuration` 读取；宿主不再维护同义基础 token。
+
+`PersistentBottomSheet` 用于拨号盘等常驻、非模态、可多段吸附的工具面板；短时确认/选择继续使用带标题和固定操作栏的 `BottomSheet`。

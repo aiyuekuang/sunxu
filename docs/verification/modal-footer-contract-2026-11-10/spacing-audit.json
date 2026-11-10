@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "target": "http://localhost:8082/",
+  "route_state": "Expo Web Catalog / 组件页面示例 / FullScreenModal fixed footer with long form",
+  "surface_frame_gate": {
+    "status": "NOT APPLICABLE",
+    "reason": "FullScreenModal fills the viewport as one modal surface; this change does not introduce a separate workspace background or inset primary panel.",
+    "rows": []
+  },
+  "seams": [
+    {
+      "route": "/ (Expo Web Catalog / 组件页面示例)",
+      "viewport": { "width": 375, "height": 812 },
+      "state": "Long form scrolled to bottom; fixed footer remains visible",
+      "previous": "Modal content scroll viewport",
+      "next": "Custom fixed footer shell",
+      "axis": "vertical",
+      "previous_rect": { "left": 0, "top": 57, "right": 375, "bottom": 747, "width": 375, "height": 690 },
+      "next_rect": { "left": 0, "top": 747, "right": 375, "bottom": 812, "width": 375, "height": 65 },
+      "gap_px": 0,
+      "expected": {
+        "kind": "contract",
+        "value": "0px joined boundary; footer is a fixed sibling of the content region with a 1px top border",
+        "source": "src/core/components/FullScreenModal.tsx:275-351"
+      },
+      "executed_command": "node /Users/suconnect/.codex/skills/playwright-skill/run.js /tmp/playwright-modal-footer-final.js; Expo Web route /, 375x812, wait for modal animation, scroll body to end, getBoundingClientRect",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/modal-footer-contract-2026-11-10/375x812-scrolled.png",
+      "screenshot_sha256": "a1deb1de6ceb32a6e2f45e5d21c4deef12b38508172656e2a8197cd0f17bc66e",
+      "status": "PASS",
+      "visual": {
+        "status": "PASS",
+        "method": "Inspected saved unannotated 375x812 screenshot and compared DOM rectangles before and after body scroll",
+        "relationship": "joined",
+        "exception": "Body and footer are one modal surface; the zero gap and footer top border form the declared fixed boundary. Footer shell stayed at y=747..812 while scrollTop changed from 0 to 189."
+      },
+      "observations": {
+        "body_client_height": 690,
+        "body_scroll_height": 879,
+        "body_scroll_top": 189,
+        "footer_bottom": 812,
+        "document_client_width": 375,
+        "document_scroll_width": 375
+      }
+    },
+    {
+      "route": "/ (Expo Web Catalog / 组件页面示例)",
+      "viewport": { "width": 375, "height": 812 },
+      "state": "Long form modal open; custom footer action row",
+      "previous": "Cancel button",
+      "next": "Save button",
+      "axis": "horizontal",
+      "previous_rect": { "left": 12, "top": 756, "right": 183.5, "bottom": 800, "width": 171.5, "height": 44 },
+      "next_rect": { "left": 191.5, "top": 756, "right": 363, "bottom": 800, "width": 171.5, "height": 44 },
+      "gap_px": 8,
+      "expected": {
+        "kind": "token",
+        "value": "8px (Spacing.sm)",
+        "source": "examples/catalog/App.tsx:997; src/core/theme/tokens.ts:5-10"
+      },
+      "executed_command": "node /Users/suconnect/.codex/skills/playwright-skill/run.js /tmp/playwright-modal-footer-final.js; Expo Web route /, 375x812, query button bounding boxes",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/modal-footer-contract-2026-11-10/375x812-top.png",
+      "screenshot_sha256": "566c059f47c6f8658d72eb51a052fda98932e38c915c1d22c371ddc812c6ae1e",
+      "status": "PASS",
+      "visual": {
+        "status": "PASS",
+        "method": "Inspected saved unannotated screenshot and measured both button rectangles",
+        "relationship": "separate",
+        "observed_clear_band_px": 8,
+        "method_detail": "The two actions remain visually distinct in one footer row; measured edge-to-edge spacing is 8px."
+      },
+      "observations": {
+        "cancel_accessible_name": "取消编辑客户信息",
+        "save_accessible_name": "保存客户信息",
+        "available_footer_width_px": 351,
+        "button_height_px": 44,
+        "button_width_px": 171.5,
+        "footer_shell_padding_bottom_px": 12
+      }
+    },
+    {
+      "route": "/ (Expo Web Catalog / 组件页面示例)",
+      "viewport": { "width": 375, "height": 812 },
+      "state": "Long form modal open; safe-area space below actions",
+      "previous": "Save button bottom edge",
+      "next": "Viewport bottom edge",
+      "axis": "vertical",
+      "previous_rect": { "left": 191.5, "top": 756, "right": 363, "bottom": 800, "width": 171.5, "height": 44 },
+      "next_rect": { "left": 0, "top": 812, "right": 375, "bottom": 812, "width": 375, "height": 0 },
+      "gap_px": 12,
+      "expected": {
+        "kind": "contract",
+        "value": "12px footer bottom padding from safe-area inset fallback plus Spacing.xs",
+        "source": "src/core/components/FullScreenModal.tsx:339-347"
+      },
+      "executed_command": "node /Users/suconnect/.codex/skills/playwright-skill/run.js /tmp/playwright-modal-footer-final.js; Expo Web route /, 375x812, measure button and viewport edge",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/modal-footer-contract-2026-11-10/375x812-top.png",
+      "screenshot_sha256": "566c059f47c6f8658d72eb51a052fda98932e38c915c1d22c371ddc812c6ae1e",
+      "status": "PASS",
+      "visual": {
+        "status": "PASS",
+        "method": "Inspected saved unannotated screenshot and measured button-to-viewport band",
+        "relationship": "separate",
+        "observed_clear_band_px": 12,
+        "method_detail": "The footer surface continues 12px below the action button to the viewport edge; computed footer padding is 12px."
+      },
+      "observations": { "footer_shell_bottom_px": 812, "footer_shell_padding_bottom_px": 12 }
+    },
+    {
+      "route": "/ (Expo Web Catalog / 组件页面示例)",
+      "viewport": { "width": 320, "height": 720 },
+      "state": "Fresh 320x720 load; long form scrolled to bottom",
+      "previous": "Modal content scroll viewport",
+      "next": "Custom fixed footer shell",
+      "axis": "vertical",
+      "previous_rect": { "left": 0, "top": 57, "right": 320, "bottom": 655, "width": 320, "height": 598 },
+      "next_rect": { "left": 0, "top": 655, "right": 320, "bottom": 720, "width": 320, "height": 65 },
+      "gap_px": 0,
+      "expected": {
+        "kind": "contract",
+        "value": "0px joined boundary; footer is a fixed sibling of the content region with a 1px top border",
+        "source": "src/core/components/FullScreenModal.tsx:275-351"
+      },
+      "executed_command": "node /Users/suconnect/.codex/skills/playwright-skill/run.js /tmp/playwright-modal-footer-320.js; fresh Expo Web route / at 320x720, scroll body to end, getBoundingClientRect",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/modal-footer-contract-2026-11-10/320x720-scrolled.png",
+      "screenshot_sha256": "c048d3e8fb10949bdc37134e6144271c8427bd341e36f76bd3039a447acd02fc",
+      "status": "PASS",
+      "visual": {
+        "status": "PASS",
+        "method": "Inspected saved unannotated 320x720 screenshot and compared scroll and footer DOM rectangles",
+        "relationship": "joined",
+        "exception": "Body and footer are one modal surface; the zero gap and footer top border form the declared fixed boundary. The fresh narrow viewport has no document horizontal overflow."
+      },
+      "observations": {
+        "body_client_height": 598,
+        "body_scroll_height": 879,
+        "body_scroll_top": 281,
+        "footer_bottom": 720,
+        "document_client_width": 320,
+        "document_scroll_width": 320,
+        "body_scroll_width": 320
+      }
+    },
+    {
+      "route": "/ (Expo Web Catalog / 组件页面示例)",
+      "viewport": { "width": 320, "height": 720 },
+      "state": "Fresh 320x720 long form modal open; custom footer actions",
+      "previous": "Cancel button",
+      "next": "Save button",
+      "axis": "horizontal",
+      "previous_rect": { "left": 12, "top": 664, "right": 156, "bottom": 708, "width": 144, "height": 44 },
+      "next_rect": { "left": 164, "top": 664, "right": 308, "bottom": 708, "width": 144, "height": 44 },
+      "gap_px": 8,
+      "expected": {
+        "kind": "token",
+        "value": "8px (Spacing.sm)",
+        "source": "examples/catalog/App.tsx:997; src/core/theme/tokens.ts:5-10"
+      },
+      "executed_command": "node /Users/suconnect/.codex/skills/playwright-skill/run.js /tmp/playwright-modal-footer-320.js; fresh Expo Web route / at 320x720, query button bounding boxes",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/modal-footer-contract-2026-11-10/320x720-scrolled.png",
+      "screenshot_sha256": "c048d3e8fb10949bdc37134e6144271c8427bd341e36f76bd3039a447acd02fc",
+      "status": "PASS",
+      "visual": {
+        "status": "PASS",
+        "method": "Inspected saved unannotated screenshot and measured both button rectangles",
+        "relationship": "separate",
+        "observed_clear_band_px": 8,
+        "method_detail": "The two actions remain visibly distinct within the fixed footer; measured edge-to-edge spacing is 8px."
+      },
+      "observations": {
+        "cancel_accessible_name": "取消编辑客户信息",
+        "save_accessible_name": "保存客户信息",
+        "available_footer_width_px": 296,
+        "button_height_px": 44,
+        "button_width_px": 144,
+        "footer_shell_padding_bottom_px": 12
+      }
+    },
+    {
+      "route": "/ (Expo Web Catalog / 组件页面示例)",
+      "viewport": { "width": 320, "height": 720 },
+      "state": "Fresh 320x720 long form modal open; footer above viewport edge",
+      "previous": "Save button bottom edge",
+      "next": "Viewport bottom edge",
+      "axis": "vertical",
+      "previous_rect": { "left": 164, "top": 664, "right": 308, "bottom": 708, "width": 144, "height": 44 },
+      "next_rect": { "left": 0, "top": 720, "right": 320, "bottom": 720, "width": 320, "height": 0 },
+      "gap_px": 12,
+      "expected": {
+        "kind": "contract",
+        "value": "12px footer bottom padding from safe-area inset fallback plus Spacing.xs",
+        "source": "src/core/components/FullScreenModal.tsx:339-347"
+      },
+      "executed_command": "node /Users/suconnect/.codex/skills/playwright-skill/run.js /tmp/playwright-modal-footer-320.js; fresh Expo Web route / at 320x720, measure button and viewport edge",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/modal-footer-contract-2026-11-10/320x720-scrolled.png",
+      "screenshot_sha256": "c048d3e8fb10949bdc37134e6144271c8427bd341e36f76bd3039a447acd02fc",
+      "status": "PASS",
+      "visual": {
+        "status": "PASS",
+        "method": "Inspected saved unannotated screenshot and measured button-to-viewport band",
+        "relationship": "separate",
+        "observed_clear_band_px": 12,
+        "method_detail": "The footer surface continues 12px below the action button to the viewport edge; computed footer padding is 12px."
+      },
+      "observations": { "footer_shell_bottom_px": 720, "footer_shell_padding_bottom_px": 12 }
+    }
+  ]
+}

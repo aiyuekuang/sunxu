@@ -1,0 +1,2566 @@
+{
+  "route": "Sunxu Catalog / 表单",
+  "targetUrl": "http://localhost:8082/",
+  "rows": [],
+  "narrow320": {
+    "viewport": {
+      "name": "320x720-default",
+      "width": 320,
+      "height": 720,
+      "documentClientWidth": 320,
+      "documentScrollWidth": 320,
+      "documentScrollHeight": 720
+    },
+    "body": {
+      "tag": "body",
+      "testID": null,
+      "text": " 新建客户 保存 客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号 列表 表单 组件 地图图表",
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "right": 320,
+        "bottom": 720,
+        "width": 320,
+        "height": 720
+      },
+      "background": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 0)",
+      "borderColor": "rgb(0, 0, 0)",
+      "borderWidth": "0px",
+      "borderRadius": "0px",
+      "gap": "normal",
+      "padding": "0px"
+    },
+    "root": {
+      "tag": "div",
+      "testID": null,
+      "text": " 新建客户 保存 客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号 列表 表单 组件 地图图表",
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "right": 320,
+        "bottom": 720,
+        "width": 320,
+        "height": 720
+      },
+      "background": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 0)",
+      "borderColor": "rgb(0, 0, 0)",
+      "borderWidth": "0px",
+      "borderRadius": "0px",
+      "gap": "normal",
+      "padding": "0px"
+    },
+    "sectionAncestors": [
+      {
+        "tag": "div",
+        "testID": "catalog-form-customer",
+        "text": "客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注",
+        "rect": {
+          "left": 12,
+          "top": 73,
+          "right": 308,
+          "bottom": 488,
+          "width": 296,
+          "height": 415
+        },
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(235, 235, 235)",
+        "borderWidth": "1px",
+        "borderRadius": "14px",
+        "gap": "8px",
+        "padding": "12px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号",
+        "rect": {
+          "left": 0,
+          "top": 61,
+          "right": 320,
+          "bottom": 663.5,
+          "width": 320,
+          "height": 602.5
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "8px",
+        "padding": "12px 12px 32px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号",
+        "rect": {
+          "left": 0,
+          "top": 61,
+          "right": 320,
+          "bottom": 659,
+          "width": 320,
+          "height": 598
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "normal",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": " 新建客户 保存 客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号 列表 表单 组件 地图图表",
+        "rect": {
+          "left": 0,
+          "top": 0,
+          "right": 320,
+          "bottom": 720,
+          "width": 320,
+          "height": 720
+        },
+        "background": "rgb(245, 246, 248)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "normal",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": " 新建客户 保存 客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号 列表 表单 组件 地图图表",
+        "rect": {
+          "left": 0,
+          "top": 0,
+          "right": 320,
+          "bottom": 720,
+          "width": 320,
+          "height": 720
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "normal",
+        "padding": "0px"
+      }
+    ],
+    "customerSection": {
+      "tag": "div",
+      "testID": "catalog-form-customer",
+      "text": "客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注",
+      "rect": {
+        "left": 12,
+        "top": 73,
+        "right": 308,
+        "bottom": 488,
+        "width": 296,
+        "height": 415
+      },
+      "background": "rgb(255, 255, 255)",
+      "color": "rgb(0, 0, 0)",
+      "borderColor": "rgb(235, 235, 235)",
+      "borderWidth": "1px",
+      "borderRadius": "14px",
+      "gap": "8px",
+      "padding": "12px"
+    },
+    "customerChildren": [
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "客户信息",
+        "rect": {
+          "left": 25,
+          "top": 86,
+          "right": 295,
+          "bottom": 108,
+          "width": 270,
+          "height": 22
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(26, 26, 26)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "normal",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "客户名称 *",
+        "rect": {
+          "left": 25,
+          "top": 116,
+          "right": 295,
+          "bottom": 186.5,
+          "width": 270,
+          "height": 70.5
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "4px",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "联系人 请填写联系人",
+        "rect": {
+          "left": 25,
+          "top": 194.5,
+          "right": 295,
+          "bottom": 284,
+          "width": 270,
+          "height": 89.5
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "4px",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "联系电话",
+        "rect": {
+          "left": 25,
+          "top": 292,
+          "right": 295,
+          "bottom": 362.5,
+          "width": 270,
+          "height": 70.5
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "4px",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "备注",
+        "rect": {
+          "left": 25,
+          "top": 370.5,
+          "right": 295,
+          "bottom": 475,
+          "width": 270,
+          "height": 104.5
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "4px",
+        "padding": "0px"
+      }
+    ],
+    "readonlySection": {
+      "tag": "div",
+      "testID": "catalog-form-readonly",
+      "text": "系统填写 客户编号",
+      "rect": {
+        "left": 12,
+        "top": 496,
+        "right": 308,
+        "bottom": 622.5,
+        "width": 296,
+        "height": 126.5
+      },
+      "background": "rgb(255, 255, 255)",
+      "color": "rgb(0, 0, 0)",
+      "borderColor": "rgb(235, 235, 235)",
+      "borderWidth": "1px",
+      "borderRadius": "14px",
+      "gap": "8px",
+      "padding": "12px"
+    },
+    "fields": {
+      "name": {
+        "group": {
+          "tag": "div",
+          "testID": null,
+          "text": "客户名称 *",
+          "rect": {
+            "left": 25,
+            "top": 116,
+            "right": 295,
+            "bottom": 186.5,
+            "width": 270,
+            "height": 70.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "label": {
+          "tag": "div",
+          "testID": null,
+          "text": "客户名称 *",
+          "rect": {
+            "left": 25,
+            "top": 116,
+            "right": 295,
+            "bottom": 134.5,
+            "width": 270,
+            "height": 18.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "input": {
+          "tag": "input",
+          "testID": "catalog-form-customer-name",
+          "text": "客户名称",
+          "rect": {
+            "left": 38,
+            "top": 140.5,
+            "right": 282,
+            "bottom": 184.5,
+            "width": 244,
+            "height": 44
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(26, 26, 26)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "normal",
+          "padding": "0px"
+        },
+        "wrapper": {
+          "tag": "div",
+          "testID": null,
+          "text": "",
+          "rect": {
+            "left": 25,
+            "top": 138.5,
+            "right": 295,
+            "bottom": 186.5,
+            "width": 270,
+            "height": 48
+          },
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(235, 235, 235)",
+          "borderWidth": "1px",
+          "borderRadius": "10px",
+          "gap": "8px",
+          "padding": "0px 12px"
+        }
+      },
+      "contact": {
+        "group": {
+          "tag": "div",
+          "testID": null,
+          "text": "联系人 请填写联系人",
+          "rect": {
+            "left": 25,
+            "top": 194.5,
+            "right": 295,
+            "bottom": 284,
+            "width": 270,
+            "height": 89.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "label": {
+          "tag": "div",
+          "testID": null,
+          "text": "联系人",
+          "rect": {
+            "left": 25,
+            "top": 194.5,
+            "right": 295,
+            "bottom": 213,
+            "width": 270,
+            "height": 18.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "input": {
+          "tag": "input",
+          "testID": "catalog-form-contact",
+          "text": "联系人",
+          "rect": {
+            "left": 38,
+            "top": 219,
+            "right": 282,
+            "bottom": 263,
+            "width": 244,
+            "height": 44
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(26, 26, 26)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "normal",
+          "padding": "0px"
+        },
+        "wrapper": {
+          "tag": "div",
+          "testID": null,
+          "text": "",
+          "rect": {
+            "left": 25,
+            "top": 217,
+            "right": 295,
+            "bottom": 265,
+            "width": 270,
+            "height": 48
+          },
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(255, 49, 65)",
+          "borderWidth": "1px",
+          "borderRadius": "10px",
+          "gap": "8px",
+          "padding": "0px 12px"
+        }
+      },
+      "notes": {
+        "group": {
+          "tag": "div",
+          "testID": null,
+          "text": "备注",
+          "rect": {
+            "left": 25,
+            "top": 370.5,
+            "right": 295,
+            "bottom": 475,
+            "width": 270,
+            "height": 104.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "label": {
+          "tag": "div",
+          "testID": null,
+          "text": "备注",
+          "rect": {
+            "left": 25,
+            "top": 370.5,
+            "right": 295,
+            "bottom": 389,
+            "width": 270,
+            "height": 18.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "input": {
+          "tag": "textarea",
+          "testID": "catalog-form-notes",
+          "text": "备注",
+          "rect": {
+            "left": 38,
+            "top": 402,
+            "right": 282,
+            "bottom": 466,
+            "width": 244,
+            "height": 64
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(26, 26, 26)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "normal",
+          "padding": "0px"
+        },
+        "wrapper": {
+          "tag": "div",
+          "testID": null,
+          "text": "",
+          "rect": {
+            "left": 25,
+            "top": 393,
+            "right": 295,
+            "bottom": 475,
+            "width": 270,
+            "height": 82
+          },
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(235, 235, 235)",
+          "borderWidth": "1px",
+          "borderRadius": "10px",
+          "gap": "8px",
+          "padding": "8px 12px"
+        }
+      },
+      "customerCode": {
+        "group": {
+          "tag": "div",
+          "testID": null,
+          "text": "客户编号",
+          "rect": {
+            "left": 25,
+            "top": 539,
+            "right": 295,
+            "bottom": 609.5,
+            "width": 270,
+            "height": 70.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "label": {
+          "tag": "div",
+          "testID": null,
+          "text": "客户编号",
+          "rect": {
+            "left": 25,
+            "top": 539,
+            "right": 295,
+            "bottom": 557.5,
+            "width": 270,
+            "height": 18.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "input": {
+          "tag": "input",
+          "testID": "catalog-form-customer-code",
+          "text": "客户编号",
+          "rect": {
+            "left": 38,
+            "top": 563.5,
+            "right": 282,
+            "bottom": 607.5,
+            "width": 244,
+            "height": 44
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(26, 26, 26)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "normal",
+          "padding": "0px"
+        },
+        "wrapper": {
+          "tag": "div",
+          "testID": null,
+          "text": "",
+          "rect": {
+            "left": 25,
+            "top": 561.5,
+            "right": 295,
+            "bottom": 609.5,
+            "width": 270,
+            "height": 48
+          },
+          "background": "rgb(245, 246, 248)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(235, 235, 235)",
+          "borderWidth": "1px",
+          "borderRadius": "10px",
+          "gap": "8px",
+          "padding": "0px 12px"
+        },
+        "readOnly": true,
+        "disabled": false
+      }
+    },
+    "horizontalOverflowNodes": []
+  },
+  "screenshotNarrow320": {
+    "path": "/Users/suconnect/Desktop/code/sunxu/docs/verification/form-components-2026-11-10/320x720-default.png",
+    "sha256": "e168b97283d8ff0e372aa1b258cd319e15ad79c01f93d4472371d62e829fa103"
+  },
+  "default375": {
+    "viewport": {
+      "name": "375x812-default",
+      "width": 375,
+      "height": 812,
+      "documentClientWidth": 375,
+      "documentScrollWidth": 375,
+      "documentScrollHeight": 812
+    },
+    "body": {
+      "tag": "body",
+      "testID": null,
+      "text": " 新建客户 保存 客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号 列表 表单 组件 地图图表",
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "right": 375,
+        "bottom": 812,
+        "width": 375,
+        "height": 812
+      },
+      "background": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 0)",
+      "borderColor": "rgb(0, 0, 0)",
+      "borderWidth": "0px",
+      "borderRadius": "0px",
+      "gap": "normal",
+      "padding": "0px"
+    },
+    "root": {
+      "tag": "div",
+      "testID": null,
+      "text": " 新建客户 保存 客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号 列表 表单 组件 地图图表",
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "right": 375,
+        "bottom": 812,
+        "width": 375,
+        "height": 812
+      },
+      "background": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 0)",
+      "borderColor": "rgb(0, 0, 0)",
+      "borderWidth": "0px",
+      "borderRadius": "0px",
+      "gap": "normal",
+      "padding": "0px"
+    },
+    "sectionAncestors": [
+      {
+        "tag": "div",
+        "testID": "catalog-form-customer",
+        "text": "客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注",
+        "rect": {
+          "left": 12,
+          "top": 73,
+          "right": 363,
+          "bottom": 488,
+          "width": 351,
+          "height": 415
+        },
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(235, 235, 235)",
+        "borderWidth": "1px",
+        "borderRadius": "14px",
+        "gap": "8px",
+        "padding": "12px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号",
+        "rect": {
+          "left": 0,
+          "top": 61,
+          "right": 375,
+          "bottom": 751,
+          "width": 375,
+          "height": 690
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "8px",
+        "padding": "12px 12px 32px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号",
+        "rect": {
+          "left": 0,
+          "top": 61,
+          "right": 375,
+          "bottom": 751,
+          "width": 375,
+          "height": 690
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "normal",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": " 新建客户 保存 客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号 列表 表单 组件 地图图表",
+        "rect": {
+          "left": 0,
+          "top": 0,
+          "right": 375,
+          "bottom": 812,
+          "width": 375,
+          "height": 812
+        },
+        "background": "rgb(245, 246, 248)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "normal",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": " 新建客户 保存 客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号 列表 表单 组件 地图图表",
+        "rect": {
+          "left": 0,
+          "top": 0,
+          "right": 375,
+          "bottom": 812,
+          "width": 375,
+          "height": 812
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "normal",
+        "padding": "0px"
+      }
+    ],
+    "customerSection": {
+      "tag": "div",
+      "testID": "catalog-form-customer",
+      "text": "客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注",
+      "rect": {
+        "left": 12,
+        "top": 73,
+        "right": 363,
+        "bottom": 488,
+        "width": 351,
+        "height": 415
+      },
+      "background": "rgb(255, 255, 255)",
+      "color": "rgb(0, 0, 0)",
+      "borderColor": "rgb(235, 235, 235)",
+      "borderWidth": "1px",
+      "borderRadius": "14px",
+      "gap": "8px",
+      "padding": "12px"
+    },
+    "customerChildren": [
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "客户信息",
+        "rect": {
+          "left": 25,
+          "top": 86,
+          "right": 350,
+          "bottom": 108,
+          "width": 325,
+          "height": 22
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(26, 26, 26)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "normal",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "客户名称 *",
+        "rect": {
+          "left": 25,
+          "top": 116,
+          "right": 350,
+          "bottom": 186.5,
+          "width": 325,
+          "height": 70.5
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "4px",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "联系人 请填写联系人",
+        "rect": {
+          "left": 25,
+          "top": 194.5,
+          "right": 350,
+          "bottom": 284,
+          "width": 325,
+          "height": 89.5
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "4px",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "联系电话",
+        "rect": {
+          "left": 25,
+          "top": 292,
+          "right": 350,
+          "bottom": 362.5,
+          "width": 325,
+          "height": 70.5
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "4px",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "备注",
+        "rect": {
+          "left": 25,
+          "top": 370.5,
+          "right": 350,
+          "bottom": 475,
+          "width": 325,
+          "height": 104.5
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "4px",
+        "padding": "0px"
+      }
+    ],
+    "readonlySection": {
+      "tag": "div",
+      "testID": "catalog-form-readonly",
+      "text": "系统填写 客户编号",
+      "rect": {
+        "left": 12,
+        "top": 496,
+        "right": 363,
+        "bottom": 622.5,
+        "width": 351,
+        "height": 126.5
+      },
+      "background": "rgb(255, 255, 255)",
+      "color": "rgb(0, 0, 0)",
+      "borderColor": "rgb(235, 235, 235)",
+      "borderWidth": "1px",
+      "borderRadius": "14px",
+      "gap": "8px",
+      "padding": "12px"
+    },
+    "fields": {
+      "name": {
+        "group": {
+          "tag": "div",
+          "testID": null,
+          "text": "客户名称 *",
+          "rect": {
+            "left": 25,
+            "top": 116,
+            "right": 350,
+            "bottom": 186.5,
+            "width": 325,
+            "height": 70.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "label": {
+          "tag": "div",
+          "testID": null,
+          "text": "客户名称 *",
+          "rect": {
+            "left": 25,
+            "top": 116,
+            "right": 350,
+            "bottom": 134.5,
+            "width": 325,
+            "height": 18.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "input": {
+          "tag": "input",
+          "testID": "catalog-form-customer-name",
+          "text": "客户名称",
+          "rect": {
+            "left": 38,
+            "top": 140.5,
+            "right": 337,
+            "bottom": 184.5,
+            "width": 299,
+            "height": 44
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(26, 26, 26)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "normal",
+          "padding": "0px"
+        },
+        "wrapper": {
+          "tag": "div",
+          "testID": null,
+          "text": "",
+          "rect": {
+            "left": 25,
+            "top": 138.5,
+            "right": 350,
+            "bottom": 186.5,
+            "width": 325,
+            "height": 48
+          },
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(235, 235, 235)",
+          "borderWidth": "1px",
+          "borderRadius": "10px",
+          "gap": "8px",
+          "padding": "0px 12px"
+        }
+      },
+      "contact": {
+        "group": {
+          "tag": "div",
+          "testID": null,
+          "text": "联系人 请填写联系人",
+          "rect": {
+            "left": 25,
+            "top": 194.5,
+            "right": 350,
+            "bottom": 284,
+            "width": 325,
+            "height": 89.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "label": {
+          "tag": "div",
+          "testID": null,
+          "text": "联系人",
+          "rect": {
+            "left": 25,
+            "top": 194.5,
+            "right": 350,
+            "bottom": 213,
+            "width": 325,
+            "height": 18.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "input": {
+          "tag": "input",
+          "testID": "catalog-form-contact",
+          "text": "联系人",
+          "rect": {
+            "left": 38,
+            "top": 219,
+            "right": 337,
+            "bottom": 263,
+            "width": 299,
+            "height": 44
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(26, 26, 26)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "normal",
+          "padding": "0px"
+        },
+        "wrapper": {
+          "tag": "div",
+          "testID": null,
+          "text": "",
+          "rect": {
+            "left": 25,
+            "top": 217,
+            "right": 350,
+            "bottom": 265,
+            "width": 325,
+            "height": 48
+          },
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(255, 49, 65)",
+          "borderWidth": "1px",
+          "borderRadius": "10px",
+          "gap": "8px",
+          "padding": "0px 12px"
+        }
+      },
+      "notes": {
+        "group": {
+          "tag": "div",
+          "testID": null,
+          "text": "备注",
+          "rect": {
+            "left": 25,
+            "top": 370.5,
+            "right": 350,
+            "bottom": 475,
+            "width": 325,
+            "height": 104.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "label": {
+          "tag": "div",
+          "testID": null,
+          "text": "备注",
+          "rect": {
+            "left": 25,
+            "top": 370.5,
+            "right": 350,
+            "bottom": 389,
+            "width": 325,
+            "height": 18.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "input": {
+          "tag": "textarea",
+          "testID": "catalog-form-notes",
+          "text": "备注",
+          "rect": {
+            "left": 38,
+            "top": 402,
+            "right": 337,
+            "bottom": 466,
+            "width": 299,
+            "height": 64
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(26, 26, 26)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "normal",
+          "padding": "0px"
+        },
+        "wrapper": {
+          "tag": "div",
+          "testID": null,
+          "text": "",
+          "rect": {
+            "left": 25,
+            "top": 393,
+            "right": 350,
+            "bottom": 475,
+            "width": 325,
+            "height": 82
+          },
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(235, 235, 235)",
+          "borderWidth": "1px",
+          "borderRadius": "10px",
+          "gap": "8px",
+          "padding": "8px 12px"
+        }
+      },
+      "customerCode": {
+        "group": {
+          "tag": "div",
+          "testID": null,
+          "text": "客户编号",
+          "rect": {
+            "left": 25,
+            "top": 539,
+            "right": 350,
+            "bottom": 609.5,
+            "width": 325,
+            "height": 70.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "label": {
+          "tag": "div",
+          "testID": null,
+          "text": "客户编号",
+          "rect": {
+            "left": 25,
+            "top": 539,
+            "right": 350,
+            "bottom": 557.5,
+            "width": 325,
+            "height": 18.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "input": {
+          "tag": "input",
+          "testID": "catalog-form-customer-code",
+          "text": "客户编号",
+          "rect": {
+            "left": 38,
+            "top": 563.5,
+            "right": 337,
+            "bottom": 607.5,
+            "width": 299,
+            "height": 44
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(26, 26, 26)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "normal",
+          "padding": "0px"
+        },
+        "wrapper": {
+          "tag": "div",
+          "testID": null,
+          "text": "",
+          "rect": {
+            "left": 25,
+            "top": 561.5,
+            "right": 350,
+            "bottom": 609.5,
+            "width": 325,
+            "height": 48
+          },
+          "background": "rgb(245, 246, 248)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(235, 235, 235)",
+          "borderWidth": "1px",
+          "borderRadius": "10px",
+          "gap": "8px",
+          "padding": "0px 12px"
+        },
+        "readOnly": true,
+        "disabled": false
+      }
+    },
+    "horizontalOverflowNodes": []
+  },
+  "screenshotDefault375": {
+    "path": "/Users/suconnect/Desktop/code/sunxu/docs/verification/form-components-2026-11-10/375x812-default.png",
+    "sha256": "9ed9128251dcf78df2f637ae88d760957da1cc11b38360a7266d92c00ee0e7af"
+  },
+  "focus375": {
+    "activeTestID": "catalog-form-customer-name",
+    "borderColor": "rgb(0, 125, 53)",
+    "outlineColor": "rgba(0, 0, 0, 0)",
+    "outlineWidth": "0px",
+    "outlineStyle": "auto",
+    "inputRect": {
+      "left": 38,
+      "top": 140.5,
+      "right": 337,
+      "bottom": 184.5,
+      "width": 299,
+      "height": 44
+    }
+  },
+  "screenshotFocus375": {
+    "path": "/Users/suconnect/Desktop/code/sunxu/docs/verification/form-components-2026-11-10/375x812-focus.png",
+    "sha256": "aef8a7b8df8442cf19fb427069774c1e825f42ef07049b1f26c3ee1e3d0267c4"
+  },
+  "error375": {
+    "borderColor": "rgb(255, 49, 65)",
+    "errorTextVisible": true
+  },
+  "screenshotError375": {
+    "path": "/Users/suconnect/Desktop/code/sunxu/docs/verification/form-components-2026-11-10/375x812-error.png",
+    "sha256": "9369797d4372e7a1fd5a5ad2d724c147ee68b45066fb3aac42916f7430b0b4de"
+  },
+  "readOnly375": {
+    "readOnly": true,
+    "disabled": false,
+    "background": "rgb(245, 246, 248)"
+  },
+  "screenshotReadOnly375": {
+    "path": "/Users/suconnect/Desktop/code/sunxu/docs/verification/form-components-2026-11-10/375x812-readonly.png",
+    "sha256": "e576011c59ffbdbf3bf9d929dd33f1b1b1e23a5750da83b71699dd91e48c6998"
+  },
+  "landscape812": {
+    "viewport": {
+      "name": "812x375-default",
+      "width": 812,
+      "height": 375,
+      "documentClientWidth": 812,
+      "documentScrollWidth": 812,
+      "documentScrollHeight": 375
+    },
+    "body": {
+      "tag": "body",
+      "testID": null,
+      "text": " 新建客户 保存 客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号 列表 表单 组件 地图图表",
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "right": 812,
+        "bottom": 375,
+        "width": 812,
+        "height": 375
+      },
+      "background": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 0)",
+      "borderColor": "rgb(0, 0, 0)",
+      "borderWidth": "0px",
+      "borderRadius": "0px",
+      "gap": "normal",
+      "padding": "0px"
+    },
+    "root": {
+      "tag": "div",
+      "testID": null,
+      "text": " 新建客户 保存 客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号 列表 表单 组件 地图图表",
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "right": 812,
+        "bottom": 375,
+        "width": 812,
+        "height": 375
+      },
+      "background": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 0)",
+      "borderColor": "rgb(0, 0, 0)",
+      "borderWidth": "0px",
+      "borderRadius": "0px",
+      "gap": "normal",
+      "padding": "0px"
+    },
+    "sectionAncestors": [
+      {
+        "tag": "div",
+        "testID": "catalog-form-customer",
+        "text": "客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注",
+        "rect": {
+          "left": 58,
+          "top": 73,
+          "right": 754,
+          "bottom": 488,
+          "width": 696,
+          "height": 415
+        },
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(235, 235, 235)",
+        "borderWidth": "1px",
+        "borderRadius": "14px",
+        "gap": "8px",
+        "padding": "12px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号",
+        "rect": {
+          "left": 46,
+          "top": 61,
+          "right": 766,
+          "bottom": 663.5,
+          "width": 720,
+          "height": 602.5
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "8px",
+        "padding": "12px 12px 32px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号",
+        "rect": {
+          "left": 0,
+          "top": 61,
+          "right": 812,
+          "bottom": 314,
+          "width": 812,
+          "height": 253
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "normal",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": " 新建客户 保存 客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号 列表 表单 组件 地图图表",
+        "rect": {
+          "left": 0,
+          "top": 0,
+          "right": 812,
+          "bottom": 375,
+          "width": 812,
+          "height": 375
+        },
+        "background": "rgb(245, 246, 248)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "normal",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": " 新建客户 保存 客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号 列表 表单 组件 地图图表",
+        "rect": {
+          "left": 0,
+          "top": 0,
+          "right": 812,
+          "bottom": 375,
+          "width": 812,
+          "height": 375
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "normal",
+        "padding": "0px"
+      }
+    ],
+    "customerSection": {
+      "tag": "div",
+      "testID": "catalog-form-customer",
+      "text": "客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注",
+      "rect": {
+        "left": 58,
+        "top": 73,
+        "right": 754,
+        "bottom": 488,
+        "width": 696,
+        "height": 415
+      },
+      "background": "rgb(255, 255, 255)",
+      "color": "rgb(0, 0, 0)",
+      "borderColor": "rgb(235, 235, 235)",
+      "borderWidth": "1px",
+      "borderRadius": "14px",
+      "gap": "8px",
+      "padding": "12px"
+    },
+    "customerChildren": [
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "客户信息",
+        "rect": {
+          "left": 71,
+          "top": 86,
+          "right": 741,
+          "bottom": 108,
+          "width": 670,
+          "height": 22
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(26, 26, 26)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "normal",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "客户名称 *",
+        "rect": {
+          "left": 71,
+          "top": 116,
+          "right": 741,
+          "bottom": 186.5,
+          "width": 670,
+          "height": 70.5
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "4px",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "联系人 请填写联系人",
+        "rect": {
+          "left": 71,
+          "top": 194.5,
+          "right": 741,
+          "bottom": 284,
+          "width": 670,
+          "height": 89.5
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "4px",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "联系电话",
+        "rect": {
+          "left": 71,
+          "top": 292,
+          "right": 741,
+          "bottom": 362.5,
+          "width": 670,
+          "height": 70.5
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "4px",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "备注",
+        "rect": {
+          "left": 71,
+          "top": 370.5,
+          "right": 741,
+          "bottom": 475,
+          "width": 670,
+          "height": 104.5
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "4px",
+        "padding": "0px"
+      }
+    ],
+    "readonlySection": {
+      "tag": "div",
+      "testID": "catalog-form-readonly",
+      "text": "系统填写 客户编号",
+      "rect": {
+        "left": 58,
+        "top": 496,
+        "right": 754,
+        "bottom": 622.5,
+        "width": 696,
+        "height": 126.5
+      },
+      "background": "rgb(255, 255, 255)",
+      "color": "rgb(0, 0, 0)",
+      "borderColor": "rgb(235, 235, 235)",
+      "borderWidth": "1px",
+      "borderRadius": "14px",
+      "gap": "8px",
+      "padding": "12px"
+    },
+    "fields": {
+      "name": {
+        "group": {
+          "tag": "div",
+          "testID": null,
+          "text": "客户名称 *",
+          "rect": {
+            "left": 71,
+            "top": 116,
+            "right": 741,
+            "bottom": 186.5,
+            "width": 670,
+            "height": 70.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "label": {
+          "tag": "div",
+          "testID": null,
+          "text": "客户名称 *",
+          "rect": {
+            "left": 71,
+            "top": 116,
+            "right": 741,
+            "bottom": 134.5,
+            "width": 670,
+            "height": 18.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "input": {
+          "tag": "input",
+          "testID": "catalog-form-customer-name",
+          "text": "客户名称",
+          "rect": {
+            "left": 84,
+            "top": 140.5,
+            "right": 728,
+            "bottom": 184.5,
+            "width": 644,
+            "height": 44
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(26, 26, 26)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "normal",
+          "padding": "0px"
+        },
+        "wrapper": {
+          "tag": "div",
+          "testID": null,
+          "text": "",
+          "rect": {
+            "left": 71,
+            "top": 138.5,
+            "right": 741,
+            "bottom": 186.5,
+            "width": 670,
+            "height": 48
+          },
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 125, 53)",
+          "borderWidth": "1px",
+          "borderRadius": "10px",
+          "gap": "8px",
+          "padding": "0px 12px"
+        }
+      },
+      "contact": {
+        "group": {
+          "tag": "div",
+          "testID": null,
+          "text": "联系人 请填写联系人",
+          "rect": {
+            "left": 71,
+            "top": 194.5,
+            "right": 741,
+            "bottom": 284,
+            "width": 670,
+            "height": 89.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "label": {
+          "tag": "div",
+          "testID": null,
+          "text": "联系人",
+          "rect": {
+            "left": 71,
+            "top": 194.5,
+            "right": 741,
+            "bottom": 213,
+            "width": 670,
+            "height": 18.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "input": {
+          "tag": "input",
+          "testID": "catalog-form-contact",
+          "text": "联系人",
+          "rect": {
+            "left": 84,
+            "top": 219,
+            "right": 728,
+            "bottom": 263,
+            "width": 644,
+            "height": 44
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(26, 26, 26)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "normal",
+          "padding": "0px"
+        },
+        "wrapper": {
+          "tag": "div",
+          "testID": null,
+          "text": "",
+          "rect": {
+            "left": 71,
+            "top": 217,
+            "right": 741,
+            "bottom": 265,
+            "width": 670,
+            "height": 48
+          },
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(255, 49, 65)",
+          "borderWidth": "1px",
+          "borderRadius": "10px",
+          "gap": "8px",
+          "padding": "0px 12px"
+        }
+      },
+      "notes": {
+        "group": {
+          "tag": "div",
+          "testID": null,
+          "text": "备注",
+          "rect": {
+            "left": 71,
+            "top": 370.5,
+            "right": 741,
+            "bottom": 475,
+            "width": 670,
+            "height": 104.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "label": {
+          "tag": "div",
+          "testID": null,
+          "text": "备注",
+          "rect": {
+            "left": 71,
+            "top": 370.5,
+            "right": 741,
+            "bottom": 389,
+            "width": 670,
+            "height": 18.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "input": {
+          "tag": "textarea",
+          "testID": "catalog-form-notes",
+          "text": "备注",
+          "rect": {
+            "left": 84,
+            "top": 402,
+            "right": 728,
+            "bottom": 466,
+            "width": 644,
+            "height": 64
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(26, 26, 26)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "normal",
+          "padding": "0px"
+        },
+        "wrapper": {
+          "tag": "div",
+          "testID": null,
+          "text": "",
+          "rect": {
+            "left": 71,
+            "top": 393,
+            "right": 741,
+            "bottom": 475,
+            "width": 670,
+            "height": 82
+          },
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(235, 235, 235)",
+          "borderWidth": "1px",
+          "borderRadius": "10px",
+          "gap": "8px",
+          "padding": "8px 12px"
+        }
+      },
+      "customerCode": {
+        "group": {
+          "tag": "div",
+          "testID": null,
+          "text": "客户编号",
+          "rect": {
+            "left": 71,
+            "top": 539,
+            "right": 741,
+            "bottom": 609.5,
+            "width": 670,
+            "height": 70.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "label": {
+          "tag": "div",
+          "testID": null,
+          "text": "客户编号",
+          "rect": {
+            "left": 71,
+            "top": 539,
+            "right": 741,
+            "bottom": 557.5,
+            "width": 670,
+            "height": 18.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "input": {
+          "tag": "input",
+          "testID": "catalog-form-customer-code",
+          "text": "客户编号",
+          "rect": {
+            "left": 84,
+            "top": 563.5,
+            "right": 728,
+            "bottom": 607.5,
+            "width": 644,
+            "height": 44
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(26, 26, 26)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "normal",
+          "padding": "0px"
+        },
+        "wrapper": {
+          "tag": "div",
+          "testID": null,
+          "text": "",
+          "rect": {
+            "left": 71,
+            "top": 561.5,
+            "right": 741,
+            "bottom": 609.5,
+            "width": 670,
+            "height": 48
+          },
+          "background": "rgb(245, 246, 248)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(235, 235, 235)",
+          "borderWidth": "1px",
+          "borderRadius": "10px",
+          "gap": "8px",
+          "padding": "0px 12px"
+        },
+        "readOnly": true,
+        "disabled": false
+      }
+    },
+    "horizontalOverflowNodes": []
+  },
+  "screenshotLandscape812": {
+    "path": "/Users/suconnect/Desktop/code/sunxu/docs/verification/form-components-2026-11-10/812x375-default.png",
+    "sha256": "f092761a31aad127a83e81784bab07e870b34dd47378b16644ff2c2feb67197d"
+  },
+  "dark375": {
+    "viewport": {
+      "name": "375x812-dark-default",
+      "width": 375,
+      "height": 812,
+      "documentClientWidth": 375,
+      "documentScrollWidth": 375,
+      "documentScrollHeight": 812
+    },
+    "body": {
+      "tag": "body",
+      "testID": null,
+      "text": " 新建客户 保存 客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号 列表 表单 组件 地图图表",
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "right": 375,
+        "bottom": 812,
+        "width": 375,
+        "height": 812
+      },
+      "background": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 0)",
+      "borderColor": "rgb(0, 0, 0)",
+      "borderWidth": "0px",
+      "borderRadius": "0px",
+      "gap": "normal",
+      "padding": "0px"
+    },
+    "root": {
+      "tag": "div",
+      "testID": null,
+      "text": " 新建客户 保存 客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号 列表 表单 组件 地图图表",
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "right": 375,
+        "bottom": 812,
+        "width": 375,
+        "height": 812
+      },
+      "background": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 0)",
+      "borderColor": "rgb(0, 0, 0)",
+      "borderWidth": "0px",
+      "borderRadius": "0px",
+      "gap": "normal",
+      "padding": "0px"
+    },
+    "sectionAncestors": [
+      {
+        "tag": "div",
+        "testID": "catalog-form-customer",
+        "text": "客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注",
+        "rect": {
+          "left": 12,
+          "top": 73,
+          "right": 363,
+          "bottom": 488,
+          "width": 351,
+          "height": 415
+        },
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(44, 44, 46)",
+        "borderWidth": "1px",
+        "borderRadius": "14px",
+        "gap": "8px",
+        "padding": "12px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号",
+        "rect": {
+          "left": 0,
+          "top": 61,
+          "right": 375,
+          "bottom": 751,
+          "width": 375,
+          "height": 690
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "8px",
+        "padding": "12px 12px 32px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号",
+        "rect": {
+          "left": 0,
+          "top": 61,
+          "right": 375,
+          "bottom": 751,
+          "width": 375,
+          "height": 690
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "normal",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": " 新建客户 保存 客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号 列表 表单 组件 地图图表",
+        "rect": {
+          "left": 0,
+          "top": 0,
+          "right": 375,
+          "bottom": 812,
+          "width": 375,
+          "height": 812
+        },
+        "background": "rgb(15, 15, 15)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "normal",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": " 新建客户 保存 客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注 系统填写 客户编号 列表 表单 组件 地图图表",
+        "rect": {
+          "left": 0,
+          "top": 0,
+          "right": 375,
+          "bottom": 812,
+          "width": 375,
+          "height": 812
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "normal",
+        "padding": "0px"
+      }
+    ],
+    "customerSection": {
+      "tag": "div",
+      "testID": "catalog-form-customer",
+      "text": "客户信息 客户名称 * 联系人 请填写联系人 联系电话 备注",
+      "rect": {
+        "left": 12,
+        "top": 73,
+        "right": 363,
+        "bottom": 488,
+        "width": 351,
+        "height": 415
+      },
+      "background": "rgb(28, 28, 30)",
+      "color": "rgb(0, 0, 0)",
+      "borderColor": "rgb(44, 44, 46)",
+      "borderWidth": "1px",
+      "borderRadius": "14px",
+      "gap": "8px",
+      "padding": "12px"
+    },
+    "customerChildren": [
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "客户信息",
+        "rect": {
+          "left": 25,
+          "top": 86,
+          "right": 350,
+          "bottom": 108,
+          "width": 325,
+          "height": 22
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(245, 245, 245)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "normal",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "客户名称 *",
+        "rect": {
+          "left": 25,
+          "top": 116,
+          "right": 350,
+          "bottom": 186.5,
+          "width": 325,
+          "height": 70.5
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "4px",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "联系人 请填写联系人",
+        "rect": {
+          "left": 25,
+          "top": 194.5,
+          "right": 350,
+          "bottom": 284,
+          "width": 325,
+          "height": 89.5
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "4px",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "联系电话",
+        "rect": {
+          "left": 25,
+          "top": 292,
+          "right": 350,
+          "bottom": 362.5,
+          "width": 325,
+          "height": 70.5
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "4px",
+        "padding": "0px"
+      },
+      {
+        "tag": "div",
+        "testID": null,
+        "text": "备注",
+        "rect": {
+          "left": 25,
+          "top": 370.5,
+          "right": 350,
+          "bottom": 475,
+          "width": 325,
+          "height": 104.5
+        },
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "borderColor": "rgb(0, 0, 0)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "gap": "4px",
+        "padding": "0px"
+      }
+    ],
+    "readonlySection": {
+      "tag": "div",
+      "testID": "catalog-form-readonly",
+      "text": "系统填写 客户编号",
+      "rect": {
+        "left": 12,
+        "top": 496,
+        "right": 363,
+        "bottom": 622.5,
+        "width": 351,
+        "height": 126.5
+      },
+      "background": "rgb(28, 28, 30)",
+      "color": "rgb(0, 0, 0)",
+      "borderColor": "rgb(44, 44, 46)",
+      "borderWidth": "1px",
+      "borderRadius": "14px",
+      "gap": "8px",
+      "padding": "12px"
+    },
+    "fields": {
+      "name": {
+        "group": {
+          "tag": "div",
+          "testID": null,
+          "text": "客户名称 *",
+          "rect": {
+            "left": 25,
+            "top": 116,
+            "right": 350,
+            "bottom": 186.5,
+            "width": 325,
+            "height": 70.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "label": {
+          "tag": "div",
+          "testID": null,
+          "text": "客户名称 *",
+          "rect": {
+            "left": 25,
+            "top": 116,
+            "right": 350,
+            "bottom": 134.5,
+            "width": 325,
+            "height": 18.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "input": {
+          "tag": "input",
+          "testID": "catalog-form-customer-name",
+          "text": "客户名称",
+          "rect": {
+            "left": 38,
+            "top": 140.5,
+            "right": 337,
+            "bottom": 184.5,
+            "width": 299,
+            "height": 44
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(245, 245, 245)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "normal",
+          "padding": "0px"
+        },
+        "wrapper": {
+          "tag": "div",
+          "testID": null,
+          "text": "",
+          "rect": {
+            "left": 25,
+            "top": 138.5,
+            "right": 350,
+            "bottom": 186.5,
+            "width": 325,
+            "height": 48
+          },
+          "background": "rgb(28, 28, 30)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(44, 44, 46)",
+          "borderWidth": "1px",
+          "borderRadius": "10px",
+          "gap": "8px",
+          "padding": "0px 12px"
+        }
+      },
+      "contact": {
+        "group": {
+          "tag": "div",
+          "testID": null,
+          "text": "联系人 请填写联系人",
+          "rect": {
+            "left": 25,
+            "top": 194.5,
+            "right": 350,
+            "bottom": 284,
+            "width": 325,
+            "height": 89.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "label": {
+          "tag": "div",
+          "testID": null,
+          "text": "联系人",
+          "rect": {
+            "left": 25,
+            "top": 194.5,
+            "right": 350,
+            "bottom": 213,
+            "width": 325,
+            "height": 18.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "input": {
+          "tag": "input",
+          "testID": "catalog-form-contact",
+          "text": "联系人",
+          "rect": {
+            "left": 38,
+            "top": 219,
+            "right": 337,
+            "bottom": 263,
+            "width": 299,
+            "height": 44
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(245, 245, 245)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "normal",
+          "padding": "0px"
+        },
+        "wrapper": {
+          "tag": "div",
+          "testID": null,
+          "text": "",
+          "rect": {
+            "left": 25,
+            "top": 217,
+            "right": 350,
+            "bottom": 265,
+            "width": 325,
+            "height": 48
+          },
+          "background": "rgb(28, 28, 30)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(255, 77, 79)",
+          "borderWidth": "1px",
+          "borderRadius": "10px",
+          "gap": "8px",
+          "padding": "0px 12px"
+        }
+      },
+      "notes": {
+        "group": {
+          "tag": "div",
+          "testID": null,
+          "text": "备注",
+          "rect": {
+            "left": 25,
+            "top": 370.5,
+            "right": 350,
+            "bottom": 475,
+            "width": 325,
+            "height": 104.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "label": {
+          "tag": "div",
+          "testID": null,
+          "text": "备注",
+          "rect": {
+            "left": 25,
+            "top": 370.5,
+            "right": 350,
+            "bottom": 389,
+            "width": 325,
+            "height": 18.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "input": {
+          "tag": "textarea",
+          "testID": "catalog-form-notes",
+          "text": "备注",
+          "rect": {
+            "left": 38,
+            "top": 402,
+            "right": 337,
+            "bottom": 466,
+            "width": 299,
+            "height": 64
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(245, 245, 245)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "normal",
+          "padding": "0px"
+        },
+        "wrapper": {
+          "tag": "div",
+          "testID": null,
+          "text": "",
+          "rect": {
+            "left": 25,
+            "top": 393,
+            "right": 350,
+            "bottom": 475,
+            "width": 325,
+            "height": 82
+          },
+          "background": "rgb(28, 28, 30)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(44, 44, 46)",
+          "borderWidth": "1px",
+          "borderRadius": "10px",
+          "gap": "8px",
+          "padding": "8px 12px"
+        }
+      },
+      "customerCode": {
+        "group": {
+          "tag": "div",
+          "testID": null,
+          "text": "客户编号",
+          "rect": {
+            "left": 25,
+            "top": 539,
+            "right": 350,
+            "bottom": 609.5,
+            "width": 325,
+            "height": 70.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "label": {
+          "tag": "div",
+          "testID": null,
+          "text": "客户编号",
+          "rect": {
+            "left": 25,
+            "top": 539,
+            "right": 350,
+            "bottom": 557.5,
+            "width": 325,
+            "height": 18.5
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "4px",
+          "padding": "0px"
+        },
+        "input": {
+          "tag": "input",
+          "testID": "catalog-form-customer-code",
+          "text": "客户编号",
+          "rect": {
+            "left": 38,
+            "top": 563.5,
+            "right": 337,
+            "bottom": 607.5,
+            "width": 299,
+            "height": 44
+          },
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(245, 245, 245)",
+          "borderColor": "rgb(0, 0, 0)",
+          "borderWidth": "0px",
+          "borderRadius": "0px",
+          "gap": "normal",
+          "padding": "0px"
+        },
+        "wrapper": {
+          "tag": "div",
+          "testID": null,
+          "text": "",
+          "rect": {
+            "left": 25,
+            "top": 561.5,
+            "right": 350,
+            "bottom": 609.5,
+            "width": 325,
+            "height": 48
+          },
+          "background": "rgb(28, 28, 30)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(44, 44, 46)",
+          "borderWidth": "1px",
+          "borderRadius": "10px",
+          "gap": "8px",
+          "padding": "0px 12px"
+        },
+        "readOnly": true,
+        "disabled": false
+      }
+    },
+    "horizontalOverflowNodes": []
+  },
+  "screenshotDark375": {
+    "path": "/Users/suconnect/Desktop/code/sunxu/docs/verification/form-components-2026-11-10/375x812-dark-default.png",
+    "sha256": "ca4a0a8802dae9e27f5de1b1b74b343f808bf41ef6934a48d7b2f4dd6d570ef3"
+  },
+  "status": "CAPTURED"
+}

@@ -567,7 +567,7 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
         onClose={() => setAdvancedVisible(false)}
         title="高级筛选"
         maxHeightRatio={0.82}
-        renderFooter={() => (
+        footer={(
           <View style={styles.advFooter}>
             <TouchableOpacity
               style={[styles.advFooterButton, styles.advResetButton, { borderColor: colors.border }]}

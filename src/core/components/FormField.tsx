@@ -1,27 +1,29 @@
-import { Ionicons } from '@expo/vector-icons';
 import type React from 'react';
 import { useState } from 'react';
 import {
+  Platform,
   StyleSheet,
   Switch,
   type TextInputProps,
-  TouchableOpacity,
   View,
+  type StyleProp,
   type ViewStyle,
 } from 'react-native';
 import { AppText as Text } from './AppText';
+import { IconActionButton } from './IconActionButton';
 import { useBottomSheetTextInput } from './BottomSheetContext';
-import { FontSize, Radius, Spacing } from '../theme/tokens';
+import { BorderWidth, FontSize, MIN_TOUCH_TARGET, MIN_TOUCH_TARGET_ANDROID, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { useScaledFontSize } from '../theme/font-scale';
 import { type FieldHelpContent, FormLabel } from './FormLabel';
 
-interface FormFieldProps extends TextInputProps {
+export interface FormFieldProps extends TextInputProps {
   label: string;
   error?: string;
   required?: boolean;
   help?: FieldHelpContent;
-  containerStyle?: ViewStyle;
+  /** Layout the field group; `style` remains the native TextInput style. */
+  containerStyle?: StyleProp<ViewStyle>;
   secureToggle?: boolean;
   rightElement?: React.ReactNode;
 }
@@ -37,6 +39,8 @@ export function FormField({
   rightElement,
   multiline,
   numberOfLines,
+  onFocus,
+  onBlur,
   accessibilityLabel,
   style,
   value,
@@ -45,6 +49,8 @@ export function FormField({
 }: FormFieldProps) {
   const { colors } = useTheme();
   const inputFontSize = useScaledFontSize(FontSize.base);
+  const touchTarget = Platform.OS === 'android' ? MIN_TOUCH_TARGET_ANDROID : MIN_TOUCH_TARGET;
+  const [focused, setFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { InputComponent, inputKey, inputProps } = useBottomSheetTextInput({ value, onChangeText });
   const isReadOnly = props.editable === false;
@@ -57,8 +63,8 @@ export function FormField({
           styles.inputWrapper,
           multiline && styles.inputWrapperMultiline,
           {
-            borderColor: error ? colors.error : isReadOnly ? colors.border : 'transparent',
-            backgroundColor: isReadOnly ? colors.surface : colors.surfaceSecondary,
+            borderColor: error ? colors.error : focused ? colors.primary : colors.border,
+            backgroundColor: isReadOnly ? colors.surfaceSecondary : colors.surface,
           },
           isReadOnly && styles.inputWrapperReadonly,
         ]}
@@ -67,8 +73,9 @@ export function FormField({
           key={inputKey}
           style={[
             styles.input,
+            Platform.OS === 'web' && styles.inputWeb,
             style,
-            { color: colors.text, fontSize: inputFontSize },
+            { minHeight: touchTarget, color: colors.text, fontSize: inputFontSize },
             multiline && styles.inputMultiline,
           ]}
           placeholderTextColor={colors.textTertiary}
@@ -76,21 +83,28 @@ export function FormField({
           multiline={multiline}
           numberOfLines={multiline ? numberOfLines : 1}
           textAlignVertical={multiline ? 'top' : undefined}
+          underlineColorAndroid="transparent"
           {...inputProps}
           {...props}
           accessibilityLabel={accessibilityLabel ?? label}
+          onFocus={(event) => {
+            setFocused(true);
+            onFocus?.(event);
+          }}
+          onBlur={(event) => {
+            setFocused(false);
+            onBlur?.(event);
+          }}
         />
         {secureToggle && secureTextEntry && (
-          <TouchableOpacity
+          <IconActionButton
+            icon={showPassword ? 'eye-off-outline' : 'eye-outline'}
+            size={touchTarget}
+            iconSize={18}
             onPress={() => setShowPassword((v) => !v)}
-            hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
-          >
-            <Ionicons
-              name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-              size={18}
-              color={colors.textTertiary}
-            />
-          </TouchableOpacity>
+            accessibilityLabel={`${showPassword ? '隐藏' : '显示'}${label}`}
+            selected={showPassword}
+          />
         )}
         {rightElement}
       </View>
@@ -134,10 +148,10 @@ const styles = StyleSheet.create({
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
-    borderRadius: Radius.sm,
+    borderWidth: BorderWidth.default,
+    borderRadius: Radius.md,
     paddingHorizontal: Spacing.md,
-    height: 44,
+    minHeight: MIN_TOUCH_TARGET_ANDROID,
     gap: Spacing.sm,
   },
   inputWrapperMultiline: {
@@ -153,6 +167,11 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: FontSize.base,
     padding: 0,
+  },
+  inputWeb: {
+    // The wrapper owns the shared focus ring; suppress the browser's nested input outline.
+    outlineColor: 'transparent',
+    outlineWidth: 0,
   },
   inputMultiline: {
     minHeight: 64,

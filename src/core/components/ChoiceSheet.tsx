@@ -49,7 +49,7 @@ export function ChoiceSheet({
       onClose={onClose}
       title={title}
       maxHeightRatio={maxHeightRatio}
-      renderFooter={() => (
+      footer={(
         <View style={styles.actions}>
           <ActionButton
             variant="secondary"

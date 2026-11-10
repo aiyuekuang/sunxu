@@ -2,11 +2,9 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  ActivityIndicator,
   Modal,
   Platform,
   StyleSheet,
-  TouchableOpacity,
   View,
   type LayoutChangeEvent,
 } from 'react-native';
@@ -17,38 +15,88 @@ import {
 } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
-import { FontSize, Radius, Spacing } from '../theme/tokens';
+import { FontSize, MIN_TOUCH_TARGET_ANDROID, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { toastConfig } from '../toast';
+import { ActionButton } from './ActionButton';
 import { AppText as Text } from './AppText';
 import { ModalRequestCloseContext, useModalRequestCloseRegistry } from './ModalRequestCloseContext';
 import { PageHeader } from './PageHeader';
 
-export interface FullScreenModalProps {
+interface FullScreenModalBaseProps {
   visible: boolean;
   onClose: () => void;
   title: string;
   children: React.ReactNode;
-  confirmText?: string;
-  cancelText?: string;
-  onConfirm?: () => void;
   loading?: boolean;
   disabled?: boolean;
-  /** 确认按钮禁用时给读屏用户的原因提示 */
-  confirmDisabledHint?: string;
   /** 表单启用键盘避让；Android 会扣除系统窗口已产生的位移。 */
   avoidKeyboard?: boolean;
   /** scroll 由弹窗管理表单滚动；fill 将内容区交给子组件管理滚动和全高布局，底部操作区仍独立固定。 */
   bodyMode?: 'scroll' | 'fill';
-  /** 沉浸式内容隐藏页头/副标题/页脚并占满弹窗内容区，供地图或媒体查看使用。 */
-  immersive?: boolean;
   subtitle?: string;
   /** 非表单确认类的页头辅助操作；提交/应用/保存等流程操作应使用固定 footer。 */
   headerRight?: React.ReactNode;
-  confirmButtonColor?: string;
-  /** 自定义底部操作区，固定在弹窗底部并位于内容滚动区之外；与 confirmText 互斥。 */
-  renderFooter?: () => React.ReactNode;
 }
+
+type FullScreenModalFooterProps =
+  | {
+      /** 提供时，Sunxu 在固定底栏渲染取消与确认按钮。 */
+      confirmText?: string;
+      cancelText?: string;
+      onConfirm?: () => void;
+      confirmDisabledHint?: string;
+      confirmButtonColor?: string;
+      footer?: never;
+      renderFooter?: never;
+    }
+  | {
+      /** 自定义操作区；弹窗会拉伸到可用内容宽度，并固定在内容滚动区之外、处理底部安全区。 */
+      footer: React.ReactNode;
+      confirmText?: never;
+      cancelText?: never;
+      onConfirm?: never;
+      confirmDisabledHint?: never;
+      confirmButtonColor?: never;
+      renderFooter?: never;
+    }
+  | {
+      /** @deprecated 使用 footer。 */
+      renderFooter: () => React.ReactNode;
+      confirmText?: never;
+      cancelText?: never;
+      onConfirm?: never;
+      confirmDisabledHint?: never;
+      confirmButtonColor?: never;
+      footer?: never;
+    }
+  | {
+      confirmText?: never;
+      cancelText?: never;
+      onConfirm?: never;
+      confirmDisabledHint?: never;
+      confirmButtonColor?: never;
+      footer?: never;
+      renderFooter?: never;
+    };
+
+type FullScreenModalImmersiveProps = {
+  /** 沉浸式内容隐藏页头/副标题/页脚并占满弹窗内容区，供地图或媒体查看使用。 */
+  immersive: true;
+  confirmText?: never;
+  cancelText?: never;
+  onConfirm?: never;
+  confirmDisabledHint?: never;
+  confirmButtonColor?: never;
+  footer?: never;
+  renderFooter?: never;
+};
+
+export type FullScreenModalProps = FullScreenModalBaseProps &
+  (
+    | ({ immersive?: false } & FullScreenModalFooterProps)
+    | FullScreenModalImmersiveProps
+  );
 
 export function FullScreenModal({
   visible,
@@ -67,11 +115,13 @@ export function FullScreenModal({
   subtitle,
   headerRight,
   confirmButtonColor,
+  footer,
   renderFooter,
 }: FullScreenModalProps) {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
-  const footerVisible = !immersive && (!!confirmText || !!renderFooter);
+  const footerContent = footer ?? renderFooter?.();
+  const footerVisible = !immersive && (!!confirmText || footerContent != null);
   const confirmButtonDisabled = disabled && !loading;
   const visibleDisabledHint = confirmButtonDisabled
     ? (confirmDisabledHint ?? '请先完善必填项或处理页面提示后再提交')
@@ -257,53 +307,36 @@ export function FullScreenModal({
                   </Text>
                 ) : null}
                 <View style={styles.footerButtons}>
-                  <TouchableOpacity
-                    style={[styles.btn, styles.cancelBtn, { borderColor: colors.border }]}
+                  <ActionButton
+                    variant="outlined"
+                    size="md"
+                    style={styles.btn}
+                    buttonColor={colors.border}
+                    textColor={colors.textSecondary}
                     onPress={onClose}
+                    accessibilityLabel={cancelText}
                   >
-                    <Text style={[styles.btnText, { color: colors.textSecondary }]}>
-                      {cancelText}
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[
-                      styles.btn,
-                      styles.confirmBtn,
-                      {
-                        backgroundColor: confirmButtonDisabled
-                          ? colors.surfaceSecondary
-                          : (confirmButtonColor ?? colors.primary),
-                        borderColor: confirmButtonDisabled ? colors.border : 'transparent',
-                        opacity: loading ? 0.6 : 1,
-                      },
-                      confirmButtonDisabled && styles.disabledConfirmBtn,
-                    ]}
+                    {cancelText}
+                  </ActionButton>
+                  <ActionButton
+                    variant="primary"
+                    size="md"
+                    style={styles.btn}
+                    buttonColor={confirmButtonDisabled ? colors.surfaceSecondary : (confirmButtonColor ?? colors.primary)}
+                    textColor={confirmButtonDisabled ? colors.textMuted : colors.textOnPrimary}
                     onPress={onConfirm}
-                    disabled={disabled || loading}
-                    accessibilityRole="button"
-                    accessibilityState={{ disabled: disabled || loading }}
+                    disabled={disabled}
+                    loading={loading}
+                    accessibilityLabel={loading ? '正在提交' : confirmText}
                     accessibilityHint={visibleDisabledHint}
                   >
-                    {loading ? (
-                      <ActivityIndicator size="small" color={colors.textOnPrimary} />
-                    ) : (
-                      <Text
-                        style={[
-                          styles.btnText,
-                          {
-                            color: confirmButtonDisabled ? colors.textMuted : colors.textOnPrimary,
-                          },
-                        ]}
-                      >
-                        {confirmText}
-                      </Text>
-                    )}
-                  </TouchableOpacity>
+                    {confirmText}
+                  </ActionButton>
                 </View>
               </View>
             ) : null}
 
-            {!immersive && !confirmText && renderFooter ? (
+            {!immersive && !confirmText && footerContent != null ? (
               <View
                 style={[
                   styles.footer,
@@ -314,7 +347,7 @@ export function FullScreenModal({
                   },
                 ]}
               >
-                {renderFooter()}
+                {footerContent}
               </View>
             ) : null}
 
@@ -357,8 +390,8 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
   },
   footer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: 'column',
+    alignItems: 'stretch',
     gap: Spacing.sm,
     paddingHorizontal: Spacing.md,
     paddingTop: Spacing.sm,
@@ -376,28 +409,13 @@ const styles = StyleSheet.create({
   },
   btn: {
     flex: 1,
-    minHeight: 44,
+    minHeight: MIN_TOUCH_TARGET_ANDROID,
     borderRadius: Radius.md,
-    alignItems: 'center',
-    justifyContent: 'center',
     paddingHorizontal: Spacing.sm,
-  },
-  cancelBtn: {
-    borderWidth: StyleSheet.hairlineWidth,
-  },
-  confirmBtn: {
-    borderWidth: 0,
-  },
-  disabledConfirmBtn: {
-    borderWidth: 1,
   },
   disabledHint: {
     fontSize: FontSize.xs,
     lineHeight: 18,
     marginBottom: Spacing.xs,
-  },
-  btnText: {
-    fontSize: FontSize.sm,
-    fontWeight: '600',
   },
 });

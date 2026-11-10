@@ -118,7 +118,7 @@ export function DetailScreenContainer({
 
 export interface ListScreenContainerProps extends Omit<ScreenContainerProps, 'header' | 'scrollMode'> {
   /** Omit when the parent navigator/workspace already names this list. */
-  title: string;
+  title?: string;
   onBack?: () => void;
   headerRight?: React.ReactNode;
   /** Count-aware actions for the page header; one stays visible, multiple use overflow. */
