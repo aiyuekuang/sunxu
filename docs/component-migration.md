@@ -110,13 +110,13 @@ Sunxu 面向多个 React Native / Expo App，提供跨业务可组合的 UI 控�
 - **可访问性**：页头返回由宿主提供回调；表单提交按钮暴露按钮角色、名称和忙碌/禁用状态；插槽内交互由控件自身提供标签和焦点顺序。
 - **验证**：类型检查通过；完整示例 App 的设备截图和几何/溢出记录未完成时，视觉验收为 `UNVERIFIED`。
 
-## 弹窗表单固定操作区
+## 弹窗固定操作区
 
-- **Anatomy/API**：`FullScreenModal` 与 `BottomSheet` 由 Sunxu 统一拥有标题、内容区和固定底栏。简单“取消 + 确认”使用 `confirmText` / `onConfirm`；自定义或多操作区通过 `footer: ReactNode` 传入。`footer` 由弹窗拉伸到可用内容宽度，渲染在内容滚动视口之外，并负责底部安全区。`confirmText` 与 `footer` 属于互斥 API，TypeScript 类型会拒绝同时设置；`FullScreenModal` 的 `immersive` 模式也不接受流程按钮。旧 `renderFooter` 只为兼容保留并标记弃用。
-- **内容/操作边界**：确定、应用、保存、取消等流程操作必须留在固定 `footer`，不得放入可滚动 `children` 或标题区。`bodyMode="scroll"` 由 `FullScreenModal` 管理内容滚动；`bodyMode="fill"` 时宿主管理全高内容及其滚动，操作 `footer` 仍由弹窗单独固定。`BottomSheet` 默认将长内容放入滚动区；`dynamicHeight` 只用于短内容选择或说明弹层。
-- **唯一页头**：`FullScreenModal` 与 `BottomSheet` 使用 Sunxu `ModalHeader`，统一为左侧标题、副标题和右侧“×”；业务侧只传标题、关闭回调及可选的关闭禁用状态，不自行绘制返回或关闭控件。`PageHeader` 只用于导航页面，不用于弹窗。
+- **Anatomy/API**：`CenteredModal`、`FullScreenModal` 与 `BottomSheet` 由 Sunxu 统一拥有标题、内容区和固定底栏。`CenteredModal` 用于短时提示、更新说明和轻量确认，宽度默认不超过 480；`BottomSheet` 适合移动端上下文选择和短编辑，`FullScreenModal` 用于完整表单。简单“取消 + 确认”使用 `confirmText` / `onConfirm`；自定义或多操作区通过 `footer: ReactNode` 传入。`footer` 由弹窗拉伸到可用内容宽度，渲染在内容滚动视口之外；容器分别处理屏幕安全区与底部 inset。`confirmText` 与 `footer` 属于互斥 API，TypeScript 类型会拒绝同时设置；`FullScreenModal` 的 `immersive` 模式也不接受流程按钮。旧 `renderFooter` 只为兼容保留并标记弃用。
+- **内容/操作边界**：确定、应用、保存、取消等流程操作必须留在固定 `footer`，不得放入可滚动 `children` 或标题区。`CenteredModal` 为短内容提供内部滚动视口和固定底栏；`FullScreenModal` 的 `bodyMode="scroll"` 由容器管理滚动，`bodyMode="fill"` 时宿主管理全高内容及滚动；`BottomSheet` 默认将长内容放入滚动区，`dynamicHeight` 只用于短内容选择或说明弹层。
+- **唯一页头**：三种模态容器使用 Sunxu `ModalHeader`，统一为左侧标题、副标题和右侧“×”；业务侧只传标题、关闭回调及可选的关闭禁用状态，不自行绘制返回或关闭控件。`PageHeader` 只用于导航页面，不用于弹窗。
 - **受控关闭**：`closeDisabled` 同时禁用右上角“×”和系统返回键，适用于必须通过明确流程动作退出的任务；关闭控件暴露 disabled 状态和可配置的无障碍名称。
-- **状态、布局与无障碍**：宿主管理 visible、提交/loading、disabled、校验及关闭恢复；容器只提供可见状态和回调承载，不调用业务 API。footer 位于弹窗视口底部，底部 inset 由容器负责；自定义 footer 内容默认拉伸至可用宽度，行内操作可用 `flex: 1` 等分填满剩余空间；窄屏须换行或堆叠且不得缩小触控目标。流程按钮使用 `ActionButton` 或等价共享按钮，提供可访问名称及 disabled/loading 反馈；至少保持平台最小触控高度。
+- **状态、布局与无障碍**：宿主管理 visible、提交/loading、disabled、校验及关闭恢复；容器只提供可见状态和回调承载，不调用业务 API。`CenteredModal` 默认允许点遮罩关闭，可通过 `closeOnBackdropPress` 关闭该行为；`closeDisabled` 同时禁用页头关闭、遮罩关闭和系统返回键。footer 固定在滚动视口外；自定义 footer 内容默认拉伸至可用宽度，行内操作可用 `flex: 1` 等分填满剩余空间；窄屏须换行或堆叠且不得缩小触控目标。流程按钮使用 `ActionButton` 或等价共享按钮，提供可访问名称及 disabled/loading 反馈；至少保持平台最小触控高度。
 - **标准调用**：
 
   ```tsx
@@ -138,7 +138,8 @@ Sunxu 面向多个 React Native / Expo App，提供跨业务可组合的 UI 控�
 - **内部状态与恢复**：可见、关闭、提交、loading、disabled 和校验状态由宿主控制；弹窗只呈现回调与状态，不调用业务 API。取消/系统返回由 `onClose` 恢复宿主状态；提交成功或失败由宿主反馈。底栏内按钮继续使用 `ActionButton` 或其他带可访问名称/状态的共享控件。
 - **适用边界**：自定义 React Native Modal 只要含有流程按钮，也必须把按钮区与可滚动内容分开，并自行处理底部安全区。静态内容日期选择器等可在不可滚动选择器之后放独立操作区；系统 `Alert` 由平台安排原生按钮。即时生效选项列表、相机/媒体查看等没有确认闭环的弹层不额外增加固定操作区。
 - **选择依据**：成熟组件同样把流程动作建模为独立区域：React Native Paper 提供 [`Dialog.Actions`](https://callstack.github.io/react-native-paper/docs/components/Dialog/DialogActions)；Gorhom Bottom Sheet 提供 [`footerComponent`](https://gorhom.dev/react-native-bottom-sheet/custom-footer) / [`BottomSheetFooter`](https://gorhom.dev/react-native-bottom-sheet/components/bottomsheetfooter) 并锚定面板底部。Sunxu 包装层沿用插槽语义，同时统一主题、关闭、内容滚动和安全区；不接受把动作按钮塞进 `children` 后依赖页面长度决定是否可见。
-- **Catalog**：`FullScreenModal` 示例用长表单与 `footer` 双按钮；`ChoiceSheet`、`FilterBar` 用自定义 `footer`。窄屏、滚动到底、按钮回调与固定底栏几何记录在对应验收文档。
+- **选择依据**：成熟组件同样把流程动作建模为独立区域：React Native Paper 提供 [`Dialog.Actions`](https://callstack.github.io/react-native-paper/docs/components/Dialog/DialogActions)；Gorhom Bottom Sheet 提供 [`footerComponent`](https://gorhom.dev/react-native-bottom-sheet/custom-footer) / [`BottomSheetFooter`](https://gorhom.dev/react-native-bottom-sheet/components/bottomsheetfooter) 并锚定面板底部。Sunxu 包装层沿用插槽语义，同时统一主题、关闭、内容滚动和安全区；不接受把动作按钮塞进 `children` 后依赖页面长度决定是否可见。
+- **Catalog**：`CenteredModal` 展示居中提示与固定双按钮，`FullScreenModal` 示例用长表单与 `footer` 双按钮；`ChoiceSheet`、`FilterBar` 用自定义 `footer`。窄屏、滚动到底、按钮回调与固定底栏几何记录在对应验收文档。
 
 ## 依赖和可移植性
 

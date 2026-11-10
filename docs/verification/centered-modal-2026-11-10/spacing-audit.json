@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "target": "http://localhost:8087/",
+  "route_state": "Expo Web Catalog / component examples / CenteredModal update prompt",
+  "surface_frame_gate": {
+    "status": "UNVERIFIED",
+    "rows": [
+      {
+        "route": "/",
+        "state": "CenteredModal open at 320x720; screenshot pixel inspection",
+        "viewport": { "width": 320, "height": 720 },
+        "workspace": "Expo Web viewport",
+        "workspace_rect": { "left": 0, "top": 0, "right": 320, "bottom": 720, "width": 320, "height": 720 },
+        "content": "[data-testid=\"centered-modal-dialog\"] screenshot pixel bounds, not DOM rect",
+        "content_rect": { "left": 16, "top": 245, "right": 304, "bottom": 475, "width": 288, "height": 230 },
+        "relationship": "separate",
+        "required_sides": ["top", "right", "bottom", "left"],
+        "insets_px": { "top": 245, "right": 16, "bottom": 245, "left": 16 },
+        "expected": {
+          "kind": "contract",
+          "value": "Centered bounded card with dimmed overlay and safe-area gutters",
+          "source": "src/core/components/CenteredModal.tsx:166-196,239-251"
+        },
+        "visual": {
+          "status": "PASS",
+          "method": "Unannotated 320x720 screenshot pixel inspection; DOM rectangle output was not preserved",
+          "painted_frame_sides": ["top", "right", "bottom", "left"]
+        },
+        "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/centered-modal-2026-11-10/320x720.png",
+        "screenshot_sha256": "e4a68d091efcb0485bbaa59c73d03518b4776c496eaa704a22b5c9672730f7d4",
+        "status": "UNVERIFIED"
+      }
+    ]
+  },
+  "seams": [
+    {
+      "route": "/ (Expo Web Catalog / 组件页面示例)",
+      "viewport": { "width": 320, "height": 720 },
+      "state": "CenteredModal open; screenshot-derived card frame",
+      "previous": "Left dimmed viewport frame, screenshot pixels",
+      "next": "Centered dialog card, screenshot pixels",
+      "axis": "horizontal",
+      "previous_rect": { "left": 0, "top": 245, "right": 16, "bottom": 475, "width": 16, "height": 230 },
+      "next_rect": { "left": 16, "top": 245, "right": 304, "bottom": 475, "width": 288, "height": 230 },
+      "gap_px": 0,
+      "expected": {
+        "kind": "contract",
+        "value": "16px side frame from centered width and horizontal inset",
+        "source": "src/core/components/CenteredModal.tsx:169-173,239-244"
+      },
+      "executed_command": "node /Users/suconnect/.codex/skills/playwright-skill/run.js /tmp/playwright-test-centered-modal.js; Expo Web / at 320x720, deviceScaleFactor=1; screenshot pixel inspection; the DOM geometry result was not preserved",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/centered-modal-2026-11-10/320x720.png",
+      "screenshot_sha256": "e4a68d091efcb0485bbaa59c73d03518b4776c496eaa704a22b5c9672730f7d4",
+      "status": "UNVERIFIED",
+      "visual": {
+        "status": "PASS",
+        "method": "Inspected unannotated screenshot; the dimmed backdrop remains visible beside the dialog; measured bounds are image pixels, not DOM rectangles",
+        "relationship": "separate",
+        "observed_clear_band_px": 16
+      }
+    }
+  ]
+}

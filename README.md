@@ -33,7 +33,7 @@ export function ExampleApp() {
 
 `PageHeader` 和 `HeaderIconButton` 提供标准页头及右侧动作。需要按数量收纳时，在 `ListScreenContainer`、`DetailScreenContainer` 或 `FormScreenContainer` 使用 `headerActions`：单个动作以图标直显，多个动作收进右侧“更多操作”下拉菜单；旧的 `headerRight` 自定义插槽继续可用。
 
-弹窗表单使用 `FullScreenModal` 或 `BottomSheet` 的 `confirmText` 内置底栏，或 `footer` 插槽放置确定、应用、保存等操作；操作区固定在弹窗底部并处理安全区，表单内容单独滚动。自定义操作区占满可用宽度，并列按钮自适应等分。确认类流程操作不放在标题栏或滚动内容中。旧 `renderFooter` 仍兼容并已弃用。
+短时提示和轻量确认使用 `CenteredModal`；上下文选择或短编辑使用 `BottomSheet`；完整表单使用 `FullScreenModal`。三者都支持固定 `footer` 操作区，内容单独滚动。自定义操作区占满可用宽度，并列按钮自适应等分；确认类流程操作不放在标题栏或滚动内容中。旧 `renderFooter` 仍兼容并已弃用。
 
 页面容器默认把顶部安全区与页头绘制为同一主题表面，正文仍使用页面背景；业务页面直接使用 `ListScreenContainer`、`DetailScreenContainer` 或 `FormScreenContainer` 即可衔接状态栏区域和页头。自定义页头背景时，通过 `headerBackgroundColor` 同步安全区底色；父级导航已处理顶部安全区时，将 `safeAreaEdges` 配置为不含 `top`，避免重复留白。底部操作区可搭配 `BottomActionBar`，由操作栏本身处理底部安全区。
 

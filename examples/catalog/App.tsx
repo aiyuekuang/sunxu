@@ -5,6 +5,7 @@ import {
   Avatar,
   Badge,
   BottomActionBar,
+  CenteredModal,
   ChoiceSheet,
   CheckboxField,
   ControlSize,
@@ -272,6 +273,7 @@ function ComponentExamples({
   const [entityValue, setEntityValue] = useState<EntityFilterValue | null>(null);
   const [photos, setPhotos] = useState<string[]>([]);
   const [fillModalVisible, setFillModalVisible] = useState(false);
+  const [centeredModalVisible, setCenteredModalVisible] = useState(false);
   const [immersiveModalVisible, setImmersiveModalVisible] = useState(false);
   const [keyboardModalVisible, setKeyboardModalVisible] = useState(false);
   const [choiceSheetVisible, setChoiceSheetVisible] = useState(false);
@@ -296,6 +298,7 @@ function ComponentExamples({
     setEntityValue(null);
     setPhotos([]);
     setFillModalVisible(false);
+    setCenteredModalVisible(false);
     setImmersiveModalVisible(false);
     setKeyboardModalVisible(false);
     setChoiceSheetVisible(false);
@@ -714,6 +717,16 @@ function ComponentExamples({
           </View>
         </View>
 
+        <View style={styles.componentSection} testID="demo-centered-modal">
+          <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>CenteredModal · 居中更新提示</AppText>
+          <AppText style={styles.componentHint}>
+            短时说明或确认内容使用居中弹窗；较长表单继续使用 FullScreenModal。
+          </AppText>
+          <ActionButton onPress={() => setCenteredModalVisible(true)}>
+            打开居中弹窗
+          </ActionButton>
+        </View>
+
         {feedback ? <AppText testID="demo-feedback">{feedback}</AppText> : null}
       </View>
 
@@ -796,6 +809,41 @@ function ComponentExamples({
           </Pressable>
         </View>
       </FullScreenModal>
+
+      <CenteredModal
+        visible={centeredModalVisible}
+        onClose={() => setCenteredModalVisible(false)}
+        title="发现新版本"
+        subtitle="v1.0.329 → v1.0.330（42.8MB）"
+        maxWidth={440}
+        footer={(
+          <View style={styles.modalFooterActions}>
+            <ActionButton
+              variant="secondary"
+              style={styles.modalFooterButton}
+              onPress={() => setCenteredModalVisible(false)}
+            >
+              稍后更新
+            </ActionButton>
+            <ActionButton
+              style={styles.modalFooterButton}
+              onPress={() => {
+                setFeedback('更新操作已交由宿主 App 处理');
+                setCenteredModalVisible(false);
+              }}
+            >
+              立即更新
+            </ActionButton>
+          </View>
+        )}
+      >
+        <View style={{ gap: Spacing.sm }}>
+          <AppText style={{ color: colors.text, fontWeight: '600' }}>更新内容</AppText>
+          <AppText style={{ color: colors.textSecondary, lineHeight: 22 }}>
+            优化座席工作流程与客户管理体验，并改善部分页面的使用流畅度。
+          </AppText>
+        </View>
+      </CenteredModal>
     </DetailScreenContainer>
   );
 }

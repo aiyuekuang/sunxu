@@ -8,6 +8,7 @@ export * from './components/Badge';
 export * from './components/BottomActionBar';
 export * from './components/BottomSheet';
 export * from './components/BottomSheetContext';
+export * from './components/CenteredModal';
 export * from './components/ChipSelectField';
 export * from './components/ChoiceSheet';
 export * from './components/CheckboxField';
