@@ -22,6 +22,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 import { FontSize, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
+import { toastConfig } from '../toast';
 import { AppText as Text } from './AppText';
 import { BottomSheetInternalContext } from './BottomSheetContext';
 import { useModalRequestCloseContext } from './ModalRequestCloseContext';
@@ -331,7 +332,10 @@ export function BottomSheet({
             {headerEl}
             <View style={[styles.body, { paddingBottom: bodyPadBottom }]}>{children}</View>
             {footerEl}
-            <Toast />
+            <Toast
+              config={toastConfig}
+              topOffset={Math.max(insets.top, Spacing.base) + Spacing.sm}
+            />
           </BottomSheetView>
         ) : (
           <>
@@ -347,7 +351,10 @@ export function BottomSheet({
             </BottomSheetScrollView>
             {footerEl}
             {/* Toast 必须在 gorhom portal 内渲染，否则 iOS FullWindowOverlay 遮挡根级 Toast */}
-            <Toast />
+            <Toast
+              config={toastConfig}
+              topOffset={Math.max(insets.top, Spacing.base) + Spacing.sm}
+            />
           </>
         )}
       </BottomSheetInternalContext.Provider>
