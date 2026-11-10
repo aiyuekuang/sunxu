@@ -114,6 +114,8 @@ Sunxu 面向多个 React Native / Expo App，提供跨业务可组合的 UI 控�
 
 - **Anatomy/API**：`FullScreenModal` 与 `BottomSheet` 由 Sunxu 统一拥有标题、内容区和固定底栏。简单“取消 + 确认”使用 `confirmText` / `onConfirm`；自定义或多操作区通过 `footer: ReactNode` 传入。`footer` 由弹窗拉伸到可用内容宽度，渲染在内容滚动视口之外，并负责底部安全区。`confirmText` 与 `footer` 属于互斥 API，TypeScript 类型会拒绝同时设置；`FullScreenModal` 的 `immersive` 模式也不接受流程按钮。旧 `renderFooter` 只为兼容保留并标记弃用。
 - **内容/操作边界**：确定、应用、保存、取消等流程操作必须留在固定 `footer`，不得放入可滚动 `children` 或标题区。`bodyMode="scroll"` 由 `FullScreenModal` 管理内容滚动；`bodyMode="fill"` 时宿主管理全高内容及其滚动，操作 `footer` 仍由弹窗单独固定。`BottomSheet` 默认将长内容放入滚动区；`dynamicHeight` 只用于短内容选择或说明弹层。
+- **唯一页头**：`FullScreenModal` 与 `BottomSheet` 使用 Sunxu `ModalHeader`，统一为左侧标题、副标题和右侧“×”；业务侧只传标题、关闭回调及可选的关闭禁用状态，不自行绘制返回或关闭控件。`PageHeader` 只用于导航页面，不用于弹窗。
+- **受控关闭**：`closeDisabled` 同时禁用右上角“×”和系统返回键，适用于必须通过明确流程动作退出的任务；关闭控件暴露 disabled 状态和可配置的无障碍名称。
 - **状态、布局与无障碍**：宿主管理 visible、提交/loading、disabled、校验及关闭恢复；容器只提供可见状态和回调承载，不调用业务 API。footer 位于弹窗视口底部，底部 inset 由容器负责；自定义 footer 内容默认拉伸至可用宽度，行内操作可用 `flex: 1` 等分填满剩余空间；窄屏须换行或堆叠且不得缩小触控目标。流程按钮使用 `ActionButton` 或等价共享按钮，提供可访问名称及 disabled/loading 反馈；至少保持平台最小触控高度。
 - **标准调用**：
 
@@ -289,9 +291,13 @@ CRM“客户 / 商机”导航的两个等宽 Tab 文字贴近格子左缘，而
 
 ## 2026-11-09 Android 全屏弹窗键盘避让
 
-`FullScreenModal` 的 `avoidKeyboard` 在 Android 上根据弹窗根视图实际底边位移计算系统已完成的键盘避让量，并通过负 `keyboardVerticalOffset` 从键盘控制器的 padding 补偿中扣除这部分，避免系统窗口 resize/pan 与组件再次完整上移叠加。键盘关闭后重新采集基线；iOS 行为及固定 footer、表单滚动职责不变，未增加公开 API 或宿主业务依赖。
+`FullScreenModal` 的 `avoidKeyboard` 在 Android 上根据独立父视图的实际底边位移计算系统已完成的键盘避让量，再通过 `keyboardVerticalOffset` 扣除，避免系统窗口 resize/pan 与组件重复避让；测量父视图排除键盘动画视图自身的布局变化。键盘关闭后重新采集基线；iOS 行为及固定 footer、表单滚动职责不变，未增加宿主业务依赖。
 
 Catalog 增加含多个输入框和固定保存栏的键盘避让表单，可用于复核低位输入框聚焦时的可见区域。小米 2510DRK44C（MIUI V816）原生 APK 构建成功，但设备以 `INSTALL_FAILED_USER_RESTRICTED` 拒绝安装；未取得渲染截图和窗口几何数据，因此设备视觉验收为 `UNVERIFIED`。
+
+## 2026-11-10 Android 键盘态固定操作栏
+
+Android 全屏弹窗以 Sunxu 独立父视图测量系统已应用的 resize/pan 位移，子级 `KeyboardAvoidingView` 使用 `height` 行为只补足剩余键盘避让，固定 footer 保持在键盘上方。测量不包含子级自身的动画高度，避免形成反馈循环；iOS 继续使用 `padding` 行为。
 
 ## 2026-11-09 Sunxu 操作组件与 CRM 单条拜访接入
 

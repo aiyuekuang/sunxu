@@ -43,6 +43,7 @@ export * from './components/MetricCard';
 export * from './components/ChartPanel';
 export * from './components/MapScreenContainer';
 export * from './components/ModalRequestCloseContext';
+export * from './components/ModalHeader';
 export * from './components/MultiEntityPickerField';
 export * from './components/MultiSelectBar';
 export * from './components/OfflineIndicator';

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Modal,
   Platform,
+  StatusBar,
   StyleSheet,
   View,
   type LayoutChangeEvent,
@@ -21,7 +22,7 @@ import { toastConfig } from '../toast';
 import { ActionButton } from './ActionButton';
 import { AppText as Text } from './AppText';
 import { ModalRequestCloseContext, useModalRequestCloseRegistry } from './ModalRequestCloseContext';
-import { PageHeader } from './PageHeader';
+import { ModalHeader } from './ModalHeader';
 
 interface FullScreenModalBaseProps {
   visible: boolean;
@@ -30,6 +31,9 @@ interface FullScreenModalBaseProps {
   children: React.ReactNode;
   loading?: boolean;
   disabled?: boolean;
+  /** Prevents header and system-back dismissal while the host requires an explicit action. */
+  closeDisabled?: boolean;
+  closeAccessibilityLabel?: string;
   /** 表单启用键盘避让；Android 会扣除系统窗口已产生的位移。 */
   avoidKeyboard?: boolean;
   /** scroll 由弹窗管理表单滚动；fill 将内容区交给子组件管理滚动和全高布局，底部操作区仍独立固定。 */
@@ -108,6 +112,8 @@ export function FullScreenModal({
   onConfirm,
   loading = false,
   disabled = false,
+  closeDisabled = false,
+  closeAccessibilityLabel = '关闭弹窗',
   confirmDisabledHint,
   avoidKeyboard = false,
   bodyMode = 'scroll',
@@ -129,7 +135,7 @@ export function FullScreenModal({
   const requestCloseRegistry = useModalRequestCloseRegistry();
   const handleRequestClose = () => {
     if (requestCloseRegistry.requestClose()) return;
-    onClose();
+    if (!closeDisabled) onClose();
   };
   const modalFrameRef = useRef<View>(null);
   const baselineModalBottomRef = useRef<number | null>(null);
@@ -223,6 +229,8 @@ export function FullScreenModal({
       visible={visible}
       animationType="slide"
       presentationStyle="fullScreen"
+      statusBarTranslucent={Platform.OS === 'android'}
+      navigationBarTranslucent={Platform.OS === 'android'}
       onRequestClose={handleRequestClose}
       onShow={captureModalBaseline}
     >
@@ -230,133 +238,157 @@ export function FullScreenModal({
         <BottomSheetModalProvider>
           {/* Native Modal 会创建独立视图层级；在这里重新提供 provider，
               确保 PickerField / BottomSheetModal 渲染在当前全屏弹窗之上。 */}
-          <KeyboardAvoidingView
+          <View
             ref={modalFrameRef}
             onLayout={handleModalLayout}
             style={[styles.container, { backgroundColor: colors.surface }]}
-            behavior={avoidKeyboard ? 'padding' : undefined}
-            // On Android, subtract movement already applied by the system window.
-            keyboardVerticalOffset={
-              Platform.OS === 'android' ? -systemKeyboardMovement : 0
-            }
           >
-            {!immersive ? (
-              <PageHeader title={title} onBack={onClose} right={headerRight} />
-            ) : null}
-
-            {!immersive && subtitle ? (
-              <View
-                style={[
-                  styles.subtitleWrap,
-                  {
-                    backgroundColor: colors.surface,
-                    borderBottomColor: colors.border,
-                  },
-                ]}
-              >
-                <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{subtitle}</Text>
-              </View>
-            ) : null}
-
-            {bodyMode === 'fill' || immersive ? (
-              <View
-                style={[
-                  styles.fillContent,
-                  immersive && styles.immersiveFillContent,
-                  !footerVisible &&
-                    !immersive && {
-                      paddingBottom: (insets.bottom || Spacing.md) + Spacing.md,
-                    },
-                ]}
-              >
-                {children}
-              </View>
-            ) : (
-              <KeyboardAwareScrollView
-                style={styles.contentScroll}
-                contentContainerStyle={[
-                  styles.content,
-                  {
-                    paddingBottom: footerVisible
-                      ? Spacing.md
-                      : (insets.bottom || Spacing.md) + Spacing.md,
-                  },
-                ]}
-                keyboardShouldPersistTaps="handled"
-                showsVerticalScrollIndicator
-                bottomOffset={20}
-              >
-                {children}
-              </KeyboardAwareScrollView>
-            )}
-
-            {!immersive && confirmText ? (
-              <View
-                style={[
-                  styles.confirmFooter,
-                  {
-                    backgroundColor: colors.surface,
-                    borderTopColor: colors.border,
-                    paddingBottom: (insets.bottom || Spacing.sm) + Spacing.xs,
-                  },
-                ]}
-              >
-                {visibleDisabledHint ? (
-                  <Text style={[styles.disabledHint, { color: colors.error }]}>
-                    {visibleDisabledHint}
-                  </Text>
-                ) : null}
-                <View style={styles.footerButtons}>
-                  <ActionButton
-                    variant="outlined"
-                    size="md"
-                    style={styles.btn}
-                    buttonColor={colors.border}
-                    textColor={colors.textSecondary}
-                    onPress={onClose}
-                    accessibilityLabel={cancelText}
-                  >
-                    {cancelText}
-                  </ActionButton>
-                  <ActionButton
-                    variant="primary"
-                    size="md"
-                    style={styles.btn}
-                    buttonColor={confirmButtonDisabled ? colors.surfaceSecondary : (confirmButtonColor ?? colors.primary)}
-                    textColor={confirmButtonDisabled ? colors.textMuted : colors.textOnPrimary}
-                    onPress={onConfirm}
-                    disabled={disabled}
-                    loading={loading}
-                    accessibilityLabel={loading ? '正在提交' : confirmText}
-                    accessibilityHint={visibleDisabledHint}
-                  >
-                    {confirmText}
-                  </ActionButton>
-                </View>
-              </View>
-            ) : null}
-
-            {!immersive && !confirmText && footerContent != null ? (
-              <View
-                style={[
-                  styles.footer,
-                  {
-                    backgroundColor: colors.surface,
-                    borderTopColor: colors.border,
-                    paddingBottom: (insets.bottom || Spacing.sm) + Spacing.xs,
-                  },
-                ]}
-              >
-                {footerContent}
-              </View>
-            ) : null}
-
-            {/* Native Modal 会盖住根级 Toast，这里补一层局部 Toast 容器供表单校验/提交反馈使用 */}
-            <Toast
-              config={toastConfig}
-              topOffset={Math.max(insets.top, Spacing.base) + Spacing.sm}
+            <StatusBar
+              barStyle={
+                colors.statusBar === 'light-content' || colors.statusBar === 'dark-content'
+                  ? colors.statusBar
+                  : 'default'
+              }
+              hidden={false}
             />
-          </KeyboardAvoidingView>
+            <KeyboardAvoidingView
+              style={styles.keyboardAvoiding}
+              behavior={
+                avoidKeyboard
+                  ? Platform.OS === 'android'
+                    ? 'height'
+                    : 'padding'
+                  : undefined
+              }
+              // The measured parent excludes this view's own keyboard animation.
+              keyboardVerticalOffset={
+                Platform.OS === 'android' ? -systemKeyboardMovement : 0
+              }
+            >
+              {!immersive ? (
+                <ModalHeader
+                  title={title}
+                  subtitle={subtitle}
+                  right={headerRight}
+                  onClose={onClose}
+                  closeDisabled={closeDisabled}
+                  closeAccessibilityLabel={closeAccessibilityLabel}
+                  topPadding={Spacing.xs}
+                  topInset={
+                    Platform.OS === 'android'
+                      // OEM status-bar insets can include extra blank space; reserve the
+                      // standard content band here, with the native window owning the rest.
+                      ? Math.min(
+                          StatusBar.currentHeight ?? Spacing.xl,
+                          Spacing.xl + Spacing.xs,
+                        )
+                      : insets.top
+                  }
+                  bordered
+                  testID="full-screen-modal-header"
+                />
+              ) : null}
+
+              {bodyMode === 'fill' || immersive ? (
+                <View
+                  style={[
+                    styles.fillContent,
+                    immersive && styles.immersiveFillContent,
+                    !footerVisible &&
+                      !immersive && {
+                        paddingBottom: (insets.bottom || Spacing.md) + Spacing.md,
+                      },
+                  ]}
+                >
+                  {children}
+                </View>
+              ) : (
+                <KeyboardAwareScrollView
+                  style={styles.contentScroll}
+                  contentContainerStyle={[
+                    styles.content,
+                    {
+                      paddingBottom: footerVisible
+                        ? Spacing.md
+                        : (insets.bottom || Spacing.md) + Spacing.md,
+                    },
+                  ]}
+                  keyboardShouldPersistTaps="handled"
+                  showsVerticalScrollIndicator
+                  bottomOffset={20}
+                >
+                  {children}
+                </KeyboardAwareScrollView>
+              )}
+
+              {!immersive && confirmText ? (
+                <View
+                  style={[
+                    styles.confirmFooter,
+                    {
+                      backgroundColor: colors.surface,
+                      borderTopColor: colors.border,
+                      paddingBottom: (insets.bottom || Spacing.sm) + Spacing.xs,
+                    },
+                  ]}
+                >
+                  {visibleDisabledHint ? (
+                    <Text style={[styles.disabledHint, { color: colors.error }]}>
+                      {visibleDisabledHint}
+                    </Text>
+                  ) : null}
+                  <View style={styles.footerButtons}>
+                    <ActionButton
+                      variant="outlined"
+                      size="md"
+                      style={styles.btn}
+                      buttonColor={colors.border}
+                      textColor={colors.textSecondary}
+                      onPress={onClose}
+                      accessibilityLabel={cancelText}
+                    >
+                      {cancelText}
+                    </ActionButton>
+                    <ActionButton
+                      variant="primary"
+                      size="md"
+                      style={styles.btn}
+                      buttonColor={confirmButtonDisabled ? colors.surfaceSecondary : (confirmButtonColor ?? colors.primary)}
+                      textColor={confirmButtonDisabled ? colors.textMuted : colors.textOnPrimary}
+                      onPress={onConfirm}
+                      disabled={disabled}
+                      loading={loading}
+                      accessibilityLabel={loading ? '正在提交' : confirmText}
+                      accessibilityHint={visibleDisabledHint}
+                    >
+                      {confirmText}
+                    </ActionButton>
+                  </View>
+                </View>
+              ) : null}
+
+              {!immersive && !confirmText && footerContent != null ? (
+                <View
+                  style={[
+                    styles.footer,
+                    {
+                      backgroundColor: colors.surface,
+                      borderTopColor: colors.border,
+                      paddingBottom: (insets.bottom || Spacing.sm) + Spacing.xs,
+                    },
+                  ]}
+                >
+                  {footerContent}
+                </View>
+              ) : null}
+
+              {/* Native Modal 会盖住根级 Toast，这里补一层局部 Toast 容器供表单校验/提交反馈使用 */}
+              <Toast
+                config={toastConfig}
+                topOffset={Math.max(insets.top, Spacing.base) + Spacing.sm}
+              />
+            </KeyboardAvoidingView>
+          </View>
         </BottomSheetModalProvider>
       </ModalRequestCloseContext.Provider>
     </Modal>
@@ -367,14 +399,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  subtitleWrap: {
-    paddingHorizontal: Spacing.md,
-    paddingBottom: Spacing.sm,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-  subtitle: {
-    fontSize: FontSize.xs,
-    lineHeight: 18,
+  keyboardAvoiding: {
+    flex: 1,
   },
   contentScroll: {
     flex: 1,

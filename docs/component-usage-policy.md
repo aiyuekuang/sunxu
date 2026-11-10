@@ -18,7 +18,7 @@
 | 列表页面 | `ListScreenContainer`；需要搜索、筛选、状态切换或记录卡片时，在负责该职责的组件上声明 `@sunxu-use search`、`filters`、`status-tabs` 或 `list-card`，并分别使用 `SearchBar`、`FilterBar`、`StatusTabs`、`ListCard`；搜索筛选工具放在 `toolbar` | 独立页头中的列表操作行、同义搜索/筛选/状态控件 |
 | 标准表单页 | `FormScreenContainer` 或 `FormPage`；字段使用 `FormField` 或对应的专用字段组件，并在字段容器上声明 `@sunxu-use form-field`；相关字段用 `FormSection` 分组 | 自绘通用字段、重复实现键盘感知滚动和页面骨架 |
 | 详情页 | `DetailScreenContainer`；记录结果可复用 `DetailCard`、`ListCard` 等匹配语义的组件 | 重做通用页头、安全区和固定操作区 |
-| 临时选择或编辑弹层 | `BottomSheet` 或 `FullScreenModal`；流程操作放在固定 `footer` | 将保存、确定、应用等按钮放进可滚动 children 或标题区域 |
+| 临时选择或编辑弹层 | `BottomSheet` 或 `FullScreenModal` 使用 Sunxu 唯一 `ModalHeader`：左侧标题、右侧关闭“×”；流程操作放在固定 `footer` | 业务自行绘制返回/关闭页头，或将保存、确定、应用等按钮放进可滚动 children 或标题区域 |
 | 常驻、可多段吸附的工具面板 | `PersistentBottomSheet` | 用临时模态弹层模拟常驻工具面板 |
 | 标准操作 | 有文案操作时声明 `@sunxu-use text-action` 并用 `ActionButton`；纯图标操作声明 `@sunxu-use icon-action` 并用 `IconActionButton` | 自绘同义按钮，遗漏共享的禁用、忙碌或无障碍状态 |
 | 加载、空结果、错误 | `LoadingView` / `Skeleton`、`EmptyState`、`ErrorView` | 每页单独拼装同义状态视图 |

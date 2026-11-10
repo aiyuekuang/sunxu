@@ -734,6 +734,8 @@ function ComponentExamples({
       <FullScreenModal
         visible={fillModalVisible}
         onClose={() => setFillModalVisible(false)}
+        closeDisabled
+        closeAccessibilityLabel="编辑客户信息时关闭弹窗"
         title="编辑客户信息"
         bodyMode="fill"
         footer={(

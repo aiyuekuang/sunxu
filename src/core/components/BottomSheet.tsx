@@ -1,4 +1,3 @@
-import { Ionicons } from '@expo/vector-icons';
 import {
   BottomSheetBackdrop,
   type BottomSheetBackdropProps,
@@ -24,6 +23,7 @@ import { FontSize, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { toastConfig } from '../toast';
 import { AppText as Text } from './AppText';
+import { ModalHeader } from './ModalHeader';
 import { BottomSheetInternalContext } from './BottomSheetContext';
 import { useModalRequestCloseContext } from './ModalRequestCloseContext';
 
@@ -211,21 +211,13 @@ export function BottomSheet({
   );
 
   const headerEl = (
-    <View style={styles.header}>
-      <View style={styles.headerTextWrap}>
-        <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
-        {subtitle ? (
-          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{subtitle}</Text>
-        ) : null}
-      </View>
-      <TouchableOpacity
-        onPress={handleClose}
-        disabled={closeDisabled}
-        hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
-      >
-        <Ionicons name="close" size={24} color={colors.text} />
-      </TouchableOpacity>
-    </View>
+    <ModalHeader
+      title={title}
+      subtitle={subtitle}
+      onClose={handleClose}
+      closeDisabled={closeDisabled}
+      testID="bottom-sheet-header"
+    />
   );
 
   const footerContent = footer ?? renderFooter?.();
@@ -367,27 +359,6 @@ const styles = StyleSheet.create({
   sheet: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    paddingHorizontal: Spacing.base,
-    paddingTop: Spacing.sm,
-    paddingBottom: Spacing.sm,
-    gap: Spacing.sm,
-  },
-  headerTextWrap: {
-    flex: 1,
-    gap: 2,
-  },
-  title: {
-    fontSize: FontSize.lg,
-    fontWeight: '700',
-  },
-  subtitle: {
-    fontSize: FontSize.sm,
-    lineHeight: 20,
   },
   body: {
     paddingHorizontal: Spacing.base,
