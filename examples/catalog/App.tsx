@@ -6,6 +6,7 @@ import {
   Badge,
   BottomActionBar,
   ChoiceSheet,
+  ControlSize,
   DateNavigator,
   DetailCard,
   DetailActionBar,
@@ -319,8 +320,10 @@ function ComponentExamples({
               <ActionButton icon="play" onPress={() => setFeedback('开始操作已触发')}>开始拜访</ActionButton>
               <IconActionButton
                 icon="map-marker-outline"
+                size={ControlSize.iconButton}
                 tone="primary"
                 variant="tinted"
+                testID="catalog-icon-action-compact"
                 accessibilityLabel="查看路线示例"
                 onPress={() => setFeedback('已打开路线示例')}
               />

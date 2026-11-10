@@ -1,13 +1,14 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type React from 'react';
 import {
+  Platform,
   Pressable,
   StyleSheet,
   type StyleProp,
   type ViewStyle,
   type GestureResponderEvent,
 } from 'react-native';
-import { MIN_TOUCH_TARGET, Radius } from '../theme/tokens';
+import { HIT_SLOP, MIN_TOUCH_TARGET, MIN_TOUCH_TARGET_ANDROID, Radius } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 
 export type IconActionTone = 'neutral' | 'primary' | 'success' | 'warning' | 'danger';
@@ -20,6 +21,7 @@ export interface IconActionButtonProps {
   accessibilityLabel: string;
   tone?: IconActionTone;
   variant?: IconActionVariant;
+  /** Layout box size in dp; hitSlop expands the target to the platform minimum. */
   size?: number;
   iconSize?: number;
   disabled?: boolean;
@@ -43,6 +45,8 @@ export function IconActionButton({
   testID,
 }: IconActionButtonProps) {
   const { colors } = useTheme();
+  const minimumTouchTarget = Platform.OS === 'android' ? MIN_TOUCH_TARGET_ANDROID : MIN_TOUCH_TARGET;
+  const hitSlop = Math.max(HIT_SLOP.top, (minimumTouchTarget - size) / 2);
   const color =
     tone === 'primary'
       ? colors.primary
@@ -68,7 +72,7 @@ export function IconActionButton({
       disabled={disabled}
       onPress={onPress}
       testID={testID}
-      hitSlop={8}
+      hitSlop={hitSlop}
       style={({ pressed }) => [
         styles.button,
         { width: size, height: size, borderRadius: size / 2, backgroundColor: fill, opacity: disabled ? 0.45 : pressed ? 0.75 : 1 },
@@ -82,8 +86,6 @@ export function IconActionButton({
 
 const styles = StyleSheet.create({
   button: {
-    minWidth: MIN_TOUCH_TARGET,
-    minHeight: MIN_TOUCH_TARGET,
     alignItems: 'center',
     justifyContent: 'center',
   },

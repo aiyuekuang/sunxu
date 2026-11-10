@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "target": "http://localhost:8081/",
+  "route_state": "Expo Web Catalog / 组件页面示例 / Sunxu · 通用操作与摘要",
+  "surface_frame_gate": {
+    "status": "NOT APPLICABLE",
+    "reason": "This change adjusts an inline shared action control within the existing Catalog section and does not change the page background or primary content frame.",
+    "rows": []
+  },
+  "seams": [
+    {
+      "route": "/ (Expo Web Catalog / 组件页面示例)",
+      "viewport": { "width": 375, "height": 812 },
+      "state": "Compact IconActionButton 32dp beside default IconActionButton 44dp; light theme",
+      "previous": "Compact IconActionButton layout box",
+      "next": "Default IconActionButton layout box",
+      "axis": "horizontal",
+      "previous_rect": { "left": 149, "top": 176, "right": 181, "bottom": 208, "width": 32, "height": 32 },
+      "next_rect": { "left": 189, "top": 170, "right": 233, "bottom": 214, "width": 44, "height": 44 },
+      "gap_px": 8,
+      "expected": {
+        "kind": "contract",
+        "value": "8px sibling gap; compact layout size 32dp and default layout size 44dp",
+        "source": "examples/catalog/App.tsx:987; src/core/theme/tokens.ts:84"
+      },
+      "executed_command": "Playwright: /Users/suconnect/.codex/skills/playwright-skill/run.js /tmp/playwright-icon-action-compact.js; Expo Web dev server at http://localhost:8081; one initial navigation to /, one tap on the 组件页面示例 tab, getBoundingClientRect at 375x812",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/icon-action-button-compact-2026-11-10/375x812.png",
+      "screenshot_sha256": "150c0fc36f083edc43016bd5b5472efdd97842a87e026e25a957ad5081e22ec8",
+      "status": "PASS",
+      "visual": {
+        "status": "PASS",
+        "method": "Inspected the saved unannotated Expo Web screenshot at the stated viewport",
+        "relationship": "separate",
+        "observed_clear_band_px": 8
+      },
+      "observations": {
+        "compact_accessibility_role": "button",
+        "compact_accessibility_label": "查看路线示例",
+        "compact_layout_box": "32x32 CSS px",
+        "default_layout_box": "44x44 CSS px",
+        "document_client_width": 375,
+        "document_scroll_width": 375,
+        "page_errors": []
+      }
+    },
+    {
+      "route": "/ (Expo Web Catalog / 组件页面示例)",
+      "viewport": { "width": 320, "height": 720 },
+      "state": "Compact IconActionButton 32dp beside default IconActionButton 44dp; light theme",
+      "previous": "Compact IconActionButton layout box",
+      "next": "Default IconActionButton layout box",
+      "axis": "horizontal",
+      "previous_rect": { "left": 149, "top": 176, "right": 181, "bottom": 208, "width": 32, "height": 32 },
+      "next_rect": { "left": 189, "top": 170, "right": 233, "bottom": 214, "width": 44, "height": 44 },
+      "gap_px": 8,
+      "expected": {
+        "kind": "contract",
+        "value": "8px sibling gap; compact layout size 32dp and default layout size 44dp",
+        "source": "examples/catalog/App.tsx:987; src/core/theme/tokens.ts:84"
+      },
+      "executed_command": "Playwright: /Users/suconnect/.codex/skills/playwright-skill/run.js /tmp/playwright-icon-action-compact.js; Expo Web dev server at http://localhost:8081; same rendered route resized to 320x720, getBoundingClientRect",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/icon-action-button-compact-2026-11-10/320x720.png",
+      "screenshot_sha256": "33f676642f8cbd78db9cc1fbc9a9db6e01760e907cca315b4980e3eb953d310b",
+      "status": "PASS",
+      "visual": {
+        "status": "PASS",
+        "method": "Inspected the saved unannotated Expo Web screenshot at the stated viewport",
+        "relationship": "separate",
+        "observed_clear_band_px": 8
+      },
+      "observations": {
+        "compact_accessibility_role": "button",
+        "compact_accessibility_label": "查看路线示例",
+        "compact_layout_box": "32x32 CSS px",
+        "default_layout_box": "44x44 CSS px",
+        "control_row_right": 283,
+        "document_client_width": 320,
+        "document_scroll_width": 331,
+        "page_horizontal_overflow_px": 11,
+        "page_errors": []
+      }
+    },
+    {
+      "route": "/ (Expo Web Catalog / 组件页面示例)",
+      "viewport": { "width": 812, "height": 375 },
+      "state": "Compact IconActionButton 32dp beside default IconActionButton 44dp; light theme",
+      "previous": "Compact IconActionButton layout box",
+      "next": "Default IconActionButton layout box",
+      "axis": "horizontal",
+      "previous_rect": { "left": 149, "top": 176, "right": 181, "bottom": 208, "width": 32, "height": 32 },
+      "next_rect": { "left": 189, "top": 170, "right": 233, "bottom": 214, "width": 44, "height": 44 },
+      "gap_px": 8,
+      "expected": {
+        "kind": "contract",
+        "value": "8px sibling gap; compact layout size 32dp and default layout size 44dp",
+        "source": "examples/catalog/App.tsx:987; src/core/theme/tokens.ts:84"
+      },
+      "executed_command": "Playwright: /Users/suconnect/.codex/skills/playwright-skill/run.js /tmp/playwright-icon-action-compact.js; Expo Web dev server at http://localhost:8081; same rendered route resized to 812x375, getBoundingClientRect",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/icon-action-button-compact-2026-11-10/812x375.png",
+      "screenshot_sha256": "9f52bb64f9d269f5ad3a4980703d227cd0f1788f77801dfc6a5b26336d383b9f",
+      "status": "PASS",
+      "visual": {
+        "status": "PASS",
+        "method": "Inspected the saved unannotated Expo Web screenshot at the stated viewport",
+        "relationship": "separate",
+        "observed_clear_band_px": 8
+      },
+      "observations": {
+        "compact_accessibility_role": "button",
+        "compact_accessibility_label": "查看路线示例",
+        "compact_layout_box": "32x32 CSS px",
+        "default_layout_box": "44x44 CSS px",
+        "document_client_width": 812,
+        "document_scroll_width": 812,
+        "page_errors": []
+      }
+    }
+  ]
+}

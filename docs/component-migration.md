@@ -232,3 +232,9 @@ Tel App 的真实设备/模拟器路由截图、长列表与弹层状态的几�
 - Expo Web Catalog 在 375×812、320×720 和 812×375 浅色视口，以及 375×812 深色主题完成渲染；点击回调、忙碌态禁用和 `aria-busy` 已验证。`npm run typecheck`、Web 导出及 spacing ledger 校验通过。截图与几何记录见[Avatar 与 ProfileIdentity 验收](./verification/profile-identity-2026-11-10/README.md)。
 - 有效头像 URL 显示/失败回退、东健 CRM/Tel App 真实资料路由接入、原生 iOS/Android、系统读屏和动态字体仍为 `UNVERIFIED`。
 - 既有 `PhotoPicker` 继续承担多图业务证据流程，不与头像选择合并。宿主应只在后端支持自助头像时提供 `onAvatarPress`。
+
+## 2026-11-10 IconActionButton 紧凑布局尺寸
+
+- `IconActionButton.size` 控制按钮布局框，不受平台最小触控尺寸反向撑高；默认布局尺寸仍为 44dp。
+- 组件按 iOS 44pt / Android 48dp 计算扩展 `hitSlop`。`ControlSize.iconButton` 的 32dp 布局框每边扩展 8dp，形成 48dp 触控区域；父级需保留足够间距，避免扩展热区覆盖相邻操作。
+- Catalog 同行展示 32dp 紧凑按钮与 44dp 默认按钮，几何证据记录于[紧凑尺寸验收](./verification/icon-action-button-compact-2026-11-10/README.md)。原生 iOS/Android 的实际命中范围仍为 `UNVERIFIED`。

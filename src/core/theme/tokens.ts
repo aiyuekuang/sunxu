@@ -78,3 +78,16 @@ export const Shadow = {
 export const HIT_SLOP = { top: 8, right: 8, bottom: 8, left: 8 } as const;
 export const MIN_TOUCH_TARGET = 44;
 export const MIN_TOUCH_TARGET_ANDROID = 48;
+
+/** Shared sizes for compact interactive controls used across Sunxu apps. */
+export const ControlSize = {
+  compact: 32,
+  control: 36,
+  tab: 34,
+  search: 36,
+  rowAction: 36,
+  iconButton: 32,
+  actionLarge: 52,
+  iconAction: 56,
+  phoneAction: 68,
+} as const;
