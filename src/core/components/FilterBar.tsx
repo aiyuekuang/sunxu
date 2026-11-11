@@ -17,6 +17,7 @@ import {
   Switch,
   TouchableOpacity,
   View,
+  type TextInputProps,
 } from 'react-native';
 import { FontSize, MIN_TOUCH_TARGET, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
@@ -25,6 +26,7 @@ import { DatePickerField } from './DatePickerField';
 import { DateRangeQuickSelect } from './DateRangeQuickSelect';
 import { FilterActionButton } from './FilterActionButton';
 import { FilterQuickControl } from './FilterQuickControl';
+import { FormField } from './FormField';
 import { BottomSheet } from './BottomSheet';
 
 export interface FilterOption {
@@ -56,11 +58,27 @@ export interface DateRangeFilterConfig {
   persist?: boolean;
 }
 
-/** 高级筛选配置项（支持选项型和日期范围型） */
-export type AdvancedFilterConfig = FilterConfig | DateRangeFilterConfig;
+/** 文本输入筛选（仅高级筛选可用）。业务只传配置，输入框样式与状态由共享 FormField 提供 */
+export interface TextFilterConfig {
+  type: 'text';
+  key: string;
+  label: string;
+  /** 输入框占位文案，如 '按电话号码筛选' */
+  placeholder?: string;
+  keyboardType?: TextInputProps['keyboardType'];
+  /** 是否参与筛选记忆，默认 true。设为 false 则该字段不会被保存/恢复 */
+  persist?: boolean;
+}
+
+/** 高级筛选配置项（支持选项型、日期范围型和文本输入型） */
+export type AdvancedFilterConfig = FilterConfig | DateRangeFilterConfig | TextFilterConfig;
 
 export function isDateRange(f: AdvancedFilterConfig): f is DateRangeFilterConfig {
   return 'type' in f && f.type === 'date_range';
+}
+
+export function isTextFilter(f: AdvancedFilterConfig): f is TextFilterConfig {
+  return 'type' in f && f.type === 'text';
 }
 
 // ─── 统一筛选配置（新 API） ──────────────────────────────────────────────────
@@ -94,8 +112,20 @@ export interface DateRangeListFilterConfig {
   persist?: boolean;
 }
 
+/** 文本输入型统一筛选配置（仅限 advanced） */
+export interface TextListFilterConfig {
+  type: 'text';
+  key: string;
+  label: string;
+  placeholder?: string;
+  keyboardType?: TextInputProps['keyboardType'];
+  placement: 'advanced';
+  /** 是否参与筛选记忆，默认 true。设为 false 则该字段不会被保存/恢复 */
+  persist?: boolean;
+}
+
 /** 统一筛选配置项 */
-export type ListFilterConfig = OptionFilterConfig | DateRangeListFilterConfig;
+export type ListFilterConfig = OptionFilterConfig | DateRangeListFilterConfig | TextListFilterConfig;
 
 export interface AdvancedFilterExtraArgs {
   values: Record<string, string | undefined>;
@@ -195,7 +225,7 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
     }
     if (advancedFilters) {
       for (const f of advancedFilters) {
-        if (!isDateRange(f)) {
+        if (!isDateRange(f) && !isTextFilter(f)) {
           map.set(f.key, new Set(f.options.map((o) => o.value)));
         }
       }
@@ -243,6 +273,20 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
     }
     return keys;
   }, [quickFilters, advancedFilters]);
+
+  // 文本输入型高级筛选的 key：自动并入暂存/应用/计数，业务无需再维护 advancedExtraKeys
+  const textFilterKeys = useMemo(
+    () => (advancedFilters ?? []).filter(isTextFilter).map((f) => f.key),
+    [advancedFilters],
+  );
+  const allExtraKeys = useMemo(
+    () => [...advancedExtraKeys, ...textFilterKeys],
+    [advancedExtraKeys, textFilterKeys],
+  );
+  const allExtraActiveKeys = useMemo(
+    () => [...advancedExtraActiveKeys, ...textFilterKeys],
+    [advancedExtraActiveKeys, textFilterKeys],
+  );
 
   // 用 ref 持有最新值，避免恢复 effect 因函数/对象引用变化而重复执行
   const allOptionSetsRef = useRef(allOptionSets);
@@ -343,12 +387,12 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
         advVals[f.key] = values[f.key];
       }
     });
-    for (const key of advancedExtraKeys) {
+    for (const key of allExtraKeys) {
       advVals[key] = values[key];
     }
     setLocalAdvanced(advVals);
     setAdvancedVisible(true);
-  }, [advancedExtraKeys, advancedFilters, values]);
+  }, [allExtraKeys, advancedFilters, values]);
 
   const handleAdvancedApply = useCallback(() => {
     if (advancedDateRangeInvalid) return;
@@ -367,7 +411,7 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
         else delete newValues[f.key];
       }
     });
-    for (const key of advancedExtraKeys) {
+    for (const key of allExtraKeys) {
       const value = localAdvanced[key];
       if (value) newValues[key] = value;
       else delete newValues[key];
@@ -376,7 +420,7 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
     persistValues(newValues);
     setAdvancedVisible(false);
   }, [
-    advancedExtraKeys,
+    allExtraKeys,
     values,
     localAdvanced,
     advancedFilters,
@@ -409,7 +453,7 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
   const advancedActiveCount =
     advancedFilters.filter((f) =>
       isDateRange(f) ? values[f.startKey] || values[f.endKey] : values[f.key],
-    ).length + advancedExtraActiveKeys.filter((key) => values[key]).length;
+    ).length + allExtraActiveKeys.filter((key) => values[key]).length;
 
   useImperativeHandle(ref, () => ({ openAdvanced, isSaveEnabled: () => saveEnabled }), [
     openAdvanced,
@@ -651,6 +695,20 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
                   }
                 />
               </View>
+            ) : isTextFilter(filter) ? (
+              <FormField
+                label=""
+                value={localAdvanced[filter.key]}
+                onChangeText={(value) =>
+                  setLocalAdvanced((current) => ({
+                    ...current,
+                    [filter.key]: value,
+                  }))
+                }
+                placeholder={filter.placeholder}
+                keyboardType={filter.keyboardType}
+                accessibilityLabel={filter.label}
+              />
             ) : (
               <View style={styles.advOptions}>
                 {filter.options.map((opt) => {

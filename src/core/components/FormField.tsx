@@ -18,7 +18,8 @@ import { useScaledFontSize } from '../theme/font-scale';
 import { type FieldHelpContent, FormLabel } from './FormLabel';
 
 export interface FormFieldProps extends TextInputProps {
-  label: string;
+  /** 字段标签；传空字符串时不渲染标签行（如筛选面板里已由分组标题提供标签） */
+  label?: string;
   error?: string;
   required?: boolean;
   help?: FieldHelpContent;
@@ -57,7 +58,7 @@ export function FormField({
 
   return (
     <View style={[styles.container, containerStyle]}>
-      <FormLabel label={label} required={required} help={help} />
+      {label ? <FormLabel label={label} required={required} help={help} /> : null}
       <View
         style={[
           styles.inputWrapper,
@@ -86,7 +87,7 @@ export function FormField({
           underlineColorAndroid="transparent"
           {...inputProps}
           {...props}
-          accessibilityLabel={accessibilityLabel ?? label}
+          accessibilityLabel={accessibilityLabel ?? (label || undefined)}
           onFocus={(event) => {
             setFocused(true);
             onFocus?.(event);

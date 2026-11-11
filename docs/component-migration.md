@@ -395,3 +395,11 @@ Tel App 已改用以上契约，并将列表/表单/工作台容器、错误边�
 - `ListScreenContainer`、`DetailScreenContainer` 和 `FormScreenContainer` 默认采用此行为。自定义页头可通过 `headerBackgroundColor` 同步页头容器及顶部安全区背景；该属性在标题容器中也同步设置标准 `PageHeader` 的背景。
 - 父级导航已处理顶部安全区时，继续从 `safeAreaEdges` 移除 `top`；容器不会再留第二段顶部空白。底部安全区规则不变。
 - Catalog 的列表、详情和示例页继续使用标准页面容器，作为默认主题表面与顶部安全区的可运行示例；375×812、320×720 浅色和 375×812 深色的截图、DOM 几何及 seam 台账见[页头与顶部安全区验收](./verification/page-header-safearea-2026-11-10/README.md)。原生状态栏区域因 Expo Web inset 为 0px，标记为 `UNVERIFIED`。
+
+## 2026-11-11 FilterBar 文本输入型高级筛选
+
+- `FilterBar.advancedFilters` 新增 `TextFilterConfig`（`type: 'text'`，含 `key`/`label`/`placeholder`/`keyboardType`/`persist`），高级筛选面板直接用共享 `FormField` 渲染文本条件，输入框样式、焦点态与触控高度全部由 Sunxu 主题提供；宿主只传配置，不再通过 `advancedExtra` 手写 `FormField`。
+- text 型配置的 key 自动并入高级筛选的暂存、应用与已选计数，`advancedExtraKeys`/`advancedExtraActiveKeys` 无需再为这些字段手动维护；持久化/恢复同样按 `persist` 语义处理。
+- `FormFieldProps.label` 改为可选：传空字符串时不渲染标签行，供分组标题已在上文提供标签的场景使用；无障碍名称缺省回落到输入框 placeholder。
+- `advancedExtra` 渲染插槽保留作兜底（实体选择器等非文本控件仍走该入口），但业务文本条件一律走 text 型配置。
+- Tel App 客户列表高级筛选（主体名称/主联系电话/主微信/企业名称/主联系人）已迁移为 text 配置；两侧类型检查通过，真实设备视觉验收待宿主运行态证据，标记 `UNVERIFIED`。
