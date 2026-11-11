@@ -273,17 +273,8 @@ export function FullScreenModal({
                   onClose={onClose}
                   closeDisabled={closeDisabled}
                   closeAccessibilityLabel={closeAccessibilityLabel}
-                  topPadding={Spacing.xs}
-                  topInset={
-                    Platform.OS === 'android'
-                      // OEM status-bar insets can include extra blank space; reserve the
-                      // standard content band here, with the native window owning the rest.
-                      ? Math.min(
-                          StatusBar.currentHeight ?? Spacing.xl,
-                          Spacing.xl + Spacing.xs,
-                        )
-                      : insets.top
-                  }
+                  topPadding={Spacing.sm}
+                  topInset={insets.top}
                   bordered
                   testID="full-screen-modal-header"
                 />

@@ -114,7 +114,7 @@ Sunxu 面向多个 React Native / Expo App，提供跨业务可组合的 UI 控�
 
 - **Anatomy/API**：`CenteredModal`、`FullScreenModal` 与 `BottomSheet` 由 Sunxu 统一拥有标题、内容区和固定底栏。`CenteredModal` 用于短时提示、更新说明和轻量确认，宽度默认不超过 480；`BottomSheet` 适合移动端上下文选择和短编辑，`FullScreenModal` 用于完整表单。简单“取消 + 确认”使用 `confirmText` / `onConfirm`；自定义或多操作区通过 `footer: ReactNode` 传入。`footer` 由弹窗拉伸到可用内容宽度，渲染在内容滚动视口之外；容器分别处理屏幕安全区与底部 inset。`confirmText` 与 `footer` 属于互斥 API，TypeScript 类型会拒绝同时设置；`FullScreenModal` 的 `immersive` 模式也不接受流程按钮。旧 `renderFooter` 只为兼容保留并标记弃用。
 - **内容/操作边界**：确定、应用、保存、取消等流程操作必须留在固定 `footer`，不得放入可滚动 `children` 或标题区。`CenteredModal` 为短内容提供内部滚动视口和固定底栏；`FullScreenModal` 的 `bodyMode="scroll"` 由容器管理滚动，`bodyMode="fill"` 时宿主管理全高内容及滚动；`BottomSheet` 默认将长内容放入滚动区，`dynamicHeight` 只用于短内容选择或说明弹层。
-- **唯一页头**：三种模态容器使用 Sunxu `ModalHeader`，统一为左侧标题、副标题和右侧“×”；业务侧只传标题、关闭回调及可选的关闭禁用状态，不自行绘制返回或关闭控件。`PageHeader` 只用于导航页面，不用于弹窗。
+- **唯一页头**：三种模态容器使用 Sunxu `ModalHeader`，统一为左侧标题、副标题和右侧“×”；业务侧只传标题、关闭回调及可选的关闭禁用状态，不自行绘制返回或关闭控件。`FullScreenModal` 在平台顶部安全区之外保留 `Spacing.sm`（8dp）呼吸间距；`PageHeader` 只用于导航页面，不用于弹窗。
 - **受控关闭**：`closeDisabled` 同时禁用右上角“×”和系统返回键，适用于必须通过明确流程动作退出的任务；关闭控件暴露 disabled 状态和可配置的无障碍名称。
 - **状态、布局与无障碍**：宿主管理 visible、提交/loading、disabled、校验及关闭恢复；容器只提供可见状态和回调承载，不调用业务 API。`CenteredModal` 默认允许点遮罩关闭，可通过 `closeOnBackdropPress` 关闭该行为；`closeDisabled` 同时禁用页头关闭、遮罩关闭和系统返回键。footer 固定在滚动视口外；自定义 footer 内容默认拉伸至可用宽度，行内操作可用 `flex: 1` 等分填满剩余空间；窄屏须换行或堆叠且不得缩小触控目标。流程按钮使用 `ActionButton` 或等价共享按钮，提供可访问名称及 disabled/loading 反馈；至少保持平台最小触控高度。
 - **标准调用**：

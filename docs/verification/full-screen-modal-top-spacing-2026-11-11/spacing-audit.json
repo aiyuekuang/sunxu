@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "surface_frame_gate": {
+    "status": "NOT APPLICABLE",
+    "reason": "FullScreenModal covers the available app viewport; it has no separate inset content surface or workspace frame to audit.",
+    "rows": []
+  },
+  "seams": [
+    {
+      "route": "Expo Catalog > Components > FullScreenModal > fixed action bar example (Android)",
+      "state": "Modal open; header and disabled close action visible",
+      "viewport": { "width": 411.43, "height": 914.29 },
+      "axis": "vertical",
+      "previous": "Android status bar safe-area boundary",
+      "next": "ModalHeader close hit target",
+      "previous_rect": { "left": 0, "top": 0, "right": 411.43, "bottom": 48.76, "width": 411.43, "height": 48.76 },
+      "next_rect": { "left": 347.43, "top": 56.76, "right": 395.43, "bottom": 104.76, "width": 48, "height": 48 },
+      "gap_px": 8,
+      "expected": { "kind": "token", "value": "Spacing.sm = 8dp after the complete top safe-area inset", "source": "src/core/theme/tokens.ts" },
+      "executed_command": "Android API 36.1 emulator, 1080x2400 at 2.625 px/dp; adb shell dumpsys window and UIAutomator bounds; screenshot inspected",
+      "screenshot": "./docs/verification/full-screen-modal-top-spacing-2026-11-11/android-modal-open.png",
+      "screenshot_sha256": "49b800ae5d3b6991290cc1e4f1272aeafa0e92f43f3de6d65fdb8f4494fbaa26",
+      "status": "PASS",
+      "visual": { "relationship": "separate", "status": "PASS", "observed_clear_band_px": 8, "method": "Inspected the real emulator screenshot and cross-checked the status-bar frame plus close target bounds from the native window and UIAutomator; physical 21px converts to 8dp." }
+    },
+    {
+      "route": "Expo Catalog > Components > FullScreenModal > fixed action bar example (iOS)",
+      "state": "Release simulator modal open; header and close action visible",
+      "viewport": { "width": 402, "height": 874 },
+      "axis": "vertical",
+      "previous": "iOS top safe-area boundary",
+      "next": "ModalHeader close hit target",
+      "previous_rect": { "left": 0, "top": 0, "right": 402, "bottom": 62, "width": 402, "height": 62 },
+      "next_rect": { "left": 342, "top": 70, "right": 386, "bottom": 114, "width": 44, "height": 44 },
+      "gap_px": 8,
+      "expected": { "kind": "token", "value": "Spacing.sm = 8pt after the complete top safe-area inset", "source": "src/core/theme/tokens.ts" },
+      "executed_command": "iPhone 17 / iOS 26.1 simulator Release screenshot; safe-area and onLayout bounds measured from the same revision in the running app; screenshot inspected",
+      "screenshot": "./docs/verification/full-screen-modal-top-spacing-2026-11-11/ios-modal-open.png",
+      "screenshot_sha256": "eb557a41c4d9d28a55179822832e9405e03b17afadbeb9dd26686d2b3b049e55",
+      "status": "PASS",
+      "visual": { "relationship": "separate", "status": "PASS", "observed_clear_band_px": 8, "method": "Inspected the real Release simulator screenshot and cross-checked the 62pt safe-area inset plus the close target onLayout at y=70pt." }
+    },
+    {
+      "route": "Expo Catalog web > Components > FullScreenModal > fixed action bar example",
+      "state": "Modal open at 375x812 CSS px; no horizontal overflow",
+      "viewport": { "width": 375, "height": 812 },
+      "axis": "vertical",
+      "previous": "Web viewport top edge",
+      "next": "ModalHeader close hit target",
+      "previous_rect": { "left": 0, "top": 0, "right": 375, "bottom": 0, "width": 375, "height": 0 },
+      "next_rect": { "left": 315, "top": 8, "right": 359, "bottom": 52, "width": 44, "height": 44 },
+      "gap_px": 8,
+      "expected": { "kind": "token", "value": "Spacing.sm = 8px at the viewport edge", "source": "src/core/theme/tokens.ts" },
+      "executed_command": "Expo Catalog web at 375x812; Playwright viewport and close-target DOM bounds; document width equals scrollWidth",
+      "screenshot": "./docs/verification/full-screen-modal-top-spacing-2026-11-11/375x812-modal-open.png",
+      "screenshot_sha256": "4e1a08fa47dedb40f143975c7d818388f34d00710698e1bf3098531dc77c4a6c",
+      "status": "PASS",
+      "visual": { "relationship": "separate", "status": "PASS", "observed_clear_band_px": 8, "method": "Inspected the real browser screenshot and measured the close hit target DOMRect; verified document scrollWidth equals the viewport width." }
+    },
+    {
+      "route": "Expo Catalog web > Components > FullScreenModal > fixed action bar example",
+      "state": "Modal open at 320x720 CSS px; no horizontal overflow",
+      "viewport": { "width": 320, "height": 720 },
+      "axis": "vertical",
+      "previous": "Web viewport top edge",
+      "next": "ModalHeader close hit target",
+      "previous_rect": { "left": 0, "top": 0, "right": 320, "bottom": 0, "width": 320, "height": 0 },
+      "next_rect": { "left": 260, "top": 8, "right": 304, "bottom": 52, "width": 44, "height": 44 },
+      "gap_px": 8,
+      "expected": { "kind": "token", "value": "Spacing.sm = 8px at the viewport edge", "source": "src/core/theme/tokens.ts" },
+      "executed_command": "Expo Catalog web at 320x720; Playwright viewport and close-target DOM bounds; document width equals scrollWidth",
+      "screenshot": "./docs/verification/full-screen-modal-top-spacing-2026-11-11/320x720-modal-open.png",
+      "screenshot_sha256": "c649cace1f9bf2548ee2ad8bd7b501f835d494913c79894c5b80face94424045",
+      "status": "PASS",
+      "visual": { "relationship": "separate", "status": "PASS", "observed_clear_band_px": 8, "method": "Inspected the real browser screenshot and measured the close hit target DOMRect; verified document scrollWidth equals the viewport width." }
+    }
+  ]
+}
