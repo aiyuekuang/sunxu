@@ -1,0 +1,55 @@
+{
+  "date": "2026-11-11",
+  "route": "examples/catalog → 地图图表 → demo-dial-pad",
+  "environment": {
+    "renderer": "Expo Web / Chromium",
+    "theme": "light",
+    "deviceScaleFactor": 1,
+    "pageErrors": []
+  },
+  "viewports": [
+    {
+      "name": "portrait-375x812",
+      "viewport": { "width": 375, "height": 812 },
+      "component": { "x": 12, "y": 77, "width": 351, "height": 451 },
+      "keySize": { "width": 64, "height": 64 },
+      "columns": [80, 156, 232],
+      "rows": [162, 236, 310, 384],
+      "documentWidth": 375,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "narrow-320x720",
+      "viewport": { "width": 320, "height": 720 },
+      "component": { "x": 12, "y": 77, "width": 296, "height": 451 },
+      "keySize": { "width": 64, "height": 64 },
+      "columns": [52, 128, 204],
+      "rows": [162, 236, 310, 384],
+      "documentWidth": 320,
+      "horizontalOverflow": false
+    },
+    {
+      "name": "landscape-812x375",
+      "viewport": { "width": 812, "height": 375 },
+      "component": { "x": 12, "y": 57, "width": 788, "height": 451 },
+      "keySize": { "width": 64, "height": 64 },
+      "columns": [298, 374, 450],
+      "rows": [142, 216, 290, 364],
+      "documentWidth": 812,
+      "horizontalOverflow": false,
+      "afterScroll": {
+        "lastKey": { "x": 450, "y": 154, "width": 64, "height": 64 },
+        "lastRowAndCallActionVisibleAboveBottomNavigation": true
+      }
+    }
+  ],
+  "interaction": {
+    "pressedKeys": ["1", "2"],
+    "displayedValue": "12"
+  },
+  "hostApp": {
+    "route": "tel_app/src/screens/IncomingCallScreen.tsx → SoftphoneSheet",
+    "androidNativeRender": "UNVERIFIED",
+    "reason": "No connected Android device or emulator"
+  }
+}

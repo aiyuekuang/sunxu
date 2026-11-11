@@ -203,9 +203,9 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   grid: { gap: 10 },
-  row: { flexDirection: 'row', gap: Spacing.md },
+  row: { flexDirection: 'row', justifyContent: 'center', gap: Spacing.md },
   key: {
-    flex: 1,
+    width: 64,
     height: 64,
     borderRadius: Radius.full,
     borderWidth: StyleSheet.hairlineWidth,
