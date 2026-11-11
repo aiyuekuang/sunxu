@@ -64,42 +64,48 @@ const PRESETS = [
 
 interface DateRangeQuickSelectProps {
   onSelect: (value: DateRangeValue) => void;
+  /** 当前区间，用于高亮命中的快捷选项 */
+  value?: [string | undefined, string | undefined];
   disabled?: boolean;
 }
 
 /** Apply a common date period to a start/end date pair. */
-export function DateRangeQuickSelect({ onSelect, disabled = false }: DateRangeQuickSelectProps) {
+export function DateRangeQuickSelect({ onSelect, value, disabled = false }: DateRangeQuickSelectProps) {
   const { colors } = useTheme();
 
   return (
     <View style={styles.container} accessibilityLabel="日期范围快捷选择">
-      {PRESETS.map((preset) => (
-        <Pressable
-          key={preset.key}
-          accessibilityRole="button"
-          accessibilityLabel={`选择${preset.label}`}
-          accessibilityState={{ disabled }}
-          disabled={disabled}
-          onPress={() => onSelect(preset.getRange())}
-          style={({ pressed }) => [
-            styles.option,
-            {
-              backgroundColor: colors.surfaceSecondary,
-              borderColor: colors.border,
-              opacity: disabled ? 0.5 : pressed ? 0.72 : 1,
-            },
-          ]}
-        >
-          <Text
-            style={[
-              styles.optionText,
-              { color: disabled ? colors.textTertiary : colors.textSecondary },
+      {PRESETS.map((preset) => {
+        const [start, end] = preset.getRange();
+        const isSelected = Boolean(value && value[0] === start && value[1] === end);
+        return (
+          <Pressable
+            key={preset.key}
+            accessibilityRole="button"
+            accessibilityLabel={`选择${preset.label}`}
+            accessibilityState={{ selected: isSelected, disabled }}
+            disabled={disabled}
+            onPress={() => onSelect([start, end])}
+            style={({ pressed }) => [
+              styles.option,
+              {
+                backgroundColor: isSelected ? colors.primary : colors.surfaceSecondary,
+                borderColor: isSelected ? colors.primary : colors.border,
+                opacity: disabled ? 0.5 : pressed ? 0.72 : 1,
+              },
             ]}
           >
-            {preset.label}
-          </Text>
-        </Pressable>
-      ))}
+            <Text
+              style={[
+                styles.optionText,
+                { color: disabled ? colors.textTertiary : isSelected ? colors.textOnPrimary : colors.textSecondary },
+              ]}
+            >
+              {preset.label}
+            </Text>
+          </Pressable>
+        );
+      })}
     </View>
   );
 }

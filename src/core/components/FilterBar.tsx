@@ -21,6 +21,7 @@ import {
 } from 'react-native';
 import { FontSize, MIN_TOUCH_TARGET, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
+import { ActionButton } from './ActionButton';
 import { AppText as Text } from './AppText';
 import { DatePickerField } from './DatePickerField';
 import { DateRangeQuickSelect } from './DateRangeQuickSelect';
@@ -202,6 +203,8 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
   const { colors } = useTheme();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [advancedVisible, setAdvancedVisible] = useState(false);
+  // 同一时刻只展开一个日期组的快捷选项，避免多个 date_range 组重复堆叠同一套 chips
+  const [openQuickRangeKey, setOpenQuickRangeKey] = useState<string | null>(null);
   const [saveEnabled, setSaveEnabled] = useState(false);
   const [localAdvanced, setLocalAdvanced] = useState<Record<string, string | undefined>>({});
   const quickRowRef = useRef<View>(null);
@@ -391,6 +394,7 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
       advVals[key] = values[key];
     }
     setLocalAdvanced(advVals);
+    setOpenQuickRangeKey(null);
     setAdvancedVisible(true);
   }, [allExtraKeys, advancedFilters, values]);
 
@@ -431,6 +435,7 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
 
   const handleAdvancedReset = useCallback(() => {
     setLocalAdvanced({});
+    setOpenQuickRangeKey(null);
     onResetAll?.();
   }, [onResetAll]);
 
@@ -613,44 +618,37 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
         maxHeightRatio={0.82}
         footer={(
           <View style={styles.advFooter}>
-            <TouchableOpacity
-              style={[styles.advFooterButton, styles.advResetButton, { borderColor: colors.border }]}
+            <ActionButton
+              variant="outlined"
+              style={styles.advFooterButton}
               onPress={handleAdvancedReset}
-              accessibilityRole="button"
               accessibilityLabel="重置高级筛选"
             >
-              <Text style={[styles.advHeaderBtn, { color: colors.textSecondary }]}>重置</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.advFooterButton,
-                styles.advApplyButton,
-                { backgroundColor: advancedDateRangeInvalid ? colors.surfaceSecondary : colors.primary },
-              ]}
+              重置
+            </ActionButton>
+            <ActionButton
+              variant={advancedDateRangeInvalid ? 'secondary' : 'primary'}
+              style={styles.advFooterButton}
               onPress={handleAdvancedApply}
               disabled={advancedDateRangeInvalid}
-              accessibilityRole="button"
-              accessibilityState={{ disabled: advancedDateRangeInvalid }}
               accessibilityLabel="应用高级筛选"
+              accessibilityHint={advancedDateRangeInvalid ? '请检查日期范围的开始与结束日期' : undefined}
             >
-              <Text
-                style={[
-                  styles.advHeaderBtn,
-                  {
-                    color: advancedDateRangeInvalid ? colors.textTertiary : colors.textOnPrimary,
-                    fontWeight: '600',
-                  },
-                ]}
-              >
-                应用
-              </Text>
-            </TouchableOpacity>
+              应用
+            </ActionButton>
           </View>
         )}
       >
         {/* 筛选项 */}
-        {advancedFilters.map((filter) => (
-          <View key={filter.key} style={styles.advGroup}>
+        {advancedFilters.map((filter, index) => (
+          <View
+            key={filter.key}
+            style={[
+              styles.advGroup,
+              index > 0 && styles.advGroupDivider,
+              index > 0 && { borderTopColor: colors.border },
+            ]}
+          >
             <Text style={[styles.advLabel, { color: colors.text }]}>{filter.label}</Text>
             {isDateRange(filter) ? (
               <View style={styles.dateRangeGroup}>
@@ -685,15 +683,35 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
                     containerStyle={styles.dateField}
                   />
                 </View>
-                <DateRangeQuickSelect
-                  onSelect={([startDate, endDate]) =>
-                    setLocalAdvanced((current) => ({
-                      ...current,
-                      [filter.startKey]: startDate,
-                      [filter.endKey]: endDate,
-                    }))
-                  }
-                />
+                <View style={styles.quickRangeGroup}>
+                  <ActionButton
+                    variant="text"
+                    size="sm"
+                    textColor={colors.primary}
+                    style={styles.quickRangeTrigger}
+                    trailingIcon={openQuickRangeKey === filter.key ? 'chevron-up' : 'chevron-down'}
+                    expanded={openQuickRangeKey === filter.key}
+                    onPress={() =>
+                      setOpenQuickRangeKey((current) => (current === filter.key ? null : filter.key))
+                    }
+                    accessibilityLabel={`${filter.label}快捷日期`}
+                  >
+                    快捷日期
+                  </ActionButton>
+                  {openQuickRangeKey === filter.key ? (
+                    <DateRangeQuickSelect
+                      value={[localAdvanced[filter.startKey], localAdvanced[filter.endKey]]}
+                      onSelect={([startDate, endDate]) => {
+                        setLocalAdvanced((current) => ({
+                          ...current,
+                          [filter.startKey]: startDate,
+                          [filter.endKey]: endDate,
+                        }));
+                        setOpenQuickRangeKey(null);
+                      }}
+                    />
+                  ) : null}
+                </View>
               </View>
             ) : isTextFilter(filter) ? (
               <FormField
@@ -836,30 +854,19 @@ const styles = StyleSheet.create({
 
   // --- 高级筛选弹窗 ---
   advFooter: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    gap: Spacing.sm,
   },
   advFooterButton: {
-    minHeight: MIN_TOUCH_TARGET,
-    minWidth: 88,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: Spacing.md,
-    borderRadius: Radius.sm,
-  },
-  advResetButton: {
-    borderWidth: StyleSheet.hairlineWidth,
-  },
-  advApplyButton: {
-    minWidth: 112,
-  },
-  advHeaderBtn: {
-    fontSize: FontSize.sm,
+    flex: 1,
   },
   advGroup: {
     marginTop: Spacing.md,
+  },
+  advGroupDivider: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+    paddingTop: Spacing.md,
   },
   advLabel: {
     fontSize: FontSize.sm,
@@ -890,6 +897,12 @@ const styles = StyleSheet.create({
   },
   dateRangeGroup: {
     gap: Spacing.xs,
+  },
+  quickRangeGroup: {
+    gap: Spacing.xs,
+  },
+  quickRangeTrigger: {
+    alignSelf: 'flex-start',
   },
   dateField: {
     flex: 1,

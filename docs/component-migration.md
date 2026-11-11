@@ -403,3 +403,10 @@ Tel App 已改用以上契约，并将列表/表单/工作台容器、错误边�
 - `FormFieldProps.label` 改为可选：传空字符串时不渲染标签行，供分组标题已在上文提供标签的场景使用；无障碍名称缺省回落到输入框 placeholder。
 - `advancedExtra` 渲染插槽保留作兜底（实体选择器等非文本控件仍走该入口），但业务文本条件一律走 text 型配置。
 - Tel App 客户列表高级筛选（主体名称/主联系电话/主微信/企业名称/主联系人）已迁移为 text 配置；两侧类型检查通过，真实设备视觉验收待宿主运行态证据，标记 `UNVERIFIED`。
+
+## 2026-11-11 弹层 footer 安全区与日期快捷选项收敛
+
+- `BottomSheet` 的内置 footer 与自定义 footer 统一处理底部安全区：`paddingBottom = max(insets.bottom, Spacing.xl) + Spacing.xs`，系统 inset 为 0 的手势导航设备也有保底间距；footer 增加 `surface` 底色与顶部分隔线，与滚动内容明确分层。内置「取消 / 确认」按钮改用共享 `ActionButton`（outlined / primary），保留 `loading`、`disabled`、`confirmButtonColor`、`confirmDisabledHint` 契约，不再手拼 `TouchableOpacity`。
+- `FilterBar` 高级筛选 footer 同样改用 `ActionButton` 平分宽度；移除原有 `flex: 1` 套在 BottomSheet 纵向 footer 容器里造成的底部按钮错位。
+- `DateRangeQuickSelect` 新增 `value` 选中态（命中快捷区间的 chip 用主题色高亮）。`FilterBar` 的日期范围组不再默认铺开一整套 9 个快捷 chips：改为「快捷日期」按需展开、同时只允许一组展开、选中后自动收起；多个 date_range 组不会再堆叠成重复的 chip 墙。高级筛选各组之间补顶部分隔线，滚动时分组归属清晰。
+- 以上均为 Sunxu 公共组件行为，宿主配置不变。Tel App 通过 `link:` 消费源码，改动需重新构建 APK 才会进入发布包；真机视觉验收 `UNVERIFIED`。

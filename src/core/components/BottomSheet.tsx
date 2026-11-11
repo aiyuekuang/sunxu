@@ -8,20 +8,19 @@ import {
 import type React from 'react';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import {
-  ActivityIndicator,
   BackHandler,
   Dimensions,
   Keyboard,
   Platform,
   StyleSheet,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
-import { FontSize, Radius, Spacing } from '../theme/tokens';
+import { FontSize, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { toastConfig } from '../toast';
+import { ActionButton } from './ActionButton';
 import { AppText as Text } from './AppText';
 import { ModalHeader } from './ModalHeader';
 import { BottomSheetInternalContext } from './BottomSheetContext';
@@ -222,6 +221,14 @@ export function BottomSheet({
 
   const footerContent = footer ?? renderFooter?.();
   const bodyPadBottom = confirmText || footerContent != null ? Spacing.base : insets.bottom || 16;
+  // 手势导航区/底部横条不能压住操作按钮：系统 inset 之外再保底一段间距，
+  // 并在有 inset 时追加一层留白，避免部分 ROM 只返回导航条高度时的贴边。
+  const footerInset = Math.max(insets.bottom, Spacing.xl) + Spacing.xs;
+  const footerSurface = {
+    backgroundColor: colors.surface,
+    borderTopColor: colors.border,
+    paddingBottom: footerInset,
+  };
   const confirmButtonDisabled = disabled && !loading;
   const visibleDisabledHint = confirmButtonDisabled
     ? (confirmDisabledHint ?? '请先完善必填项或处理页面提示后再提交')
@@ -230,59 +237,37 @@ export function BottomSheet({
   const footerEl = (
     <>
       {confirmText && (
-        <View style={[styles.confirmFooter, { paddingBottom: insets.bottom || 16 }]}>
+        <View style={[styles.confirmFooter, footerSurface]}>
           {visibleDisabledHint ? (
             <Text style={[styles.disabledHint, { color: colors.error }]}>
               {visibleDisabledHint}
             </Text>
           ) : null}
           <View style={styles.footerButtons}>
-            <TouchableOpacity
-              style={[styles.btn, styles.cancelBtn, { borderColor: colors.border }]}
+            <ActionButton
+              variant="outlined"
+              style={styles.footerButtonFlex}
               onPress={handleClose}
               disabled={closeDisabled}
             >
-              <Text style={[styles.btnText, { color: colors.textSecondary }]}>{cancelText}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.btn,
-                styles.confirmBtn,
-                {
-                  backgroundColor: confirmButtonDisabled
-                    ? colors.surfaceSecondary
-                    : (confirmButtonColor ?? colors.primary),
-                  borderColor: confirmButtonDisabled ? colors.border : 'transparent',
-                  opacity: loading ? 0.6 : 1,
-                },
-                confirmButtonDisabled && styles.disabledConfirmBtn,
-              ]}
+              {cancelText}
+            </ActionButton>
+            <ActionButton
+              variant={confirmButtonDisabled ? 'secondary' : 'primary'}
+              buttonColor={confirmButtonDisabled ? undefined : confirmButtonColor}
+              style={styles.footerButtonFlex}
               onPress={onConfirm}
               disabled={disabled || loading}
-              accessibilityRole="button"
-              accessibilityState={{ disabled: disabled || loading }}
+              loading={loading}
               accessibilityHint={visibleDisabledHint}
             >
-              {loading ? (
-                <ActivityIndicator size="small" color={colors.textOnPrimary} />
-              ) : (
-                <Text
-                  style={[
-                    styles.btnText,
-                    { color: confirmButtonDisabled ? colors.textMuted : colors.textOnPrimary },
-                  ]}
-                >
-                  {confirmText}
-                </Text>
-              )}
-            </TouchableOpacity>
+              {confirmText}
+            </ActionButton>
           </View>
         </View>
       )}
       {!confirmText && footerContent != null && (
-        <View style={[styles.footer, { paddingBottom: insets.bottom || 16 }]}>
-          {footerContent}
-        </View>
+        <View style={[styles.footer, footerSurface]}>{footerContent}</View>
       )}
     </>
   );
@@ -370,38 +355,25 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
     paddingHorizontal: Spacing.base,
     paddingTop: Spacing.sm,
+    borderTopWidth: StyleSheet.hairlineWidth,
     flexShrink: 0,
   },
   confirmFooter: {
     paddingHorizontal: Spacing.base,
     paddingTop: Spacing.sm,
+    borderTopWidth: StyleSheet.hairlineWidth,
     flexShrink: 0,
   },
   footerButtons: {
     flexDirection: 'row',
     gap: Spacing.sm,
   },
-  btn: {
+  footerButtonFlex: {
     flex: 1,
-    paddingVertical: 14,
-    borderRadius: Radius.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  cancelBtn: {
-    borderWidth: 1,
-  },
-  confirmBtn: {},
-  disabledConfirmBtn: {
-    borderWidth: 1,
   },
   disabledHint: {
     fontSize: FontSize.xs,
     lineHeight: 18,
     marginBottom: Spacing.xs,
-  },
-  btnText: {
-    fontSize: FontSize.base,
-    fontWeight: '600',
   },
 });
