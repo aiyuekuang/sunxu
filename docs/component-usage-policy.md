@@ -26,6 +26,10 @@
 
 若一页同时属于多个场景，分别采用相应组件组合；不因页面属于特定业务就改变通用容器和控件职责。
 
+### BottomSheet 内容宽度
+
+`BottomSheet` 的 body、固定 footer 包装区和标题各自使用 `Spacing.base`（16dp）水平留白，三者边界对齐；body 内容默认拉伸并占满扣除两侧留白后的可用宽度。宿主不要在 `children` 根节点、滚动列表的 `contentContainerStyle` 或自定义 footer 根节点重复添加外层水平 `padding` / `margin`，也不要无业务需要地设置 `maxWidth` 或固定宽度。保留搜索框、卡片等控件自身的内部 padding；确需窄列或局部缩进时，明确目的并让同一区域元素使用一致的边界。
+
 ## 业务专用组件标记
 
 Sunxu 的 `src/core/**` 只收录可跨业务复用的实现。业务专用页面、卡片或字段应留在宿主业务目录，并在导出的组件 JSDoc 中明确分类。所有纳入检查范围的组件都必须声明 `shared` 或 `business-specific`，避免共享组件与业务专用组件边界含糊。

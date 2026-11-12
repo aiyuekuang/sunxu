@@ -32,6 +32,12 @@ interface BottomSheetBaseProps {
   /** 弹层动画完成并从 portal 移除后的回调 */
   onDismiss?: () => void;
   title: string;
+  /**
+   * 弹层内容。内容区可用宽度为 sheet 内宽减去两侧 Spacing.base（16dp）留白；children 根节点默认拉伸占满该宽度，
+   * 与标题对齐。宿主不要在 children 根节点或滚动列表的 contentContainerStyle 上重复添加同级水平 padding/margin，
+   * 也不要无业务需要地设置 maxWidth 或固定宽度。
+   * 搜索框、卡片等子组件自身的内部留白不受此约束。
+   */
   children: React.ReactNode;
   /** 确认按钮 loading */
   loading?: boolean;
@@ -63,7 +69,10 @@ type BottomSheetFooterProps =
       renderFooter?: never;
     }
   | {
-      /** 自定义操作区；BottomSheet 会拉伸到可用内容宽度，并固定在滚动区之外、处理底部安全区。 */
+      /**
+       * 自定义操作区；BottomSheet 会固定在滚动区之外并处理底部安全区。
+       * Footer 包装区已有 Spacing.base（16dp）水平留白，footer 节点不要再添加同级外层水平 padding/margin。
+       */
       footer: React.ReactNode;
       confirmText?: never;
       cancelText?: never;
@@ -345,14 +354,17 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
+  // Shared with ModalHeader and footer; host children use this inner width directly.
   body: {
     paddingHorizontal: Spacing.base,
+    alignItems: 'stretch',
     gap: Spacing.md,
   },
   footer: {
     flexDirection: 'column',
     alignItems: 'stretch',
     gap: Spacing.sm,
+    // Footer content shares the body/header gutter; do not add another outer inset in callers.
     paddingHorizontal: Spacing.base,
     paddingTop: Spacing.sm,
     borderTopWidth: StyleSheet.hairlineWidth,
