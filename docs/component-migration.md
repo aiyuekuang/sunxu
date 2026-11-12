@@ -409,7 +409,7 @@ Tel App 已改用以上契约，并将列表/表单/工作台容器、错误边�
 
 - `BottomSheet` 的内置 footer 与自定义 footer 统一处理底部安全区：`paddingBottom = max(insets.bottom, Spacing.xl) + Spacing.xs`，系统 inset 为 0 的手势导航设备也有保底间距；footer 增加 `surface` 底色与顶部分隔线，与滚动内容明确分层。内置「取消 / 确认」按钮改用共享 `ActionButton`（outlined / primary），保留 `loading`、`disabled`、`confirmButtonColor`、`confirmDisabledHint` 契约，不再手拼 `TouchableOpacity`。
 - `FilterBar` 高级筛选 footer 同样改用 `ActionButton` 平分宽度；移除原有 `flex: 1` 套在 BottomSheet 纵向 footer 容器里造成的底部按钮错位。
-- `DateRangeQuickSelect` 新增 `value` 选中态（命中快捷区间的 chip 用主题色高亮）。`FilterBar` 的日期范围组不再默认铺开一整套 9 个快捷 chips：改为「快捷日期」按需展开、同时只允许一组展开、选中后自动收起；多个 date_range 组不会再堆叠成重复的 chip 墙。高级筛选各组之间补顶部分隔线，滚动时分组归属清晰。
+- `DateRangeQuickSelect` 新增 `value` 选中态（命中快捷区间的 chip 用主题色高亮）。`FilterBar` 只有一个日期范围组时，打开高级筛选默认展开快捷日期，选择后保持展开以显示选中态；有多个日期范围组时按需展开，且同时只展开一组，避免堆叠重复的 chip 墙。高级筛选各组之间补顶部分隔线，滚动时分组归属清晰。
 - 以上均为 Sunxu 公共组件行为，宿主配置不变。Tel App 通过 `link:` 消费源码，改动需重新构建 APK 才会进入发布包；真机视觉验收 `UNVERIFIED`。
 
 ## 2026-11-12 FilterBar 单选选项

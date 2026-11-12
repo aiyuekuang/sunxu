@@ -396,7 +396,8 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
       advVals[key] = values[key];
     }
     setLocalAdvanced(advVals);
-    setOpenQuickRangeKey(null);
+    const dateRangeFilters = advancedFilters.filter(isDateRange);
+    setOpenQuickRangeKey(dateRangeFilters.length === 1 ? dateRangeFilters[0].key : null);
     setAdvancedVisible(true);
   }, [allExtraKeys, advancedFilters, values]);
 
@@ -709,7 +710,6 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
                           [filter.startKey]: startDate,
                           [filter.endKey]: endDate,
                         }));
-                        setOpenQuickRangeKey(null);
                       }}
                     />
                   ) : null}
