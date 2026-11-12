@@ -746,7 +746,7 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
                       onPress={() =>
                         setLocalAdvanced((prev) => ({
                           ...prev,
-                          [filter.key]: opt.value,
+                          [filter.key]: prev[filter.key] === opt.value ? undefined : opt.value,
                         }))
                       }
                     />
