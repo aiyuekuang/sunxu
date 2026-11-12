@@ -1,5 +1,13 @@
 import type React from 'react';
-import { type StyleProp, StyleSheet, TouchableOpacity, View, type ViewStyle } from 'react-native';
+import {
+  type AccessibilityRole,
+  type Insets,
+  type StyleProp,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  type ViewStyle,
+} from 'react-native';
 import { FontSize, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { AppText as Text } from './AppText';
@@ -12,6 +20,10 @@ export interface SelectableChipProps {
   disabled?: boolean;
   /** 自定义读屏名称；默认使用可见标签。 */
   accessibilityLabel?: string;
+  /** 选择项语义；列表单选组可声明 radio。 */
+  accessibilityRole?: AccessibilityRole;
+  /** 扩展透明触控区域，不改变胶囊的可见尺寸。 */
+  hitSlop?: Insets;
   /** 可选尾随信息，如筛选数量。 */
   suffix?: React.ReactNode;
   /** sm=列表/弹层内的紧凑筛选胶囊；md=表单/设置卡内的常规选择胶囊 */
@@ -34,6 +46,8 @@ export function SelectableChip({
   onPress,
   disabled = false,
   accessibilityLabel,
+  accessibilityRole = 'button',
+  hitSlop,
   suffix,
   size = 'sm',
   style,
@@ -52,10 +66,11 @@ export function SelectableChip({
         },
         style,
       ]}
+      hitSlop={hitSlop}
       activeOpacity={0.72}
       disabled={disabled}
       onPress={onPress}
-      accessibilityRole="button"
+      accessibilityRole={accessibilityRole}
       accessibilityState={{ selected, disabled }}
       accessibilityLabel={accessibilityLabel ?? label}
     >

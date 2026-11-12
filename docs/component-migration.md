@@ -321,7 +321,7 @@ Tel App 接入检查中发现可共享而宿主先前自绘的加载、按压反
 
 - `InlineLoading.size` 支持 React Native 加载指示器的字符串尺寸与具体数字尺寸，主题颜色仍由 Sunxu 提供；Catalog 展示 12、16 和 large 三种尺寸。
 - `DialPad` 增加宿主键盘模式 `variant="keypad"` 与 `onKeyPress`，按键结果仍由宿主处理，不调用电话、权限或 SIM API。
-- `StatusTabs` 的 `TabItem` 暴露 `testID`；`Badge` 与 `ProgressBar` 提供标准 `style` 接入点；`SelectableChip` 提供 `accessibilityLabel` 和 `suffix` 插槽。
+- `StatusTabs` 的 `TabItem` 暴露 `testID`；`Badge` 与 `ProgressBar` 提供标准 `style` 接入点；`SelectableChip` 提供 `accessibilityLabel`、`accessibilityRole`、透明 `hitSlop` 和 `suffix` 插槽。
 - 新增可复用 `ScalePressable`、主题化 `Divider` 与根级 `ToastHost`，并在 `src/core/index.ts` 导出。
 - 类型检查通过前，不发布新 Sunxu 包。Tel App 当前从相邻仓库以 `link:../../sunxu` 实时依赖共享源码，避免复制本地 Git 历史和示例依赖；发布和版本升级由各自项目流程单独处理。
 
@@ -411,3 +411,9 @@ Tel App 已改用以上契约，并将列表/表单/工作台容器、错误边�
 - `FilterBar` 高级筛选 footer 同样改用 `ActionButton` 平分宽度；移除原有 `flex: 1` 套在 BottomSheet 纵向 footer 容器里造成的底部按钮错位。
 - `DateRangeQuickSelect` 新增 `value` 选中态（命中快捷区间的 chip 用主题色高亮）。`FilterBar` 的日期范围组不再默认铺开一整套 9 个快捷 chips：改为「快捷日期」按需展开、同时只允许一组展开、选中后自动收起；多个 date_range 组不会再堆叠成重复的 chip 墙。高级筛选各组之间补顶部分隔线，滚动时分组归属清晰。
 - 以上均为 Sunxu 公共组件行为，宿主配置不变。Tel App 通过 `link:` 消费源码，改动需重新构建 APK 才会进入发布包；真机视觉验收 `UNVERIFIED`。
+
+## 2026-11-12 FilterBar 单选选项
+
+- `FilterBar` 高级筛选选项复用 `SelectableChip` 的主题、选中态和无障碍状态；选项布局使用紧凑胶囊。单选组再次点击当前值仍保持选中，清空由筛选重置操作负责，避免 radio 语义下出现“取消选中”。
+- 高级筛选胶囊保留 40dp 可见高度，并用透明纵向 `hitSlop` 将触控范围扩至 48dp；选项间距保证扩展热区不互相覆盖。快捷筛选和日期范围配置/API 不变。
+- Catalog 的 `近期活动` 二元筛选作为单选样例；实际渲染与几何/溢出验收见[FilterBar 单选验收](./verification/filter-bar-single-select-2026-11-12/README.md)。

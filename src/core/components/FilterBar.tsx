@@ -19,7 +19,7 @@ import {
   View,
   type TextInputProps,
 } from 'react-native';
-import { FontSize, MIN_TOUCH_TARGET, Radius, Spacing } from '../theme/tokens';
+import { FontSize, MIN_TOUCH_TARGET, MIN_TOUCH_TARGET_ANDROID, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { ActionButton } from './ActionButton';
 import { AppText as Text } from './AppText';
@@ -29,6 +29,7 @@ import { FilterActionButton } from './FilterActionButton';
 import { FilterQuickControl } from './FilterQuickControl';
 import { FormField } from './FormField';
 import { BottomSheet } from './BottomSheet';
+import { SelectableChip } from './SelectableChip';
 
 export interface FilterOption {
   label: string;
@@ -180,6 +181,7 @@ export { SAVE_FLAG_PREFIX as FILTER_SAVE_FLAG_PREFIX };
 
 const STORAGE_PREFIX = 'mes_filter_';
 const SAVE_FLAG_PREFIX = 'mes_filter_save_';
+const ADVANCED_FILTER_CHIP_HIT_SLOP = { top: 4, right: 0, bottom: 4, left: 0 } as const;
 
 export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function FilterBar(
   {
@@ -732,31 +734,22 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
                 {filter.options.map((opt) => {
                   const isSel = localAdvanced[filter.key] === opt.value;
                   return (
-                    <TouchableOpacity
+                    <SelectableChip
                       key={opt.value}
-                      style={[
-                        styles.advChip,
-                        { backgroundColor: isSel ? colors.primary : colors.surfaceSecondary },
-                      ]}
-                      hitSlop={{ top: 4, right: 0, bottom: 4, left: 0 }}
+                      label={opt.label}
+                      selected={isSel}
                       accessibilityRole="radio"
-                      accessibilityState={{ selected: isSel }}
+                      accessibilityLabel={`${filter.label}：${opt.label}`}
+                      hitSlop={ADVANCED_FILTER_CHIP_HIT_SLOP}
+                      style={styles.advChip}
+                      size="sm"
                       onPress={() =>
                         setLocalAdvanced((prev) => ({
                           ...prev,
-                          [filter.key]: prev[filter.key] === opt.value ? undefined : opt.value,
+                          [filter.key]: opt.value,
                         }))
                       }
-                    >
-                      <Text
-                        style={[
-                          styles.advChipText,
-                          { color: isSel ? colors.textOnPrimary : colors.textSecondary },
-                        ]}
-                      >
-                        {opt.label}
-                      </Text>
-                    </TouchableOpacity>
+                    />
                   );
                 })}
               </View>
@@ -876,17 +869,10 @@ const styles = StyleSheet.create({
   advOptions: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 6,
+    gap: Spacing.sm,
   },
   advChip: {
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: 5,
-    minHeight: 36,
-    justifyContent: 'center',
-    borderRadius: Radius.sm,
-  },
-  advChipText: {
-    fontSize: FontSize.xs,
+    minHeight: Math.max(MIN_TOUCH_TARGET, MIN_TOUCH_TARGET_ANDROID) - 8,
   },
 
   // --- 日期范围 ---
