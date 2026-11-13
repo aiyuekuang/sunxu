@@ -66,6 +66,27 @@ export function ConfigBadge<T extends string>({
   return <Badge label={cfg.label} color={cfg.color} bg={cfg.bg} size={size} />;
 }
 
+/** Compact outlined badge for a section count or notification summary. */
+export function CountBadge({
+  count,
+  tone = 'primary',
+}: {
+  count: number | string;
+  tone?: 'primary' | 'error' | 'default';
+}) {
+  const { colors } = useTheme();
+  const color =
+    tone === 'error' ? colors.error : tone === 'default' ? colors.textSecondary : colors.primary;
+
+  return (
+    <View style={[styles.countBadge, { backgroundColor: `${color}10`, borderColor: `${color}24` }]}>
+      <Text numberOfLines={1} allowFontScaling={false} style={[styles.countBadgeText, { color }]}>
+        {count}
+      </Text>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   badge: {
     paddingHorizontal: Spacing.sm,
@@ -84,5 +105,19 @@ const styles = StyleSheet.create({
   },
   labelSm: {
     fontSize: FontSize.xs,
+  },
+  countBadge: {
+    minWidth: 18,
+    height: 18,
+    borderRadius: 9,
+    borderWidth: StyleSheet.hairlineWidth,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: Spacing.xs,
+  },
+  countBadgeText: {
+    fontSize: FontSize.xs,
+    fontWeight: '700',
+    lineHeight: 13,
   },
 });

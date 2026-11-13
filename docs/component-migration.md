@@ -417,3 +417,8 @@ Tel App 已改用以上契约，并将列表/表单/工作台容器、错误边�
 - `FilterBar` 高级筛选选项复用 `SelectableChip` 的主题、选中态和无障碍状态；选项布局使用紧凑胶囊。单选组再次点击当前值可取消该筛选，重置操作仍可清空全部条件。
 - 高级筛选胶囊保留 40dp 可见高度，并用透明纵向 `hitSlop` 将触控范围扩至 48dp；选项间距保证扩展热区不互相覆盖。快捷筛选和日期范围配置/API 不变。
 - Catalog 的 `近期活动` 二元筛选作为单选样例；实际渲染与几何/溢出验收见[FilterBar 单选验收](./verification/filter-bar-single-select-2026-11-12/README.md)。
+
+## 2026-11-13 CountBadge
+
+- `CountBadge` 从 MES 首页计数徽标中提取为通用共享组件，支持 `primary`、`error`、`default` 三种语义色和数字/短文本计数；颜色与尺寸由 Sunxu 主题和 token 管理。
+- App 用于首页待办/待审批/待报工分节提示。Catalog 展示普通数字与 `99+` 错误态，并以“日/周/月/年”复现报表快捷周期的四等分 StatusTabs。

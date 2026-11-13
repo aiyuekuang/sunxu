@@ -4,6 +4,7 @@ import {
   ActionMenu,
   Avatar,
   Badge,
+  CountBadge,
   BottomActionBar,
   CenteredModal,
   ChoiceSheet,
@@ -261,6 +262,7 @@ function ComponentExamples({
   const { colors } = useTheme();
   const [date, setDate] = useState(today);
   const [status, setStatus] = useState<ComponentStatus>('all');
+  const [quickRange, setQuickRange] = useState<'day' | 'week' | 'month' | 'year'>('day');
   const [timelineFilter, setTimelineFilter] = useState<TimelineFilterDemo>('all');
   const [disabledTimelineFilter, setDisabledTimelineFilter] = useState<TimelineFilterDemo>('all');
   const [customerOpportunity, setCustomerOpportunity] = useState<CustomerOpportunityDemo>('customers');
@@ -327,6 +329,11 @@ function ComponentExamples({
       <View style={styles.componentDemo}>
         <View style={styles.componentSection} testID="demo-shared-actions">
           <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>Sunxu · 通用操作与摘要</AppText>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.sm }}>
+            <AppText style={{ color: colors.textSecondary }}>待处理</AppText>
+            <CountBadge count={12} />
+            <CountBadge count="99+" tone="error" />
+          </View>
           <SectionCard
             title="共享业务卡片"
             subtitle="状态和操作结果仍由宿主页面负责"
@@ -618,6 +625,23 @@ function ComponentExamples({
             activeKey={timelineFilter}
             onChange={setTimelineFilter}
             variant="pill"
+          />
+        </View>
+
+        <View style={styles.componentSection} testID="demo-status-tabs-quick-range">
+          <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>
+            StatusTabs · 日/周/月/年
+          </AppText>
+          <StatusTabs
+            tabs={[
+              { key: 'day', label: '日' },
+              { key: 'week', label: '周' },
+              { key: 'month', label: '月' },
+              { key: 'year', label: '年' },
+            ]}
+            activeKey={quickRange}
+            onChange={setQuickRange}
+            density="compact"
           />
         </View>
 

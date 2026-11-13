@@ -9366,12 +9366,28 @@
       "export_subpath": "sunxu/core",
       "status": "ADDED",
       "purpose": "Scrollable detail screen with a fixed header and optional footer actions."
+    },
+    {
+      "name": "CountBadge",
+      "target": "src/core/components/Badge.tsx",
+      "export_subpath": "sunxu/core",
+      "status": "ADDED",
+      "purpose": "Compact themed count marker for section summaries and notification counts."
     }
   ],
   "validation": {
     "typecheck": "PASS: npm run typecheck and example TypeScript check passed after curation.",
     "visual_preview": "Expo Web / React Native Web: list, form and detail at 375x812; list at 812x375; light and dark list snapshots; no console/HTTP errors or horizontal overflow.",
-    "native_rendering": "UNVERIFIED: native iOS/Android safe areas, keyboard, Dynamic Type and screen reader behavior were not rendered in this task.",
+    "native_rendering": "UNVERIFIED: native iOS/Android safe areas, keyboard, Dynamic Type and screen reader behavior were not rendered in this task. The MES ReportsScreen dev client also rejected the unsigned local manifest because its app config requires a private signing key; no production signing key was used.",
     "evidence_document": "docs/verification/component-containers.md"
+  },
+  "latest_integration": {
+    "package_version": "0.1.10",
+    "release": "Published to npmjs.org with public access.",
+    "core_typecheck": "PASS: npm run typecheck.",
+    "catalog_typecheck": "PASS: npx tsc --noEmit -p examples/catalog/tsconfig.json.",
+    "catalog_visual": "PASS: four StatusTabs labels visible at 375x812 and 320x720; no horizontal overflow in track, section, or document. CountBadge 12 and 99+ visible.",
+    "app_ios_bundle": "PASS: npx expo export --platform ios generated /tmp/mes-app-export-sunxu-20261113-final.",
+    "host_route": "UNVERIFIED: MES ReportsScreen native development client did not load due to the local OTA code-signing requirement; see docs/verification/sunxu-status-tabs-integration-2026-11-13/README.md."
   }
 }
