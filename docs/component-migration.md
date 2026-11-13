@@ -422,3 +422,19 @@ Tel App 已改用以上契约，并将列表/表单/工作台容器、错误边�
 
 - `CountBadge` 从 MES 首页计数徽标中提取为通用共享组件，支持 `primary`、`error`、`default` 三种语义色和数字/短文本计数；颜色与尺寸由 Sunxu 主题和 token 管理。
 - App 用于首页待办/待审批/待报工分节提示。Catalog 展示普通数字与 `99+` 错误态，并以“日/周/月/年”复现报表快捷周期的四等分 StatusTabs。
+
+## 2026-11-13 Icon 与 SwitchControl
+
+- `Icon` 提供主题化的独立图标显示，默认作为装饰内容从无障碍树隐藏；只有图标单独承载信息时才传 `accessibilityLabel`。图标操作使用 `IconActionButton`，不要把图标展示组件变成可点控件。
+- `SwitchControl` 为嵌在宿主字段布局中的独立布尔开关，必传受控 `value`、`onValueChange` 和可访问名称；禁用状态使用原生 Switch 的 `disabled` 并同步暴露无障碍状态。`FormSwitch` 组合可见标签和 `SwitchControl`，避免页面重复拼接原生开关。
+- 两者不拥有字段值、权限或保存时机。Taro/微信适配使用 Taro 原生 `Switch` 与平台图标资源，保持相同受控事件、可访问名称和禁用语义，不复用 React Native 源码。
+- Catalog 覆盖装饰图标、开关开启/关闭与禁用状态；真实设备的触控边界与系统读屏行为仍须由宿主验收。
+- Expo Web Catalog 在 375×812 与 320×720 CSS px 下四个周期标签均可见，轨道、分节和页面均无横向溢出；截图与 DOM 几何见[Sunxu 组件接入验收](./verification/sunxu-status-tabs-integration-2026-11-13/README.md)。MES ReportsScreen 的原生开发客户端未加载，宿主页面标记为 `UNVERIFIED`。
+
+## 2026-11-13 InlineHint 与 LoadingView 文案
+
+- 新增 `InlineHint`：短说明以行内展开/收起呈现，触发器名称和 expanded 状态暴露给读屏；较长的结构化指导继续使用 `ContextualHelpButton` / `FormLabel.help` 底部面板。
+- `LoadingView` 增加可选 `message`，在加载指示器下方展示可见说明，并以进度条角色和说明名称向辅助技术报告；省略时维持原有纯指示器外观。
+- Catalog 覆盖行内说明展开、折叠与带文案的页面加载状态；Taro 侧 `AppHint` 映射到 `InlineHint`，`PageState.LoadingState` 映射到带文案 `LoadingView` 的等价实现。
+- Expo Web Catalog 的 375×812 与 320×720 CSS px 视口均已实际渲染；行内说明展开/收起与可见文案、加载状态角色/文案、开关切换及禁用态均已检查。两档页面横向溢出均为 0；组件几何、截图和边界见[组件适配验收](./verification/sunxu-mini-component-parity-2026-11-13/README.md)。
+- 触控命中范围的真实设备表现、系统读屏，以及 Taro/微信目标路由仍为 `UNVERIFIED`；Catalog 证据只证明 Sunxu 共享契约和 Expo Web 示例。

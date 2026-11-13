@@ -26,6 +26,9 @@ import {
   InfoRow,
   InlineLoading,
   IconActionButton,
+  Icon,
+  InlineHint,
+  LoadingView,
   ListCard,
   ListScreenContainer,
   MetricCard,
@@ -38,6 +41,7 @@ import {
   SettingsRow,
   Spacing,
   StatusTabs,
+  SwitchControl,
   Skeleton,
   SwipeableRow,
   SunxuProvider,
@@ -284,6 +288,7 @@ function ComponentExamples({
   const [listCardExpanded, setListCardExpanded] = useState(false);
   const [listCardSelected, setListCardSelected] = useState(false);
   const [checkboxValue, setCheckboxValue] = useState(false);
+  const [switchValue, setSwitchValue] = useState(false);
   const [swipeActionLoading, setSwipeActionLoading] = useState(false);
   const [iconActionLoading, setIconActionLoading] = useState(false);
   const [errorExampleActive, setErrorExampleActive] = useState(false);
@@ -307,6 +312,7 @@ function ComponentExamples({
     setChoiceValue('active');
     setSwipeActionLoading(false);
     setCheckboxValue(false);
+    setSwitchValue(false);
     setErrorExampleActive(false);
     setFeedback('示例状态已重置');
   };
@@ -472,6 +478,34 @@ function ComponentExamples({
               value={checkboxValue}
               onValueChange={setCheckboxValue}
             />
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.sm }}>
+              <Icon name="information-outline" />
+              <AppText style={{ color: colors.textSecondary }}>信息图标配合可见说明文字</AppText>
+            </View>
+            <InlineHint label="填写说明" hint="需要补充的信息请写在对应字段中，重要限制会直接显示在字段旁。" />
+            <View style={{ height: 112, alignSelf: 'stretch', overflow: 'hidden', borderRadius: 8, backgroundColor: colors.surfaceSecondary }}>
+              <LoadingView message="正在加载客户信息" />
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <AppText style={{ color: colors.text }}>接收任务提醒</AppText>
+              <SwitchControl
+                value={switchValue}
+                onValueChange={setSwitchValue}
+                accessibilityLabel="接收任务提醒"
+                accessibilityHint="开启后接收任务状态提醒"
+                testID="demo-switch-control"
+              />
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <AppText style={{ color: colors.textSecondary }}>只读设置</AppText>
+              <SwitchControl
+                value={false}
+                onValueChange={() => undefined}
+                accessibilityLabel="只读设置，已关闭"
+                disabled
+                testID="demo-switch-control-disabled"
+              />
+            </View>
             <SettingsRow
               icon="account-outline"
               label="负责人"

@@ -1,11 +1,24 @@
 import { ActivityIndicator, StyleSheet, View, type ViewStyle } from 'react-native';
+import { FontSize, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
+import { AppText as Text } from './AppText';
 
-export function LoadingView() {
+export interface LoadingViewProps {
+  /** 可见的加载说明；省略时仅显示加载指示器。 */
+  message?: string;
+}
+
+export function LoadingView({ message }: LoadingViewProps = {}) {
   const { colors } = useTheme();
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View
+      style={[styles.container, { backgroundColor: colors.background }]}
+      accessible
+      accessibilityRole="progressbar"
+      accessibilityLabel={message ?? '正在加载'}
+    >
       <ActivityIndicator size="large" color={colors.primary} />
+      {message ? <Text style={[styles.message, { color: colors.textSecondary }]}>{message}</Text> : null}
     </View>
   );
 }
@@ -29,5 +42,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    gap: Spacing.sm,
+  },
+  message: {
+    fontSize: FontSize.sm,
+    textAlign: 'center',
   },
 });

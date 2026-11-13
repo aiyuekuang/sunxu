@@ -1,0 +1,96 @@
+{
+  "url": "http://localhost:8097/",
+  "route": "Sunxu Catalog > 组件 > 表单选择与设置行",
+  "measurements": [
+    {
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "document": {
+        "clientWidth": 375,
+        "scrollWidth": 375,
+        "horizontalOverflow": false
+      },
+      "inlineHint": {
+        "trigger": {
+          "x": 37,
+          "y": 390,
+          "width": 28,
+          "height": 28
+        },
+        "message": {
+          "x": 69,
+          "y": 394,
+          "width": 269,
+          "height": 40
+        },
+        "row": {
+          "x": 37,
+          "y": 390,
+          "width": 301,
+          "height": 44
+        }
+      },
+      "loading": {
+        "container": {
+          "x": 37,
+          "y": 442,
+          "width": 301,
+          "height": 112
+        },
+        "message": {
+          "x": 135.5,
+          "y": 510.8,
+          "width": 104,
+          "height": 18.5
+        }
+      }
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 720
+      },
+      "document": {
+        "clientWidth": 320,
+        "scrollWidth": 320,
+        "horizontalOverflow": false
+      },
+      "inlineHint": {
+        "trigger": {
+          "x": 37,
+          "y": 344,
+          "width": 28,
+          "height": 28
+        },
+        "message": {
+          "x": 69,
+          "y": 348,
+          "width": 214,
+          "height": 40
+        },
+        "row": {
+          "x": 37,
+          "y": 344,
+          "width": 246,
+          "height": 44
+        }
+      },
+      "loading": {
+        "container": {
+          "x": 37,
+          "y": 396,
+          "width": 246,
+          "height": 112
+        },
+        "message": {
+          "x": 108,
+          "y": 464.8,
+          "width": 104,
+          "height": 18.5
+        }
+      }
+    }
+  ]
+}

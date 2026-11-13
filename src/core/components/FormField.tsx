@@ -3,7 +3,6 @@ import { useState } from 'react';
 import {
   Platform,
   StyleSheet,
-  Switch,
   type TextInputProps,
   View,
   type StyleProp,
@@ -16,6 +15,7 @@ import { BorderWidth, FontSize, MIN_TOUCH_TARGET, MIN_TOUCH_TARGET_ANDROID, Radi
 import { useTheme } from '../theme/useTheme';
 import { useScaledFontSize } from '../theme/font-scale';
 import { type FieldHelpContent, FormLabel } from './FormLabel';
+import { SwitchControl } from './SwitchControl';
 
 export interface FormFieldProps extends TextInputProps {
   /** 字段标签；传空字符串时不渲染标签行（如筛选面板里已由分组标题提供标签） */
@@ -120,23 +120,28 @@ export function FormSwitch({
   onValueChange,
   disabled = false,
   containerStyle,
+  accessibilityHint,
+  testID,
 }: {
   label: string;
   value: boolean;
   onValueChange: (v: boolean) => void;
   disabled?: boolean;
   containerStyle?: ViewStyle;
+  accessibilityHint?: string;
+  testID?: string;
 }) {
   const { colors } = useTheme();
   return (
     <View style={[styles.switchRow, containerStyle]}>
       <Text style={[styles.switchLabel, { color: colors.text }]}>{label}</Text>
-      <Switch
+      <SwitchControl
         value={value}
         onValueChange={onValueChange}
         disabled={disabled}
-        trackColor={{ false: colors.border, true: colors.primary }}
-        thumbColor={colors.textOnPrimary}
+        accessibilityLabel={label}
+        accessibilityHint={accessibilityHint}
+        testID={testID}
       />
     </View>
   );
@@ -184,6 +189,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    minHeight: MIN_TOUCH_TARGET_ANDROID,
     paddingVertical: Spacing.sm,
   },
   switchLabel: {
