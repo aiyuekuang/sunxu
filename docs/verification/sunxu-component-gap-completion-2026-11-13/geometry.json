@@ -1,0 +1,246 @@
+{
+  "url": "http://localhost:8097/",
+  "route": "Sunxu Expo Web catalog / Components example",
+  "date": "2026-11-13",
+  "method": "Each viewport opened directly in a fresh page; no viewport resize between measurements.",
+  "results": [
+    {
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "document": {
+        "clientWidth": 375,
+        "scrollWidth": 375
+      },
+      "attachment": {
+        "scrollTop": 0,
+        "rect": {
+          "x": 28,
+          "y": 57,
+          "width": 319,
+          "height": 354.5,
+          "right": 347
+        },
+        "actions": [
+          {
+            "label": "打开附件客户补充资料.pdf",
+            "x": 41,
+            "right": 290,
+            "width": 249,
+            "height": 48
+          },
+          {
+            "label": "移除附件客户补充资料.pdf",
+            "x": 294,
+            "right": 342,
+            "width": 48,
+            "height": 48
+          },
+          {
+            "label": "打开附件现场照片.jpg",
+            "x": 41,
+            "right": 290,
+            "width": 249,
+            "height": 48
+          },
+          {
+            "label": "移除附件现场照片.jpg",
+            "x": 294,
+            "right": 342,
+            "width": 48,
+            "height": 48
+          },
+          {
+            "label": "取消附件设备演示.mp4",
+            "x": 294,
+            "right": 342,
+            "width": 48,
+            "height": 48
+          },
+          {
+            "label": "打开附件产品方案.docx",
+            "x": 41,
+            "right": 290,
+            "width": 249,
+            "height": 48
+          },
+          {
+            "label": "移除附件产品方案.docx",
+            "x": 294,
+            "right": 342,
+            "width": 48,
+            "height": 48
+          },
+          {
+            "label": "添加附件",
+            "x": 28,
+            "right": 132,
+            "width": 104,
+            "height": 44
+          }
+        ]
+      },
+      "bottomTabs": {
+        "scrollTop": 0,
+        "rect": {
+          "x": 28,
+          "y": 431.5,
+          "width": 319,
+          "height": 130,
+          "right": 347
+        },
+        "tabs": [
+          {
+            "label": "首页",
+            "selected": "false",
+            "x": 33,
+            "right": 136,
+            "width": 103,
+            "height": 48
+          },
+          {
+            "label": "待办，6",
+            "selected": "true",
+            "x": 136,
+            "right": 239,
+            "width": 103,
+            "height": 48
+          },
+          {
+            "label": "我的",
+            "selected": "false",
+            "x": 239,
+            "right": 342,
+            "width": 103,
+            "height": 48
+          }
+        ]
+      },
+      "retryVisibleInErrorState": true,
+      "retryRecovered": true,
+      "todoSelected": "true",
+      "pageErrors": [],
+      "screenshot": "components-375.png"
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 720
+      },
+      "document": {
+        "clientWidth": 320,
+        "scrollWidth": 320
+      },
+      "attachment": {
+        "scrollTop": 0,
+        "rect": {
+          "x": 28,
+          "y": 57,
+          "width": 264,
+          "height": 354.5,
+          "right": 292
+        },
+        "actions": [
+          {
+            "label": "打开附件客户补充资料.pdf",
+            "x": 41,
+            "right": 235,
+            "width": 194,
+            "height": 48
+          },
+          {
+            "label": "移除附件客户补充资料.pdf",
+            "x": 239,
+            "right": 287,
+            "width": 48,
+            "height": 48
+          },
+          {
+            "label": "打开附件现场照片.jpg",
+            "x": 41,
+            "right": 235,
+            "width": 194,
+            "height": 48
+          },
+          {
+            "label": "移除附件现场照片.jpg",
+            "x": 239,
+            "right": 287,
+            "width": 48,
+            "height": 48
+          },
+          {
+            "label": "取消附件设备演示.mp4",
+            "x": 239,
+            "right": 287,
+            "width": 48,
+            "height": 48
+          },
+          {
+            "label": "打开附件产品方案.docx",
+            "x": 41,
+            "right": 235,
+            "width": 194,
+            "height": 48
+          },
+          {
+            "label": "移除附件产品方案.docx",
+            "x": 239,
+            "right": 287,
+            "width": 48,
+            "height": 48
+          },
+          {
+            "label": "添加附件",
+            "x": 28,
+            "right": 132,
+            "width": 104,
+            "height": 44
+          }
+        ]
+      },
+      "bottomTabs": {
+        "scrollTop": 0,
+        "rect": {
+          "x": 28,
+          "y": 431.5,
+          "width": 264,
+          "height": 130,
+          "right": 292
+        },
+        "tabs": [
+          {
+            "label": "首页",
+            "selected": "false",
+            "x": 33,
+            "right": 117.7,
+            "width": 84.7,
+            "height": 48
+          },
+          {
+            "label": "待办，6",
+            "selected": "true",
+            "x": 117.7,
+            "right": 202.3,
+            "width": 84.7,
+            "height": 48
+          },
+          {
+            "label": "我的",
+            "selected": "false",
+            "x": 202.3,
+            "right": 287,
+            "width": 84.7,
+            "height": 48
+          }
+        ]
+      },
+      "retryVisibleInErrorState": true,
+      "retryRecovered": true,
+      "todoSelected": "true",
+      "pageErrors": [],
+      "screenshot": "components-320.png"
+    }
+  ]
+}

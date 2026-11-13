@@ -438,3 +438,13 @@ Tel App 已改用以上契约，并将列表/表单/工作台容器、错误边�
 - Catalog 覆盖行内说明展开、折叠与带文案的页面加载状态；Taro 侧 `AppHint` 映射到 `InlineHint`，`PageState.LoadingState` 映射到带文案 `LoadingView` 的等价实现。
 - Expo Web Catalog 的 375×812 与 320×720 CSS px 视口均已实际渲染；行内说明展开/收起与可见文案、加载状态角色/文案、开关切换及禁用态均已检查。两档页面横向溢出均为 0；组件几何、截图和边界见[组件适配验收](./verification/sunxu-mini-component-parity-2026-11-13/README.md)。
 - 触控命中范围的真实设备表现、系统读屏，以及 Taro/微信目标路由仍为 `UNVERIFIED`；Catalog 证据只证明 Sunxu 共享契约和 Expo Web 示例。
+
+## 2026-11-13 小程序通用控件缺口补齐
+
+全量检查小程序已挂载的组件后，补入两项跨业务 UI 能力：
+
+- `AttachmentField` 以受控附件项呈现图片、视频、文档和一般文件，统一 ready、uploading、error 状态，以及添加、打开、重试、移除和数量上限。文件选择、上传/下载、授权、存储与预览仍由宿主回调完成。
+- `BottomTabBar` 以受控 tab 项呈现图标、标签、选中/禁用状态和可选徽标；宿主继续决定路由、可见菜单、权限和计数，并传入平台图标插槽。组件处理 tablist/selected 语义及底部安全区。
+- `examples/catalog` 增加附件状态和底部导航示例，覆盖宿主接线边界。
+
+Digi CRM 小程序以 `AppAttachmentField` 与 `AppBottomTabBar` 提供 Taro 适配；`CrmFileField` 与 `CrmCustomBottomNav` 复用呈现控件，保留各自 CRM 上传、媒体预览、路由、权限和数据逻辑。`CrmSignatureField` 仍是单一 Taro Canvas/CRM 上传场景；组织选择可由现有实体选择器与树选择器组合，因此不作为共享基础组件新增。

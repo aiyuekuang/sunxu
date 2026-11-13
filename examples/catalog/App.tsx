@@ -2,10 +2,12 @@ import {
   AppText,
   ActionButton,
   ActionMenu,
+  AttachmentField,
   Avatar,
   Badge,
   CountBadge,
   BottomActionBar,
+  BottomTabBar,
   CenteredModal,
   ChoiceSheet,
   CheckboxField,
@@ -48,6 +50,8 @@ import {
   ToastHost,
   type EntityFilterValue,
   type EntityPickerFetchFn,
+  type AttachmentFieldItem,
+  type BottomTabItem,
   type PickerOption,
   type AdvancedFilterConfig,
   type TabItem,
@@ -71,6 +75,7 @@ type CustomerStatus = 'all' | 'active' | 'paused';
 type ComponentStatus = 'all' | 'waiting' | 'done';
 type TimelineFilterDemo = 'all' | 'calls' | 'followups' | 'others';
 type CustomerOpportunityDemo = 'customers' | 'opportunities';
+type BottomTabDemoKey = 'home' | 'tasks' | 'mine';
 
 const screenTabs: { key: ScreenKey; label: string }[] = [
   { key: 'list', label: '列表' },
@@ -278,6 +283,13 @@ function ComponentExamples({
   const [pickerValue, setPickerValue] = useState('lin');
   const [entityValue, setEntityValue] = useState<EntityFilterValue | null>(null);
   const [photos, setPhotos] = useState<string[]>([]);
+  const [bottomTab, setBottomTab] = useState<BottomTabDemoKey>('home');
+  const [attachments, setAttachments] = useState<AttachmentFieldItem[]>([
+    { id: 'demo-contract', name: '客户补充资料.pdf', kind: 'document', status: 'ready', description: 'PDF · 1.8 MB' },
+    { id: 'demo-image', name: '现场照片.jpg', kind: 'image', status: 'ready', description: '图片 · 860 KB' },
+    { id: 'demo-video', name: '设备演示.mp4', kind: 'video', status: 'uploading', description: '正在上传' },
+    { id: 'demo-failed', name: '产品方案.docx', kind: 'document', status: 'error', errorMessage: '上传中断，可重试' },
+  ]);
   const [fillModalVisible, setFillModalVisible] = useState(false);
   const [centeredModalVisible, setCenteredModalVisible] = useState(false);
   const [immersiveModalVisible, setImmersiveModalVisible] = useState(false);
@@ -304,6 +316,8 @@ function ComponentExamples({
     setPickerValue('lin');
     setEntityValue(null);
     setPhotos([]);
+    setBottomTab('home');
+    setAttachments([]);
     setFillModalVisible(false);
     setCenteredModalVisible(false);
     setImmersiveModalVisible(false);
@@ -745,6 +759,52 @@ function ComponentExamples({
           </AppText>
         </View>
 
+        <View style={styles.componentSection} testID="demo-attachment-field">
+          <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>AttachmentField · 上传与恢复状态</AppText>
+          <AttachmentField
+            items={attachments}
+            maxCount={5}
+            addLabel="添加附件"
+            onAdd={() => setAttachments((current) => [...current, {
+              id: `demo-${Date.now()}`,
+              name: '新添加的附件.pdf',
+              kind: 'document',
+              status: 'ready',
+              description: 'PDF · 240 KB',
+            }])}
+            onOpen={(item) => setFeedback(`打开示例附件：${item.name}`)}
+            onRemove={(item) => setAttachments((current) => current.filter((candidate) => candidate.id !== item.id))}
+            onRetry={(item) => setAttachments((current) => current.map((candidate) => candidate.id === item.id
+              ? { ...candidate, status: 'ready', errorMessage: undefined, description: '上传完成' }
+              : candidate))}
+          />
+          <AppText style={styles.componentHint}>
+            组件只呈现附件类型、上传状态与操作；文件选择、上传和预览由宿主提供。
+          </AppText>
+        </View>
+
+        <View style={styles.componentSection} testID="demo-bottom-tab-bar">
+          <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>BottomTabBar · 主导航与待办数</AppText>
+          <View style={[styles.bottomTabExample, { borderColor: colors.border, backgroundColor: colors.surface }]}>
+            <BottomTabBar<BottomTabDemoKey>
+              tabs={[
+                { key: 'home', label: '首页', icon: <Icon name="home-outline" size={20} color={colors.textSecondary} />, activeIcon: <Icon name="home" size={20} color={colors.primary} /> },
+                { key: 'tasks', label: '待办', icon: <Icon name="inbox-outline" size={20} color={colors.textSecondary} />, activeIcon: <Icon name="inbox" size={20} color={colors.primary} />, badge: 6 },
+                { key: 'mine', label: '我的', icon: <Icon name="account-outline" size={20} color={colors.textSecondary} />, activeIcon: <Icon name="account" size={20} color={colors.primary} /> },
+              ] satisfies BottomTabItem<BottomTabDemoKey>[]}
+              activeKey={bottomTab}
+              onChange={setBottomTab}
+              accessibilityLabel="示例主导航"
+              includeSafeArea={false}
+              bottomInsetBase={4}
+              style={{ position: 'relative', borderTopWidth: 0, paddingHorizontal: Spacing.xs, paddingTop: Spacing.xs, paddingBottom: 4 }}
+            />
+          </View>
+          <AppText style={styles.componentHint}>
+            当前页签、路由、权限和徽标数由宿主控制；组件处理选中/禁用语义与安全区。
+          </AppText>
+        </View>
+
         <View style={styles.componentSection} testID="demo-full-screen-modal">
           <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>FullScreenModal · 固定操作区 / 键盘避让 / immersive</AppText>
           <View style={styles.modalButtons}>
@@ -1089,6 +1149,7 @@ const styles = StyleSheet.create({
   componentDemo: { padding: 16, gap: 20 },
   componentSection: { gap: 8 },
   componentSectionTitle: { fontSize: 14, fontWeight: '600' },
+  bottomTabExample: { overflow: 'hidden', borderWidth: StyleSheet.hairlineWidth, borderRadius: 10 },
   avatarStateRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 24, flexWrap: 'wrap' },
   avatarStateItem: { alignItems: 'center', gap: 6 },
   componentHint: { fontSize: 12, lineHeight: 18 },

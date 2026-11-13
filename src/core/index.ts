@@ -5,6 +5,8 @@ export * from './components/ActionButton';
 export * from './components/ActionMenu';
 export * from './components/AudioPlayer';
 export * from './components/Badge';
+export * from './components/AttachmentField';
+export * from './components/BottomTabBar';
 export * from './components/BottomActionBar';
 export * from './components/BottomSheet';
 export * from './components/BottomSheetContext';
