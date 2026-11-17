@@ -16,6 +16,7 @@
     "src/**/*.tsx"
   ],
   "exclude": [
+    "src/core/taro/**",
     "**/*.test.ts",
     "**/*.test.tsx"
   ]

@@ -1,1 +1,4 @@
 node_modules/
+artifacts/
+examples/taro-catalog/dist/
+examples/taro-catalog/.swc/

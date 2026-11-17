@@ -2,6 +2,8 @@
 
 Sunxu 是面向 React Native / Expo 项目的通用 UI 组件和页面容器库。它提供主题 token、表单/筛选/选择控件，以及列表、表单和详情页常用骨架；数据请求、路由、授权和业务规则由宿主 App 管理。
 
+Taro/微信小程序使用独立的 `sunxu-taro` 平台包，避免引入 RN/Expo peer dependencies。权威实现仍归本仓库 `src/core/taro/`；公开 API、打包与宿主接入见 [Taro 组件契约](./docs/taro-components.md)，可运行示例见 [Taro Catalog](./examples/taro-catalog/README.md)。
+
 ## 页面容器
 
 ```tsx

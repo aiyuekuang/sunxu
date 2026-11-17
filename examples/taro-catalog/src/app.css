@@ -1,0 +1,8 @@
+page { background: #F5F6F8; color: #1A1A1A; font-size: 28rpx; }
+.catalog { --app-page-content-gutter: 20rpx; padding: 20rpx 0 calc(160rpx + env(safe-area-inset-bottom)); }
+.catalog__section { display: flex; min-width: 0; flex-direction: column; gap: 20rpx; margin-bottom: 20rpx; padding: 20rpx; border-radius: 16rpx; background: #fff; }
+.catalog__row { display: flex; min-width: 0; align-items: center; gap: 20rpx; }
+.catalog__search { flex: 1; }
+.catalog__tabs { margin-bottom: 20rpx; }
+.catalog__actions { display: flex; flex-wrap: wrap; gap: 20rpx; }
+.catalog__action.ui-button { background: var(--c-primary); color: #fff; }

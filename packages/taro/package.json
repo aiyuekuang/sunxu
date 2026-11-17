@@ -1,0 +1,36 @@
+{
+  "name": "sunxu-taro",
+  "version": "0.1.0",
+  "description": "Sunxu components adapted to Taro and WeChat Mini Programs",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aiyuekuang/sunxu.git",
+    "directory": "packages/taro"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
+    "./tokens.css": "./tokens.css",
+    "./styles.css": "./styles.css",
+    "./overrides.css": "./overrides.css",
+    "./package.json": "./package.json"
+  },
+  "files": ["dist", "tokens.css", "styles.css", "overrides.css", "README.md", "LICENSE"],
+  "scripts": {
+    "pack": "node ../../scripts/pack-taro.cjs"
+  },
+  "peerDependencies": {
+    "@tarojs/components": ">=4.2.0 <5",
+    "@tarojs/taro": ">=4.2.0 <5",
+    "react": "^18.3.1 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@tarojs/components": "4.2.0",
+    "@tarojs/taro": "4.2.0",
+    "@types/react": "^18.3.18",
+    "react": "^18.3.1",
+    "typescript": "^5.8.2"
+  }
+}

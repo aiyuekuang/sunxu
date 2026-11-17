@@ -1,0 +1,99 @@
+/* Import after host layout CSS: preserves final shared appearance/size ownership. */
+
+.ui-button.ui-button--appearance-plain { border: 0; background: transparent; color: inherit; text-align: left; }
+
+.app-bottom-tabbar {
+  --app-bottom-tabbar-height: 112rpx;
+  --app-bottom-tabbar-surface: var(--c-surface, #fff);
+  --app-bottom-tabbar-border: var(--c-border, #ebebeb);
+  --app-bottom-tabbar-label: var(--c-text-4, #6b778c);
+  --app-bottom-tabbar-active: var(--c-tab-active, #45516c);
+  --app-bottom-tabbar-badge: var(--c-danger, #e55e58);
+  position: fixed;
+  z-index: 1000;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  /* The mini-program bar can live beside page content, outside page-scoped token inheritance. */
+  height: calc(var(--app-bottom-tabbar-height) + env(safe-area-inset-bottom));
+  align-items: flex-start;
+  justify-content: space-around;
+  padding: 8rpx 8rpx env(safe-area-inset-bottom);
+  border-top: 1rpx solid var(--app-bottom-tabbar-border);
+  background: var(--app-bottom-tabbar-surface);
+  box-sizing: border-box;
+}
+
+.app-bottom-tabbar__item.ui-button {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: var(--app-bottom-tabbar-height);
+  flex: 1 1 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rpx;
+  --ui-button-hit-inset-y: 0rpx;
+  --ui-button-hit-inset-x: 0;
+  --ui-min-height: var(--app-bottom-tabbar-height);
+  --ui-padding: 4rpx 0;
+  --ui-radius: 0;
+  --ui-font: 20rpx;
+  border: 0;
+  background: transparent;
+  color: var(--app-bottom-tabbar-label);
+  text-align: center;
+}
+
+.app-bottom-tabbar__item.ui-button::after { border: 0; }
+.app-bottom-tabbar__item.is-active { color: var(--app-bottom-tabbar-active); }
+.app-bottom-tabbar__icon { position: relative; display: flex; width: 38rpx; height: 38rpx; flex: 0 0 38rpx; align-items: center; justify-content: center; }
+.app-bottom-tabbar__label { display: block; max-width: 100%; overflow: hidden; font-size: 24rpx; line-height: 1.2; text-overflow: ellipsis; white-space: nowrap; }
+.app-bottom-tabbar__badge { position: absolute; top: -1rpx; left: calc(50% + 8rpx); display: flex; min-width: 26rpx; height: 26rpx; align-items: center; justify-content: center; padding: 0 5rpx; border: 2rpx solid var(--app-bottom-tabbar-surface); border-radius: 999rpx; background: var(--app-bottom-tabbar-badge); color: #fff; font-size: 18rpx; line-height: 1; }
+
+.app-attachment-field { display: flex; flex-direction: column; gap: 8rpx; }
+.app-attachment-field__heading { display: flex; min-width: 0; align-items: center; justify-content: space-between; gap: 12rpx; }
+.app-attachment-field__label { color: var(--c-text-2); font-size: 24rpx; font-weight: 600; }
+.app-attachment-field__count,
+.app-attachment-field__state { color: var(--c-text-5); font-size: 22rpx; }
+.app-attachment-field__state { display: block; padding: 8rpx 0; }
+.app-attachment-field__list { display: flex; flex-direction: column; gap: 8rpx; }
+.app-attachment-field__item { display: flex; min-width: 0; min-height: 88rpx; align-items: center; gap: 8rpx; border-bottom: 1rpx solid var(--c-border); }
+.app-attachment-field__open.ui-button { min-width: 0; flex: 1 1 auto; justify-content: flex-start; gap: 12rpx; border: 0; background: transparent; color: var(--c-text-dark); text-align: left; white-space: normal; }
+.app-attachment-field__icon { flex: 0 0 auto; color: var(--c-text-4); }
+.app-attachment-field__details { display: flex; min-width: 0; flex: 1; flex-direction: column; align-items: flex-start; gap: 2rpx; }
+.app-attachment-field__name { display: block; max-width: 100%; overflow: hidden; color: inherit; font-size: 24rpx; line-height: 1.4; text-overflow: ellipsis; white-space: nowrap; }
+.app-attachment-field__meta,
+.app-attachment-field__status { display: block; color: var(--c-text-5); font-size: 20rpx; line-height: 1.4; }
+.app-attachment-field__status.is-error { color: var(--c-danger-deep); }
+.app-attachment-field__remove.ui-button,
+.app-attachment-field__retry.ui-button { flex: 0 0 auto; border: 0; background: transparent; color: var(--c-danger-deep); font-size: 22rpx; }
+.app-attachment-field__retry.ui-button { color: var(--c-primary-deep); }
+.app-attachment-field__actions { display: flex; flex-wrap: wrap; gap: 12rpx; }
+.app-attachment-field__add.ui-button { display: inline-flex; align-items: center; gap: 6rpx; border: 0; background: transparent; color: var(--c-primary-deep); font-size: 22rpx; }
+.ui-tabs--page-title { background: transparent; }
+.ui-tabs--page-title .ui-tabs__track {
+  height: 104rpx;
+  align-items: center;
+  gap: 48rpx;
+  padding: 0 12rpx;
+  border: 0;
+  background: transparent;
+}
+.ui-tabs--page-title .ui-tabs__tab.ui-button {
+  height: 88rpx;
+  min-height: 88rpx;
+  --ui-min-height: 88rpx;
+  --ui-padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #171a21;
+  font-size: 32rpx;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.ui-tabs--page-title .ui-tabs__tab.is-active.ui-button { font-size: 38rpx; font-weight: 700; }
+.ui-tabs--page-title .ui-tabs__indicator { display: none; }
