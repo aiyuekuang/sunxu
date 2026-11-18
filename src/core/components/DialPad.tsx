@@ -24,6 +24,8 @@ interface DialPadBaseProps {
   placeholder?: string;
   /** Disables all keypad and action controls. */
   disabled?: boolean;
+  /** Overall control scale. `regular` preserves the 64dp keypad. */
+  size?: 'regular' | 'large';
 }
 
 export type DialPadProps = DialPadBaseProps & (
@@ -63,6 +65,7 @@ export function DialPad({
   maxLength = 20,
   placeholder = '输入号码',
   disabled = false,
+  size = 'regular',
   isSubmitting = false,
   variant = 'full',
   onKeyPress,
@@ -73,6 +76,7 @@ export function DialPad({
   const keypadDisabled = disabled || (!onKeyPress && value.length >= limit);
   const canSubmit = hasValue && !disabled && !isSubmitting;
   const canDelete = hasValue && !disabled && !isSubmitting;
+  const isLarge = size === 'large';
 
   const appendKey = (key: string) => {
     if (keypadDisabled) return;
@@ -98,15 +102,16 @@ export function DialPad({
         {value || placeholder}
       </AppText> : null}
 
-      <View style={styles.grid}>
+      <View style={[styles.grid, isLarge && styles.gridLarge]}>
         {[0, 1, 2, 3].map((rowIndex) => (
-          <View key={rowIndex} style={styles.row}>
+          <View key={rowIndex} style={[styles.row, isLarge && styles.rowLarge]}>
             {DIAL_KEYS.slice(rowIndex * 3, rowIndex * 3 + 3).map(
               ({ key, letters }) => (
                 <Pressable
                   key={key}
                   style={({ pressed }) => [
                     styles.key,
+                    isLarge && styles.keyLarge,
                     {
                       backgroundColor: pressed ? colors.border : colors.surfaceSecondary,
                       borderColor: colors.border,
@@ -122,13 +127,20 @@ export function DialPad({
                   disabled={keypadDisabled}
                   onPress={() => appendKey(key)}
                 >
-                  <AppText style={[styles.keyText, { color: colors.text }]}>
+                  <AppText
+                    style={[
+                      styles.keyText,
+                      isLarge && styles.keyTextLarge,
+                      { color: colors.text },
+                    ]}
+                  >
                     {key}
                   </AppText>
                   {letters ? (
                     <AppText
                       style={[
                         styles.letters,
+                        isLarge && styles.lettersLarge,
                         { color: colors.textSecondary },
                       ]}
                     >
@@ -146,6 +158,7 @@ export function DialPad({
         <Pressable
           style={({ pressed }) => [
             styles.actionSlot,
+            isLarge && styles.actionSlotLarge,
             pressed && canDelete && { opacity: 0.55 },
           ]}
           accessibilityRole="button"
@@ -164,6 +177,7 @@ export function DialPad({
         <Pressable
           style={({ pressed }) => [
             styles.submitButton,
+            isLarge && styles.submitButtonLarge,
             {
               backgroundColor: colors.primary,
               opacity: !canSubmit ? 0.58 : pressed ? 0.78 : 1,
@@ -186,7 +200,7 @@ export function DialPad({
             />
           )}
         </Pressable>
-        <View style={styles.actionSlot} />
+        <View style={[styles.actionSlot, isLarge && styles.actionSlotLarge]} />
       </View> : null}
     </View>
   );
@@ -203,7 +217,9 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   grid: { gap: 10 },
+  gridLarge: { gap: 12 },
   row: { flexDirection: 'row', justifyContent: 'center', gap: Spacing.md },
+  rowLarge: { gap: Spacing.lg },
   key: {
     width: 64,
     height: 64,
@@ -212,13 +228,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  keyLarge: { width: 80, height: 80 },
   keyText: { fontSize: 23, lineHeight: 26, fontWeight: '500' },
+  keyTextLarge: { fontSize: 29, lineHeight: 33 },
   letters: {
     fontSize: 9,
     lineHeight: 11,
     letterSpacing: 1,
     fontWeight: '600',
   },
+  lettersLarge: { fontSize: 11, lineHeight: 13 },
   actions: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -232,6 +251,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  actionSlotLarge: { width: 80, height: 80 },
   submitButton: {
     width: 64,
     height: 64,
@@ -240,4 +260,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: Spacing.xl,
   },
+  submitButtonLarge: { width: 72, height: 72 },
 });

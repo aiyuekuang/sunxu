@@ -51,6 +51,7 @@ export function VisualExamples({ onBack, footer }: { onBack: () => void; footer:
         <View style={styles.section} testID="demo-dial-pad">
           <AppText style={[styles.sectionTitle, { color: colors.text }]}>DialPad · 拨号键盘</AppText>
           <DialPad
+            size="large"
             value={dialValue}
             onChangeText={setDialValue}
             onSubmit={setDialSubmitted}
