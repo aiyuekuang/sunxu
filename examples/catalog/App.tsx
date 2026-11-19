@@ -423,8 +423,8 @@ function ComponentExamples({
             <SwipeableRow
               rightActions={[
                 {
-                  label: swipeActionLoading ? '处理中' : '编辑',
-                  icon: 'create-outline',
+                  label: swipeActionLoading ? '处理中' : '归档',
+                  icon: 'archive-outline',
                   color: colors.primary,
                   disabled: swipeActionLoading,
                   loading: swipeActionLoading,
@@ -435,12 +435,37 @@ function ComponentExamples({
                   },
                 },
               ]}
-              onPress={() => setFeedback('已打开客户详情示例')}
-              accessibilityLabel="打开客户详情示例"
-              accessibilityHint="向左滑动查看更多操作"
             >
-              <ListCard>
-                <AppText style={{ color: colors.text }}>点击卡片查看详情</AppText>
+              <ListCard
+                onPress={() => setFeedback('已打开客户详情示例')}
+                accessibilityLabel="打开客户详情示例"
+                accessibilityHint="点击打开详情；向左滑动查看更多操作"
+              >
+                <AppText style={{ color: colors.text }}>常用操作与左滑溢出示例</AppText>
+                <ListCard.Actions>
+                  <ListCard.Action
+                    tone="primary"
+                    onPress={() => {
+                      setFeedback('已触发录入示例');
+                    }}
+                  >
+                    录入
+                  </ListCard.Action>
+                  <ListCard.Action
+                    onPress={() => {
+                      setFeedback('已触发拍照质检示例');
+                    }}
+                  >
+                    拍照质检
+                  </ListCard.Action>
+                  <ListCard.Action
+                    onPress={() => {
+                      setFeedback('已触发记录示例');
+                    }}
+                  >
+                    记录
+                  </ListCard.Action>
+                </ListCard.Actions>
               </ListCard>
             </SwipeableRow>
             <View style={styles.errorExample}>

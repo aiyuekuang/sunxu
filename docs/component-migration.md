@@ -12,7 +12,7 @@
 
 - **稳定任务**：点击结果卡片打开详情或展开卡片内的补充信息。
 - **API**：沿用 `onPress`、`accessibilityLabel` 和 `accessibilityHint`；新增可选 `expanded`，只负责向读屏暴露展开状态，不代替宿主的可见箭头、展开内容或状态管理。
-- **状态**：未提供 `onPress` 时继续渲染静态容器；提供 `onPress` 时成为唯一整卡触控目标；展开/收起由宿主状态控制，并通过 `accessibilityState.expanded` 同步给辅助技术。卡片内部独立动作使用共享按钮并阻断事件冒泡。
+- **状态**：未提供 `onPress` 时继续渲染静态容器；提供 `onPress` 且没有 `ListCard.Actions` 时成为整卡触控目标；包含 `ListCard.Actions` 时只让信息区响应详情点击，底部按钮保持独立触控目标。展开/收起由宿主状态控制，并通过 `accessibilityState.expanded` 同步给辅助技术。
 - **边界**：不负责详情路由、数据加载或列表筛选。最近邻替代是 `ScalePressable` 加手绘卡片表面；它绕过 ListCard 的统一容器语义和列表样式。
 
 ## ListCard 选择状态契约
@@ -25,17 +25,15 @@
 ## ListCard.Actions 与 SwipeableRow 列表操作契约
 
 - **稳定任务**：在记录卡片底部直接提供最常用的记录级操作，把低频操作收进按需展开的左滑区，减少卡片高度和动作竞争。
-- **组件分工**：`ListCard.Actions` 只承载卡片底部可见操作；常用操作最多 3 个。按钮使用 Sunxu `ActionButton` 的 `text` 变体和紧凑尺寸，按钮间用 `Divider orientation="vertical"` 分隔。`SwipeableRow.rightActions` 承载低频操作和第 4 项起的溢出动作，由 `SwipeableRow` 统一处理左滑展开、行详情点击及动作按钮的禁用/加载状态。
+- **组件分工**：`ListCard.Actions` 只承载卡片底部可见操作；常用操作最多 3 个。每个按钮使用 `ListCard.Action`，由它统一套用 Sunxu `ActionButton` 的 `text` 变体、紧凑尺寸和语义色；`ListCard.Actions` 自动等分按钮并插入主题分隔线。`SwipeableRow.rightActions` 承载低频操作和第 4 项起的溢出动作，由 `SwipeableRow` 统一处理左滑展开、行详情点击及动作按钮的禁用/加载状态。
 - **视觉与响应式**：可见操作保持单行、轻量，不堆叠成多行全宽实心或描边按钮。只有一个明确主操作时才可用主色文字强调；分隔线使用主题色并在浅色、深色主题下都清楚可见。窄屏、长文案或大字模式下优先把低优先级操作移入左滑区，不压缩触控目标或让按钮换行。
 - **动作和数据边界**：操作、权限、业务状态和回调由宿主提供；组件只负责呈现和交互。左滑只展开操作区，不直接提交删除等高风险动作。滑动区内每项操作都须保留键盘和辅助技术可到达的非手势入口（如该记录详情中的操作菜单）；关键操作还须有清楚可见的非手势入口。
-- **行点击与组合**：有左滑操作时由 `SwipeableRow.onPress` 持有行详情点击；其子 `ListCard` 仅负责卡片内容和样式，不同时设置 `ListCard.onPress`。没有左滑操作时，可由 `ListCard.onPress` 承担整行主动作。卡片内部按钮须停止事件冒泡，只执行自身操作，不误触发行详情。
-- **当前 API 边界**：现有 `ListCard.Actions` 是可组合容器，不自动插入分隔线或强制最多 3 个按钮；宿主按本契约组合 `ActionButton`、`Divider` 与 `SwipeableRow`。本规范不代表这些约束已由运行时代码强制执行。
+- **行点击与组合**：卡片含有 `ListCard.Actions` 时，详情点击由 `ListCard.onPress` 持有；组件只将卡片信息区设为详情触控区，底部操作区作为并列按钮，不会被详情按钮包裹。`ListCard.Action` 自动阻止事件冒泡。此时 `SwipeableRow` 只承载左滑操作，不设置 `SwipeableRow.onPress`，避免整行按钮包裹内部按钮。没有卡片内操作区时，详情点击可由 `SwipeableRow.onPress` 或 `ListCard.onPress` 持有，两者不要同时设置。
+- **API 与边界**：`ListCard.Action` 提供 `neutral`、`primary`、`success`、`warning`、`danger` 语义色，以及禁用、加载、无障碍名称和提示；`ListCard.Actions` 自动插入分隔线，开发态发现超过 3 个可见操作时只警告、不截断或丢弃动作。组件不会自动替宿主拆分溢出动作；宿主将低频/第 4 项起的动作传给外层 `SwipeableRow.rightActions`。非交互提示内容可继续放在 `ListCard.Actions` 中，并显示在按钮栏上方。
 - **最近邻替代及拒绝原因**：把多个动作做成上下堆叠的大按钮会拉长每条记录并让次要动作获得过高视觉权重；把 4 个以上按钮全部常驻则会挤压记录信息，因此不采用这两种布局。
 
 ```tsx
 <SwipeableRow
-  onPress={() => openDetail(item)}
-  accessibilityLabel="打开记录详情"
   rightActions={[
     {
       label: '归档',
@@ -45,31 +43,30 @@
     },
   ]}
 >
-  <ListCard>
+  <ListCard
+    onPress={() => openDetail(item)}
+    accessibilityLabel="打开记录详情"
+    accessibilityHint="点击打开详情；向左滑动查看更多操作"
+  >
     {/* 记录信息 */}
     <ListCard.Actions>
-      <ActionButton
-        variant="text"
-        size="sm"
-        textColor={colors.primary}
-        onPress={(event) => {
-          event.stopPropagation();
-          openPrimaryAction(item);
-        }}
+      <ListCard.Action
+        tone="primary"
+        onPress={() => openPrimaryAction(item)}
       >
         主要操作
-      </ActionButton>
-      <Divider orientation="vertical" />
-      <ActionButton
-        variant="text"
-        size="sm"
-        onPress={(event) => {
-          event.stopPropagation();
-          openSecondaryAction(item);
-        }}
+      </ListCard.Action>
+      <ListCard.Action
+        onPress={() => openPhotoCheck(item)}
       >
-        次要操作
-      </ActionButton>
+        拍照质检
+      </ListCard.Action>
+      <ListCard.Action
+        tone="neutral"
+        onPress={() => openSecondaryAction(item)}
+      >
+        查看记录
+      </ListCard.Action>
     </ListCard.Actions>
   </ListCard>
 </SwipeableRow>
@@ -260,7 +257,7 @@ CRM 宿主对 49 个再导出组件与来源基线逐文件比对后，修正与
 - 行没有 `onPress` 时直接渲染 `children`，不再额外套一层无回调的 `TouchableOpacity`，避免无障碍树把子控件合并为无操作的单一行。
 - 行有 `onPress` 时才提供按钮角色。
 - 左滑操作按钮暴露按钮角色和对应标签，并至少保持 44dp 高度。
-- 详情行的点击回调由 `SwipeableRow.onPress` 持有；子 `ListCard` 只负责内容和卡片样式。行点击直接调用宿主回调，不额外调用 `close()`；右滑操作按钮才先关闭操作区再执行动作。
+- 没有 `ListCard.Actions` 的普通详情行可以由 `SwipeableRow.onPress` 持有点击回调；子 `ListCard` 只负责内容和卡片样式。行点击直接调用宿主回调，不额外调用 `close()`；右滑操作按钮才先关闭操作区再执行动作。含有 `ListCard.Actions` 的卡片改由 `ListCard.onPress` 持有详情点击，左滑行只负责展示右侧溢出操作。
 - `SwipeableRow` 的行点击区和操作按钮使用 React Native `TouchableOpacity`。行内展示内容保持非交互，电话、评论等独立操作作为并列子项；避免在整行点击区内再包一层覆盖大面积的 Pressable。
 - `ScalePressable` 的缩放只作用于内部视觉层，外层按压目标保持不变形，避免 Android 列表虚拟化与动画变换造成点击命中区偏移。
 - `BottomSheet` 使用根级 `BottomSheetModalProvider` 提供的 portal host；不要在其内部再嵌套 `PortalProvider`，否则详情等弹层会收到点击状态却无法显示。
@@ -272,7 +269,7 @@ CRM 宿主对 49 个再导出组件与来源基线逐文件比对后，修正与
 
 ## 2026-11-09 列表卡片触控与拨号操作样式
 
-- `ListCard` 没有 `onPress` / `onLongPress` 时渲染普通 `View`，不创建禁用态 `TouchableOpacity` 边界；卡片内的详情区、电话键和其他子操作保留各自触控目标。需要整行点击时才使用 `ListCard.onPress`，嵌在 `SwipeableRow` 中的业务行则由 `SwipeableRow.onPress` 统一处理点击。
+- `ListCard` 没有 `onPress` / `onLongPress` 时渲染普通 `View`，不创建禁用态 `TouchableOpacity` 边界。使用标准底部操作区时，通过 `ListCard.Actions` 把详情触控区与独立按钮分开；无底部操作区的左滑行可由 `SwipeableRow.onPress` 统一处理点击。
 - 固定在页面边缘的主操作使用 `FAB`，不要用默认透明的 `IconActionButton` 伪装浮动按钮。`FAB` 支持禁用状态、读屏状态、测试标识和 `StyleProp<ViewStyle>` 定位样式；普通行内图标动作按强调级别显式选 `plain`、`tinted` 或 `filled`。
 - `DialPad` 按键使用 `surfaceSecondary` 和 `border` 形成可辨识的圆形触控面；按压时变为边线色。颜色跟随主题，不由宿主覆盖样式。
 - Catalog 展示拨号图标的填充状态、页面主操作 FAB，以及“整行进入详情 + 左滑更多操作”的标准组合。宿主不再把详情回调嵌在手势行中的内层卡片上。
@@ -413,7 +410,7 @@ Tel App 的真实设备/模拟器路由截图、长列表与弹层状态的几�
 ## 2026-11-10 Tel App 页面与操作状态复用
 
 - `ListScreenContainer.title` 改为可选；父级导航或工作区已提供页面名称时省略页头，列表搜索/筛选仍由 `toolbar` 固定在结果区上方。标题缺省时不创建空 `PageHeader`。
-- `SwipeableRow` 的 `SwipeAction` 增加 `disabled` 与 `loading`。忙碌时显示主题色文字上的 spinner，禁用重复触发，并暴露无障碍 disabled/busy 状态；行详情仍由 `SwipeableRow.onPress` 管理，业务操作回调归宿主。
+- `SwipeableRow` 的 `SwipeAction` 增加 `disabled` 与 `loading`。忙碌时显示主题色文字上的 spinner，禁用重复触发，并暴露无障碍 disabled/busy 状态；普通无内嵌按钮的行详情由 `SwipeableRow.onPress` 管理，含 `ListCard.Actions` 的记录详情改由 `ListCard.onPress` 管理，业务操作回调归宿主。
 - `ErrorBoundary` 增加宿主 `fallback` 插槽，并允许 `null` 显式隐藏共享兜底；默认重试改用 Sunxu `ActionButton`。
 - `Skeleton` 读取系统减少动态效果偏好。宿主已有整组动效时可以传 `animated={false}`，继续复用主题骨架色与尺寸；Tel 页面骨架组合保留在宿主。
 - `core/theme/tokens` 新增公共 `ControlSize`、`BorderWidth`、`MotionDuration`、`FontWeight.light` 和 `Spacing.none`、`Radius.none/xs`，用于统一控件高度、描边、动效时长、字重及零/细间距和小圆角。所有 token 由 `sunxu/core` 公开导出。

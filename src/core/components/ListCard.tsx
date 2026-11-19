@@ -1,11 +1,22 @@
+import { Children, Fragment, isValidElement } from 'react';
 import type React from 'react';
-import { type AccessibilityRole, type StyleProp, StyleSheet, TouchableOpacity, View, type ViewStyle } from 'react-native';
+import {
+  type AccessibilityRole,
+  type GestureResponderEvent,
+  type StyleProp,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  type ViewStyle,
+} from 'react-native';
 import { FontSize, Radius, Shadow, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
+import { ActionButton } from './ActionButton';
 import { AppText as Text } from './AppText';
+import { Divider } from './Divider';
 
 interface ListCardProps {
-  /** Makes the full card the primary action, usually opening its detail view. */
+  /** Makes the card the primary action. With Actions, only the information area is tappable. */
   onPress?: () => void;
   /** Optional secondary action for a long press. */
   onLongPress?: () => void;
@@ -26,10 +37,23 @@ interface ListCardProps {
   children: React.ReactNode;
 }
 
+export type ListCardActionTone = 'neutral' | 'primary' | 'success' | 'warning' | 'danger';
+
+interface CardActionProps {
+  children: React.ReactNode;
+  onPress: (event: GestureResponderEvent) => void;
+  tone?: ListCardActionTone;
+  disabled?: boolean;
+  loading?: boolean;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
+  testID?: string;
+}
+
 /**
- * Shared list-card surface. Without press handlers it stays a plain View so
- * nested actions keep their own touch targets; with `onPress`, the full card
- * becomes the primary action. Avoid nesting another full-card pressable.
+ * Shared list-card surface. Without press handlers it stays a plain View.
+ * With an action row, `onPress` applies only to the information area so the
+ * row actions remain independent controls.
  */
 export function ListCard({
   onPress,
@@ -46,15 +70,55 @@ export function ListCard({
 }: ListCardProps) {
   const { colors } = useTheme();
 
+  const cardChildren = flattenFragments(children);
+  const actionSections = cardChildren.filter(
+    (child) => isValidElement(child) && child.type === CardActions,
+  );
+  const contentChildren = cardChildren.filter(
+    (child) => !(isValidElement(child) && child.type === CardActions),
+  );
+  const hasActionSections = actionSections.length > 0;
+
   const cardStyle = [
     styles.card,
     {
       backgroundColor: selected ? colors.primarySurface : colors.surface,
       borderColor: selected ? colors.primary : colors.borderLight,
-      opacity: disabled ? 0.5 : 1,
+      opacity: disabled && !hasActionSections ? 0.5 : 1,
     },
     style,
   ];
+
+  // Keep detail navigation separate from the action row. This avoids nested
+  // interactive elements when a card has independently tappable actions.
+  if (actionSections.length > 0) {
+    return (
+      <View style={cardStyle}>
+        {contentChildren.length > 0 ? (
+          onPress || onLongPress ? (
+            <TouchableOpacity
+              style={[styles.cardContent, { opacity: disabled ? 0.5 : 1 }]}
+              onPress={onPress}
+              onLongPress={onLongPress}
+              disabled={disabled}
+              activeOpacity={0.75}
+              accessibilityRole={accessibilityRole}
+              accessibilityLabel={accessibilityLabel}
+              accessibilityHint={accessibilityHint}
+              accessibilityState={{ disabled, selected, expanded, checked }}
+            >
+              {contentChildren}
+            </TouchableOpacity>
+          ) : (
+            <View style={[styles.cardContent, { opacity: disabled ? 0.5 : 1 }]}>
+              {contentChildren}
+            </View>
+          )
+        ) : null}
+        {actionSections}
+      </View>
+    );
+  }
 
   // A disabled TouchableOpacity can still form a responder boundary on some
   // native versions. Keep visual-only cards as Views so nested controls retain
@@ -144,9 +208,108 @@ function CardCode({ children, color }: { children: React.ReactNode; color?: stri
   );
 }
 
-/** 卡片操作按钮行 */
+function flattenFragments(children: React.ReactNode): React.ReactNode[] {
+  return Children.toArray(children).flatMap((child) => {
+    if (isValidElement<{ children?: React.ReactNode }>(child) && child.type === Fragment) {
+      return flattenFragments(child.props.children);
+    }
+    return [child];
+  });
+}
+
+/** Compact, theme-aware action used in a ListCard action row. */
+function CardAction({
+  children,
+  onPress,
+  tone = 'neutral',
+  disabled = false,
+  loading = false,
+  accessibilityLabel,
+  accessibilityHint,
+  testID,
+}: CardActionProps) {
+  const { colors } = useTheme();
+  const textColor = {
+    neutral: colors.textSecondary,
+    primary: colors.primary,
+    success: colors.success,
+    warning: colors.warning,
+    danger: colors.error,
+  }[tone];
+
+  return (
+    <ActionButton
+      variant="text"
+      size="md"
+      textColor={textColor}
+      disabled={disabled}
+      loading={loading}
+      accessibilityLabel={accessibilityLabel}
+      accessibilityHint={accessibilityHint}
+      testID={testID}
+      style={styles.actionButton}
+      contentStyle={styles.actionButtonContent}
+      onPress={(event) => {
+        event.stopPropagation();
+        onPress(event);
+      }}
+    >
+      {children}
+    </ActionButton>
+  );
+}
+
+function isActionControl(child: React.ReactNode): boolean {
+  if (!isValidElement(child)) return false;
+  const props = child.props as {
+    accessibilityRole?: unknown;
+    disabled?: unknown;
+    loading?: unknown;
+    onPress?: unknown;
+  };
+  return (
+    typeof props.onPress === 'function' ||
+    props.accessibilityRole === 'button' ||
+    typeof props.disabled === 'boolean' ||
+    typeof props.loading === 'boolean'
+  );
+}
+
+const warnedActionCounts = new Set<number>();
+
+/** Bottom action row. Use up to three controls; overflow belongs in SwipeableRow. */
 function CardActions({ children }: { children: React.ReactNode }) {
-  return <View style={styles.actions}>{children}</View>;
+  const nodes = flattenFragments(children);
+  const actionNodes = nodes.filter(isActionControl);
+  const supportingNodes = nodes.filter((node) => !isActionControl(node));
+
+  if (__DEV__ && actionNodes.length > 3 && !warnedActionCounts.has(actionNodes.length)) {
+    warnedActionCounts.add(actionNodes.length);
+    console.warn(
+      `[Sunxu] ListCard.Actions has ${actionNodes.length} visible actions. Keep at most 3 and move overflow to SwipeableRow.rightActions.`,
+    );
+  }
+
+  return (
+    <View style={styles.actions}>
+      {supportingNodes.length > 0 ? (
+        <View style={styles.actionSupporting}>{supportingNodes}</View>
+      ) : null}
+      {actionNodes.length > 0 ? (
+        <View style={styles.actionRow}>
+          {actionNodes.map((child, index) => {
+            const key = isValidElement(child) && child.key != null ? child.key : `action-${index}`;
+            return (
+              <Fragment key={key}>
+                {index > 0 ? <Divider orientation="vertical" style={styles.actionDivider} /> : null}
+                <View style={styles.actionCell}>{child}</View>
+              </Fragment>
+            );
+          })}
+        </View>
+      ) : null}
+    </View>
+  );
 }
 
 // Attach sub-components
@@ -156,6 +319,7 @@ ListCard.Subtitle = CardSubtitle;
 ListCard.Meta = CardMeta;
 ListCard.MetaText = MetaText;
 ListCard.Code = CardCode;
+ListCard.Action = CardAction;
 ListCard.Actions = CardActions;
 
 const styles = StyleSheet.create({
@@ -165,6 +329,9 @@ const styles = StyleSheet.create({
     padding: Spacing.md,
     gap: Spacing.xs,
     ...Shadow.sm,
+  },
+  cardContent: {
+    gap: Spacing.xs,
   },
   header: {
     flexDirection: 'row',
@@ -195,10 +362,29 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   actions: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    flexWrap: 'wrap',
-    gap: Spacing.sm,
     marginTop: Spacing.sm,
+    gap: Spacing.xs,
+  },
+  actionSupporting: {
+    gap: Spacing.xs,
+  },
+  actionRow: {
+    flexDirection: 'row',
+    alignItems: 'stretch',
+  },
+  actionCell: {
+    flex: 1,
+    minWidth: 0,
+    justifyContent: 'center',
+  },
+  actionButton: {
+    width: '100%',
+    borderWidth: 0,
+  },
+  actionButtonContent: {
+    paddingHorizontal: Spacing.xs,
+  },
+  actionDivider: {
+    marginVertical: Spacing.sm,
   },
 });

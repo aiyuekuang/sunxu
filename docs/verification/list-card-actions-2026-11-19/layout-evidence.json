@@ -1,0 +1,235 @@
+{
+  "url": "http://localhost:8091/",
+  "title": "Sunxu Catalog",
+  "results": [
+    {
+      "viewport": "375x812",
+      "geometry": [
+        {
+          "label": "录入",
+          "x": 50,
+          "y": 459,
+          "width": 91,
+          "height": 44,
+          "scrollWidth": 91,
+          "clientWidth": 91
+        },
+        {
+          "label": "拍照质检",
+          "x": 142,
+          "y": 459,
+          "width": 91,
+          "height": 44,
+          "scrollWidth": 91,
+          "clientWidth": 91
+        },
+        {
+          "label": "记录",
+          "x": 234,
+          "y": 459,
+          "width": 91,
+          "height": 44,
+          "scrollWidth": 91,
+          "clientWidth": 91
+        }
+      ],
+      "pageGeometry": {
+        "innerWidth": 375,
+        "clientWidth": 375,
+        "scrollWidth": 375,
+        "bodyScrollWidth": 375
+      },
+      "errors": [],
+      "actionRow": {
+        "rect": {
+          "x": 50,
+          "y": 459,
+          "width": 275,
+          "height": 44
+        },
+        "children": [
+          {
+            "tag": "DIV",
+            "x": 50,
+            "y": 459,
+            "width": 91,
+            "height": 44,
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "DIV",
+            "x": 141,
+            "y": 467,
+            "width": 1,
+            "height": 28,
+            "backgroundColor": "rgb(235, 235, 235)"
+          },
+          {
+            "tag": "DIV",
+            "x": 142,
+            "y": 459,
+            "width": 91,
+            "height": 44,
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "DIV",
+            "x": 233,
+            "y": 467,
+            "width": 1,
+            "height": 28,
+            "backgroundColor": "rgb(235, 235, 235)"
+          },
+          {
+            "tag": "DIV",
+            "x": 234,
+            "y": 459,
+            "width": 91,
+            "height": 44,
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          }
+        ]
+      },
+      "accessibility": [
+        {
+          "name": "录入",
+          "role": "button",
+          "tag": "BUTTON"
+        },
+        {
+          "name": "拍照质检",
+          "role": "button",
+          "tag": "BUTTON"
+        },
+        {
+          "name": "记录",
+          "role": "button",
+          "tag": "BUTTON"
+        }
+      ],
+      "detailBeforeAction": 0,
+      "detailAfterAction": 0,
+      "actionAfterAction": 2,
+      "detailAfterContentClick": 2,
+      "archiveVisibleAfterSwipe": 1
+    },
+    {
+      "viewport": "320x720",
+      "geometry": [
+        {
+          "label": "录入",
+          "x": 50,
+          "y": 459,
+          "width": 72.7,
+          "height": 44,
+          "scrollWidth": 73,
+          "clientWidth": 73
+        },
+        {
+          "label": "拍照质检",
+          "x": 123.7,
+          "y": 459,
+          "width": 72.7,
+          "height": 44,
+          "scrollWidth": 73,
+          "clientWidth": 73
+        },
+        {
+          "label": "记录",
+          "x": 197.3,
+          "y": 459,
+          "width": 72.7,
+          "height": 44,
+          "scrollWidth": 73,
+          "clientWidth": 73
+        }
+      ],
+      "pageGeometry": {
+        "innerWidth": 320,
+        "clientWidth": 320,
+        "scrollWidth": 320,
+        "bodyScrollWidth": 320
+      },
+      "errors": []
+    },
+    {
+      "viewport": "430x932",
+      "geometry": [
+        {
+          "label": "录入",
+          "x": 50,
+          "y": 459,
+          "width": 109.3,
+          "height": 44,
+          "scrollWidth": 109,
+          "clientWidth": 109
+        },
+        {
+          "label": "拍照质检",
+          "x": 160.3,
+          "y": 459,
+          "width": 109.3,
+          "height": 44,
+          "scrollWidth": 109,
+          "clientWidth": 109
+        },
+        {
+          "label": "记录",
+          "x": 270.7,
+          "y": 459,
+          "width": 109.3,
+          "height": 44,
+          "scrollWidth": 109,
+          "clientWidth": 109
+        }
+      ],
+      "pageGeometry": {
+        "innerWidth": 430,
+        "clientWidth": 430,
+        "scrollWidth": 430,
+        "bodyScrollWidth": 430
+      },
+      "errors": []
+    },
+    {
+      "viewport": "812x375",
+      "geometry": [
+        {
+          "label": "录入",
+          "x": 50,
+          "y": 208,
+          "width": 236.7,
+          "height": 44,
+          "scrollWidth": 237,
+          "clientWidth": 237
+        },
+        {
+          "label": "拍照质检",
+          "x": 287.7,
+          "y": 208,
+          "width": 236.7,
+          "height": 44,
+          "scrollWidth": 237,
+          "clientWidth": 237
+        },
+        {
+          "label": "记录",
+          "x": 525.3,
+          "y": 208,
+          "width": 236.7,
+          "height": 44,
+          "scrollWidth": 237,
+          "clientWidth": 237
+        }
+      ],
+      "pageGeometry": {
+        "innerWidth": 812,
+        "clientWidth": 812,
+        "scrollWidth": 812,
+        "bodyScrollWidth": 812
+      },
+      "errors": []
+    }
+  ],
+  "allErrors": []
+}
