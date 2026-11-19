@@ -1,0 +1,521 @@
+{
+  "schema_version": 1,
+  "overall_status": "PASS WITH UNVERIFIED",
+  "target": {
+    "name": "Sunxu Catalog FormPage save action",
+    "route": "http://localhost:8082/ → one “新增客户” action → FormPage example",
+    "runtime": "Expo Web, Playwright Chromium; public local example, no authentication",
+    "executed_command": "cd /Users/suconnect/.codex/skills/playwright-skill && node run.js /tmp/playwright-formpage-layout-2026-11-19.js",
+    "geometry_artifact": "/Users/suconnect/Desktop/code/sunxu/docs/verification/form-page-save-2026-11-19/geometry.json"
+  },
+  "surface_frame_gate": {
+    "status": "PASS",
+    "rows": [
+      {
+        "route": "http://localhost:8082/ → click “新增客户” → FormPage catalog example",
+        "state": "light, 375x812-default, default form",
+        "viewport": {
+          "width": 375,
+          "height": 812
+        },
+        "workspace": "FormScreenContainer visible scroll viewport below fixed PageHeader and above fixed ExampleTabs",
+        "workspace_rect": {
+          "left": 0,
+          "top": 57,
+          "right": 375,
+          "bottom": 751,
+          "width": 375,
+          "height": 694
+        },
+        "content": "visible FormSection card union; landscape row is clipped to the scroll viewport",
+        "content_rect": {
+          "left": 12,
+          "top": 69,
+          "right": 363,
+          "bottom": 618.5,
+          "width": 351,
+          "height": 549.5
+        },
+        "relationship": "separate",
+        "required_sides": [
+          "left",
+          "right",
+          "top",
+          "bottom"
+        ],
+        "insets_px": {
+          "left": 12,
+          "right": 12,
+          "top": 12,
+          "bottom": 132.5
+        },
+        "excluded_sides": {},
+        "expected": {
+          "kind": "token",
+          "value": "Spacing.md = 12px; ContentWidth.form = 720px",
+          "source": "src/core/components/FormPage.tsx:166-172; src/core/theme/tokens.ts:5-21"
+        },
+        "visual": {
+          "status": "PASS",
+          "method": "Measured DOM rectangles and inspected the unannotated screenshot; page background remains visible around form cards.",
+          "painted_frame_sides": [
+            "left",
+            "right",
+            "top",
+            "bottom"
+          ]
+        },
+        "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/form-page-save-2026-11-19/375x812-default.png",
+        "screenshot_sha256": "2d6b8284dac10592980a7d2e301286ccc43ec0924c2cc4c5a41eaf9163c5b8cd",
+        "status": "PASS"
+      },
+      {
+        "route": "http://localhost:8082/ → click “新增客户” → FormPage catalog example",
+        "state": "light, 320x720-default, default form",
+        "viewport": {
+          "width": 320,
+          "height": 720
+        },
+        "workspace": "FormScreenContainer visible scroll viewport below fixed PageHeader and above fixed ExampleTabs",
+        "workspace_rect": {
+          "left": 0,
+          "top": 57,
+          "right": 320,
+          "bottom": 659,
+          "width": 320,
+          "height": 602
+        },
+        "content": "visible FormSection card union; landscape row is clipped to the scroll viewport",
+        "content_rect": {
+          "left": 12,
+          "top": 69,
+          "right": 308,
+          "bottom": 618.5,
+          "width": 296,
+          "height": 549.5
+        },
+        "relationship": "separate",
+        "required_sides": [
+          "left",
+          "right",
+          "top",
+          "bottom"
+        ],
+        "insets_px": {
+          "left": 12,
+          "right": 12,
+          "top": 12,
+          "bottom": 40.5
+        },
+        "excluded_sides": {},
+        "expected": {
+          "kind": "token",
+          "value": "Spacing.md = 12px; ContentWidth.form = 720px",
+          "source": "src/core/components/FormPage.tsx:166-172; src/core/theme/tokens.ts:5-21"
+        },
+        "visual": {
+          "status": "PASS",
+          "method": "Measured DOM rectangles and inspected the unannotated screenshot; page background remains visible around form cards.",
+          "painted_frame_sides": [
+            "left",
+            "right",
+            "top",
+            "bottom"
+          ]
+        },
+        "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/form-page-save-2026-11-19/320x720-default.png",
+        "screenshot_sha256": "647f96fcb93fbc50210bf2227dfe64aaf0562c08bcd8bccbe2c43a16f7eb83a6",
+        "status": "PASS"
+      },
+      {
+        "route": "http://localhost:8082/ → click “新增客户” → FormPage catalog example",
+        "state": "light, 812x375-landscape, default form",
+        "viewport": {
+          "width": 812,
+          "height": 375
+        },
+        "workspace": "FormScreenContainer visible scroll viewport below fixed PageHeader and above fixed ExampleTabs",
+        "workspace_rect": {
+          "left": 0,
+          "top": 57,
+          "right": 812,
+          "bottom": 314,
+          "width": 812,
+          "height": 257
+        },
+        "content": "visible FormSection card union; landscape row is clipped to the scroll viewport",
+        "content_rect": {
+          "left": 58,
+          "top": 69,
+          "right": 754,
+          "bottom": 314,
+          "width": 696,
+          "height": 245
+        },
+        "relationship": "separate",
+        "required_sides": [
+          "left",
+          "right",
+          "top"
+        ],
+        "insets_px": {
+          "left": 58,
+          "right": 58,
+          "top": 12
+        },
+        "excluded_sides": {
+          "bottom": "Landscape viewport cuts the scrollable form at the fixed footer; bottom frame is not visible."
+        },
+        "expected": {
+          "kind": "token",
+          "value": "Spacing.md = 12px; ContentWidth.form = 720px",
+          "source": "src/core/components/FormPage.tsx:166-172; src/core/theme/tokens.ts:5-21"
+        },
+        "visual": {
+          "status": "PASS",
+          "method": "Measured DOM rectangles and inspected the unannotated screenshot; page background remains visible around form cards.",
+          "painted_frame_sides": [
+            "left",
+            "right",
+            "top"
+          ]
+        },
+        "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/form-page-save-2026-11-19/812x375-landscape.png",
+        "screenshot_sha256": "87cfc71691097ee4417e4005973dd4e76183f96886773bdc181f28a679fc40c2",
+        "status": "PASS"
+      }
+    ]
+  },
+  "component_states": [
+    {
+      "state": "default",
+      "status": "PASS",
+      "evidence": "Measured 36px visible button inside a 44px Web target container at 375x812, 320x720, and 812x375."
+    },
+    {
+      "state": "submit success",
+      "status": "PASS",
+      "evidence": "One click on 保存 navigated the catalog example to 客户详情."
+    },
+    {
+      "state": "loading/disabled/error count/pressed",
+      "status": "UNVERIFIED",
+      "evidence": "No dedicated runtime state was rendered for these unchanged FormPage/ActionButton states."
+    },
+    {
+      "state": "Android touch target",
+      "status": "UNVERIFIED",
+      "evidence": "Source selects 48dp on Android; native accessibility bounds were not inspected."
+    }
+  ],
+  "runtime_findings": [
+    {
+      "viewport": "320x720 Web",
+      "status": "UNVERIFIED",
+      "finding": "documentWidth=331 while viewportWidth=320; the two reported out-of-bounds nodes are positioned above the viewport (top -144 to -72), so the visible save control and form cards remain within bounds. Their owner was not resolved."
+    }
+  ],
+  "seams": [
+    {
+      "route": "http://localhost:8082/ → click “新增客户” → FormPage catalog example",
+      "state": "light, 375x812-default; transparent touch target to visible save control",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "axis": "vertical",
+      "previous": "transparent top inset inside FormPage saveActionTarget",
+      "next": "button[aria-label=\"保存\"] visible ActionButton",
+      "previous_rect": {
+        "left": 295,
+        "top": 4,
+        "right": 367,
+        "bottom": 8,
+        "width": 72,
+        "height": 4
+      },
+      "next_rect": {
+        "left": 295,
+        "top": 8,
+        "right": 367,
+        "bottom": 44,
+        "width": 72,
+        "height": 36
+      },
+      "gap_px": 0,
+      "expected": {
+        "kind": "contract",
+        "value": "ActionButton sm paints at 36px; transparent parent keeps a 44px touch layout target on this Web viewport.",
+        "source": "src/core/components/FormPage.tsx:50,69-80,142-148; src/core/components/ActionButton.tsx:73-80,106-116; src/core/theme/tokens.ts:77-88,136-138"
+      },
+      "visual": {
+        "relationship": "joined",
+        "status": "PASS",
+        "method": "DOM bounds plus screenshot inspection; parent is transparent and the visible primary button is centered within it.",
+        "exception": "The visible save surface is intentionally nested in its transparent touch-target wrapper as one composite control."
+      },
+      "executed_command": "cd /Users/suconnect/.codex/skills/playwright-skill && node run.js /tmp/playwright-formpage-layout-2026-11-19.js",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/form-page-save-2026-11-19/375x812-default.png",
+      "screenshot_sha256": "2d6b8284dac10592980a7d2e301286ccc43ec0924c2cc4c5a41eaf9163c5b8cd",
+      "status": "PASS"
+    },
+    {
+      "route": "http://localhost:8082/ → click “新增客户” → FormPage catalog example",
+      "state": "light, 375x812-default; save control to PageHeader right inset",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "axis": "horizontal",
+      "previous": "button[aria-label=\"保存\"] visible background edge",
+      "next": "PageHeader right padding band",
+      "previous_rect": {
+        "left": 295,
+        "top": 8,
+        "right": 367,
+        "bottom": 44,
+        "width": 72,
+        "height": 36
+      },
+      "next_rect": {
+        "left": 367,
+        "top": 8,
+        "right": 375,
+        "bottom": 44,
+        "width": 8,
+        "height": 36
+      },
+      "gap_px": 0,
+      "expected": {
+        "kind": "token",
+        "value": "Spacing.sm = 8px right inset owned by PageHeader",
+        "source": "src/core/components/PageHeader.tsx:274-280; src/core/theme/tokens.ts:5-16"
+      },
+      "visual": {
+        "relationship": "separate",
+        "status": "PASS",
+        "method": "DOM bounds and screenshot inspection; the header surface remains visibly clear between the blue/green control and viewport edge.",
+        "observed_clear_band_px": 8
+      },
+      "executed_command": "cd /Users/suconnect/.codex/skills/playwright-skill && node run.js /tmp/playwright-formpage-layout-2026-11-19.js",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/form-page-save-2026-11-19/375x812-default.png",
+      "screenshot_sha256": "2d6b8284dac10592980a7d2e301286ccc43ec0924c2cc4c5a41eaf9163c5b8cd",
+      "status": "PASS"
+    },
+    {
+      "route": "http://localhost:8082/ → click “新增客户” → FormPage catalog example",
+      "state": "light, 320x720-default; transparent touch target to visible save control",
+      "viewport": {
+        "width": 320,
+        "height": 720
+      },
+      "axis": "vertical",
+      "previous": "transparent top inset inside FormPage saveActionTarget",
+      "next": "button[aria-label=\"保存\"] visible ActionButton",
+      "previous_rect": {
+        "left": 240,
+        "top": 4,
+        "right": 312,
+        "bottom": 8,
+        "width": 72,
+        "height": 4
+      },
+      "next_rect": {
+        "left": 240,
+        "top": 8,
+        "right": 312,
+        "bottom": 44,
+        "width": 72,
+        "height": 36
+      },
+      "gap_px": 0,
+      "expected": {
+        "kind": "contract",
+        "value": "ActionButton sm paints at 36px; transparent parent keeps a 44px touch layout target on this Web viewport.",
+        "source": "src/core/components/FormPage.tsx:50,69-80,142-148; src/core/components/ActionButton.tsx:73-80,106-116; src/core/theme/tokens.ts:77-88,136-138"
+      },
+      "visual": {
+        "relationship": "joined",
+        "status": "PASS",
+        "method": "DOM bounds plus screenshot inspection; parent is transparent and the visible primary button is centered within it.",
+        "exception": "The visible save surface is intentionally nested in its transparent touch-target wrapper as one composite control."
+      },
+      "executed_command": "cd /Users/suconnect/.codex/skills/playwright-skill && node run.js /tmp/playwright-formpage-layout-2026-11-19.js",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/form-page-save-2026-11-19/320x720-default.png",
+      "screenshot_sha256": "647f96fcb93fbc50210bf2227dfe64aaf0562c08bcd8bccbe2c43a16f7eb83a6",
+      "status": "PASS"
+    },
+    {
+      "route": "http://localhost:8082/ → click “新增客户” → FormPage catalog example",
+      "state": "light, 320x720-default; save control to PageHeader right inset",
+      "viewport": {
+        "width": 320,
+        "height": 720
+      },
+      "axis": "horizontal",
+      "previous": "button[aria-label=\"保存\"] visible background edge",
+      "next": "PageHeader right padding band",
+      "previous_rect": {
+        "left": 240,
+        "top": 8,
+        "right": 312,
+        "bottom": 44,
+        "width": 72,
+        "height": 36
+      },
+      "next_rect": {
+        "left": 312,
+        "top": 8,
+        "right": 320,
+        "bottom": 44,
+        "width": 8,
+        "height": 36
+      },
+      "gap_px": 0,
+      "expected": {
+        "kind": "token",
+        "value": "Spacing.sm = 8px right inset owned by PageHeader",
+        "source": "src/core/components/PageHeader.tsx:274-280; src/core/theme/tokens.ts:5-16"
+      },
+      "visual": {
+        "relationship": "separate",
+        "status": "PASS",
+        "method": "DOM bounds and screenshot inspection; the header surface remains visibly clear between the blue/green control and viewport edge.",
+        "observed_clear_band_px": 8
+      },
+      "executed_command": "cd /Users/suconnect/.codex/skills/playwright-skill && node run.js /tmp/playwright-formpage-layout-2026-11-19.js",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/form-page-save-2026-11-19/320x720-default.png",
+      "screenshot_sha256": "647f96fcb93fbc50210bf2227dfe64aaf0562c08bcd8bccbe2c43a16f7eb83a6",
+      "status": "PASS"
+    },
+    {
+      "route": "http://localhost:8082/ → click “新增客户” → FormPage catalog example",
+      "state": "light, 812x375-landscape; transparent touch target to visible save control",
+      "viewport": {
+        "width": 812,
+        "height": 375
+      },
+      "axis": "vertical",
+      "previous": "transparent top inset inside FormPage saveActionTarget",
+      "next": "button[aria-label=\"保存\"] visible ActionButton",
+      "previous_rect": {
+        "left": 732,
+        "top": 4,
+        "right": 804,
+        "bottom": 8,
+        "width": 72,
+        "height": 4
+      },
+      "next_rect": {
+        "left": 732,
+        "top": 8,
+        "right": 804,
+        "bottom": 44,
+        "width": 72,
+        "height": 36
+      },
+      "gap_px": 0,
+      "expected": {
+        "kind": "contract",
+        "value": "ActionButton sm paints at 36px; transparent parent keeps a 44px touch layout target on this Web viewport.",
+        "source": "src/core/components/FormPage.tsx:50,69-80,142-148; src/core/components/ActionButton.tsx:73-80,106-116; src/core/theme/tokens.ts:77-88,136-138"
+      },
+      "visual": {
+        "relationship": "joined",
+        "status": "PASS",
+        "method": "DOM bounds plus screenshot inspection; parent is transparent and the visible primary button is centered within it.",
+        "exception": "The visible save surface is intentionally nested in its transparent touch-target wrapper as one composite control."
+      },
+      "executed_command": "cd /Users/suconnect/.codex/skills/playwright-skill && node run.js /tmp/playwright-formpage-layout-2026-11-19.js",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/form-page-save-2026-11-19/812x375-landscape.png",
+      "screenshot_sha256": "87cfc71691097ee4417e4005973dd4e76183f96886773bdc181f28a679fc40c2",
+      "status": "PASS"
+    },
+    {
+      "route": "http://localhost:8082/ → click “新增客户” → FormPage catalog example",
+      "state": "light, 812x375-landscape; save control to PageHeader right inset",
+      "viewport": {
+        "width": 812,
+        "height": 375
+      },
+      "axis": "horizontal",
+      "previous": "button[aria-label=\"保存\"] visible background edge",
+      "next": "PageHeader right padding band",
+      "previous_rect": {
+        "left": 732,
+        "top": 8,
+        "right": 804,
+        "bottom": 44,
+        "width": 72,
+        "height": 36
+      },
+      "next_rect": {
+        "left": 804,
+        "top": 8,
+        "right": 812,
+        "bottom": 44,
+        "width": 8,
+        "height": 36
+      },
+      "gap_px": 0,
+      "expected": {
+        "kind": "token",
+        "value": "Spacing.sm = 8px right inset owned by PageHeader",
+        "source": "src/core/components/PageHeader.tsx:274-280; src/core/theme/tokens.ts:5-16"
+      },
+      "visual": {
+        "relationship": "separate",
+        "status": "PASS",
+        "method": "DOM bounds and screenshot inspection; the header surface remains visibly clear between the blue/green control and viewport edge.",
+        "observed_clear_band_px": 8
+      },
+      "executed_command": "cd /Users/suconnect/.codex/skills/playwright-skill && node run.js /tmp/playwright-formpage-layout-2026-11-19.js",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/form-page-save-2026-11-19/812x375-landscape.png",
+      "screenshot_sha256": "87cfc71691097ee4417e4005973dd4e76183f96886773bdc181f28a679fc40c2",
+      "status": "PASS"
+    },
+    {
+      "route": "MES App QualityFormScreen (Android native)",
+      "state": "default; native accessibility bounds not available in Expo Web",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "axis": "vertical",
+      "previous": "FormPage transparent target container (Web proxy)",
+      "next": "ActionButton visible bounds (Web proxy; Android bounds not measured)",
+      "previous_rect": {
+        "left": 295,
+        "top": 4,
+        "right": 367,
+        "bottom": 48,
+        "width": 72,
+        "height": 44
+      },
+      "next_rect": {
+        "left": 295,
+        "top": 8,
+        "right": 367,
+        "bottom": 44,
+        "width": 72,
+        "height": 36
+      },
+      "gap_px": -40,
+      "expected": {
+        "kind": "contract",
+        "value": "Android interactive node >=48dp while visible ActionButton remains 36dp.",
+        "source": "src/core/components/FormPage.tsx:50,69-80; src/core/components/ActionButton.tsx:73-80,106-116; src/core/theme/tokens.ts:77-88,136-138"
+      },
+      "visual": {
+        "relationship": "joined",
+        "status": "UNVERIFIED",
+        "method": "Only the Web proxy was rendered; Android native accessibility bounds were not inspected.",
+        "exception": "The visible control and platform target are one composite action; native target geometry needs Android runtime evidence."
+      },
+      "executed_command": "cd /Users/suconnect/.codex/skills/playwright-skill && node run.js /tmp/playwright-formpage-layout-2026-11-19.js",
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/form-page-save-2026-11-19/375x812-default.png",
+      "screenshot_sha256": "2d6b8284dac10592980a7d2e301286ccc43ec0924c2cc4c5a41eaf9163c5b8cd",
+      "status": "UNVERIFIED"
+    }
+  ]
+}

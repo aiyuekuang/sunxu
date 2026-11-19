@@ -1,7 +1,16 @@
 import type React from 'react';
 import { useRef } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { BorderWidth, ContentWidth, FontSize, FontWeight, Radius, Spacing } from '../theme/tokens';
+import { Platform, StyleSheet, View } from 'react-native';
+import {
+  BorderWidth,
+  ContentWidth,
+  FontSize,
+  FontWeight,
+  MIN_TOUCH_TARGET,
+  MIN_TOUCH_TARGET_ANDROID,
+  Radius,
+  Spacing,
+} from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { AppText as Text } from './AppText';
 import { ActionButton } from './ActionButton';
@@ -38,6 +47,7 @@ export function FormPage({
 }: FormPageProps) {
   const { colors } = useTheme();
   const lastPressRef = useRef(0);
+  const saveActionTarget = Platform.OS === 'android' ? MIN_TOUCH_TARGET_ANDROID : MIN_TOUCH_TARGET;
 
   const handleSubmit = () => {
     const now = Date.now();
@@ -56,7 +66,7 @@ export function FormPage({
       contentContainerStyle={styles.content}
       headerRight={
         onSubmit ? (
-          <View>
+          <View style={[styles.saveActionTarget, { minHeight: saveActionTarget }]}>
             <ActionButton
               variant="primary"
               size="sm"
@@ -129,8 +139,10 @@ export function Field({
 }
 
 const styles = StyleSheet.create({
+  saveActionTarget: {
+    justifyContent: 'center',
+  },
   saveBtn: {
-    minHeight: 48,
     justifyContent: 'center',
     paddingHorizontal: Spacing.md,
     borderRadius: Radius.md,

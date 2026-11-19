@@ -1,0 +1,149 @@
+{
+  "status": "PASS WITH UNVERIFIED",
+  "target": "Sunxu Catalog Expo Web, root list → one “新增客户” action → FormPage example",
+  "httpStatus": 200,
+  "navigationCount": 1,
+  "viewports": [
+    {
+      "name": "375x812-default",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "geometry": {
+        "button": {
+          "left": 295,
+          "top": 8,
+          "right": 367,
+          "bottom": 44,
+          "width": 72,
+          "height": 36
+        },
+        "targetContainer": {
+          "left": 295,
+          "top": 4,
+          "right": 367,
+          "bottom": 48,
+          "width": 72,
+          "height": 44
+        },
+        "title": {
+          "left": 52,
+          "top": 14.75,
+          "right": 295,
+          "bottom": 37.25,
+          "width": 243,
+          "height": 22.5
+        },
+        "buttonStyle": {
+          "minHeight": "36px",
+          "height": "36px",
+          "borderRadius": "10px",
+          "backgroundColor": "rgb(0, 125, 53)"
+        },
+        "overflow": {
+          "viewportWidth": 375,
+          "documentWidth": 375,
+          "horizontal": false
+        }
+      },
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/form-page-save-2026-11-19/375x812-default.png"
+    },
+    {
+      "name": "320x720-default",
+      "viewport": {
+        "width": 320,
+        "height": 720
+      },
+      "geometry": {
+        "button": {
+          "left": 240,
+          "top": 8,
+          "right": 312,
+          "bottom": 44,
+          "width": 72,
+          "height": 36
+        },
+        "targetContainer": {
+          "left": 240,
+          "top": 4,
+          "right": 312,
+          "bottom": 48,
+          "width": 72,
+          "height": 44
+        },
+        "title": {
+          "left": 52,
+          "top": 14.75,
+          "right": 240,
+          "bottom": 37.25,
+          "width": 188,
+          "height": 22.5
+        },
+        "buttonStyle": {
+          "minHeight": "36px",
+          "height": "36px",
+          "borderRadius": "10px",
+          "backgroundColor": "rgb(0, 125, 53)"
+        },
+        "overflow": {
+          "viewportWidth": 320,
+          "documentWidth": 331,
+          "horizontal": true
+        }
+      },
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/form-page-save-2026-11-19/320x720-default.png"
+    },
+    {
+      "name": "812x375-landscape",
+      "viewport": {
+        "width": 812,
+        "height": 375
+      },
+      "geometry": {
+        "button": {
+          "left": 732,
+          "top": 8,
+          "right": 804,
+          "bottom": 44,
+          "width": 72,
+          "height": 36
+        },
+        "targetContainer": {
+          "left": 732,
+          "top": 4,
+          "right": 804,
+          "bottom": 48,
+          "width": 72,
+          "height": 44
+        },
+        "title": {
+          "left": 52,
+          "top": 14.75,
+          "right": 732,
+          "bottom": 37.25,
+          "width": 680,
+          "height": 22.5
+        },
+        "buttonStyle": {
+          "minHeight": "36px",
+          "height": "36px",
+          "borderRadius": "10px",
+          "backgroundColor": "rgb(0, 125, 53)"
+        },
+        "overflow": {
+          "viewportWidth": 812,
+          "documentWidth": 812,
+          "horizontal": false
+        }
+      },
+      "screenshot": "/Users/suconnect/Desktop/code/sunxu/docs/verification/form-page-save-2026-11-19/812x375-landscape.png"
+    }
+  ],
+  "interaction": {
+    "action": "save button click",
+    "result": "catalog navigated to customer detail example"
+  },
+  "nativeAndroidTouchBounds": "UNVERIFIED; Expo Web does not expose native Android accessibility bounds",
+  "consoleErrors": []
+}
