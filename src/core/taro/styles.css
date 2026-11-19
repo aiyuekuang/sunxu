@@ -79,12 +79,26 @@
 .ui-select--leading-indicator .ui-select__trigger.ui-button { width: 100%; justify-content: center; }
 .ui-select--leading-indicator .ui-select__value { flex: 0 1 auto; }
 .ui-select--leading-indicator .ui-select__chevron { order: -1; }
-.ui-select-sheet-host { position: fixed; z-index: 40; inset: 0; }
-.ui-select-sheet__backdrop.ui-button { z-index: 0; background: rgba(18, 33, 28, .42); }
-.ui-select-sheet { position: absolute; z-index: 1; right: 0; bottom: 0; left: 0; display: flex; max-height: 82vh; flex-direction: column; padding: 20rpx var(--space-page-inline) calc(20rpx + env(safe-area-inset-bottom)); overflow: hidden; border-radius: var(--r-select-sheet) var(--r-select-sheet) 0 0; background: var(--c-surface); }
-.ui-select-sheet__header { display: flex; min-height: var(--h-button-icon); flex: 0 0 auto; align-items: center; justify-content: space-between; gap: 16rpx; padding-bottom: 12rpx; }
-.ui-select-sheet__title { min-width: 0; color: var(--c-text); font-size: var(--fs-title); font-weight: 600; }
-.ui-select-sheet__close.ui-button { flex: 0 0 auto; border: 0; background: transparent; color: var(--c-text-4); }
+.ui-sheet-host { position: fixed; z-index: var(--sheet-z-index, 40); inset: 0; }
+.ui-sheet__backdrop.ui-button { z-index: 0; background: var(--sheet-backdrop-color, rgba(18, 33, 28, .42)); }
+.ui-sheet__backdrop.ui-button[disabled] { opacity: 1; }
+.ui-sheet { position: absolute; z-index: 1; right: 0; bottom: 0; left: 0; display: flex; height: var(--sheet-height, auto); max-height: var(--sheet-max-height, none); flex-direction: column; padding: var(--sheet-padding-block-start, 20rpx) var(--sheet-padding-inline, var(--space-page-inline)) calc(var(--sheet-padding-block-end, 20rpx) + env(safe-area-inset-bottom)); overflow: hidden; border-radius: var(--sheet-radius, var(--r-select-sheet) var(--r-select-sheet) 0 0); background: var(--sheet-background, var(--c-surface)); }
+.ui-sheet__header { flex: 0 0 auto; padding-bottom: var(--sheet-header-spacing, 12rpx); }
+.ui-sheet__header-row { position: relative; display: flex; min-height: var(--sheet-header-min-height, var(--h-button-icon)); align-items: center; }
+.ui-sheet__header-row--end { padding-right: calc(var(--sheet-close-size, var(--h-button-icon)) + 16rpx); }
+.ui-sheet__header-row--start { padding-left: calc(var(--sheet-close-size, var(--h-button-icon)) + 16rpx); }
+.ui-sheet__header-row--center { padding-right: calc(var(--sheet-close-size, var(--h-button-icon)) + 16rpx); padding-left: calc(var(--sheet-close-size, var(--h-button-icon)) + 16rpx); text-align: center; }
+.ui-sheet__heading { min-width: 0; width: 100%; }
+.ui-sheet__title { min-width: 0; color: var(--sheet-title-color, var(--c-text)); font-size: var(--sheet-title-font-size, var(--fs-title)); font-weight: var(--sheet-title-font-weight, 600); line-height: var(--sheet-title-line-height, inherit); }
+.ui-sheet__close.ui-button { --ui-button-hit-inset-y: var(--sheet-close-hit-inset, var(--tap-inset-icon)); --ui-button-hit-inset-x: var(--sheet-close-hit-inset, var(--tap-inset-horizontal)); position: absolute; top: 50%; width: var(--sheet-close-size, var(--h-button-icon)); height: var(--sheet-close-size, var(--h-button-icon)); min-height: var(--sheet-close-size, var(--h-button-icon)); display: flex; align-items: center; justify-content: center; transform: translateY(-50%); border: 0; background: transparent; color: var(--sheet-close-color, var(--c-text-4)); line-height: 1; }
+.ui-sheet__close--start { left: var(--sheet-close-offset-inline, 0); }
+.ui-sheet__close--end { right: var(--sheet-close-offset-inline, 0); }
+.ui-sheet__content { display: flex; min-width: 0; min-height: 0; flex-direction: column; }
+.ui-sheet__content--natural { flex: 0 0 auto; }
+.ui-sheet__content--scroll { width: 100%; height: var(--sheet-body-height, auto); flex: 0 1 auto; }
+.ui-sheet__content--fill { flex: 1 1 auto; overflow: hidden; }
+.ui-sheet__footer { min-width: 0; flex: 0 0 auto; padding-top: var(--sheet-footer-spacing, 0); }
+.ui-select-sheet-host { --sheet-max-height: 82vh; }
 .ui-select-sheet__search { flex: 0 0 auto; margin-bottom: 10rpx; }
 .ui-select-sheet__list { width: 100%; max-height: calc(var(--h-select-option) * 8); flex: 0 1 auto; }
 .ui-select-sheet__option.ui-button { --ui-button-hit-inset-y: var(--tap-inset-select); display: flex; width: 100%; --ui-min-height: var(--h-select-option); --ui-padding: 0 8rpx; justify-content: space-between; border-bottom: 1rpx solid var(--c-border-soft); color: var(--c-text-2); }

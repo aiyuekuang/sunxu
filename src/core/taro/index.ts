@@ -16,6 +16,7 @@ export * from './OptionSheet';
 export * from './PageContentContainer';
 export * from './RegionPicker';
 export * from './SearchInput';
+export * from './Sheet';
 export * from './SegmentedControl';
 export * from './Select';
 export * from './Switch';

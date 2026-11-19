@@ -2,6 +2,10 @@
 
 ## 2026-11-17 Taro 平台归一化
 
+`sunxu-taro@0.1.1` 新增公开 `Sheet` 容器，通用控件数由 21 增至 22。它承载任意 children、标题/关闭图标插槽、明确的关闭侧与标题对齐、natural/scroll/fill 正文模式以及独立固定 footer；默认自然高度且无隐含 max-height。公共 `--sheet-*` token 使宿主按真实来源配置几何，不把库默认外观作为复刻基线。`OptionSheet` 内部组合此容器，保留旧 API、82vh/八行几何、搜索与选择/关闭分离语义；`Button.expandHitArea` 增加可选覆盖，默认保持旧尺寸推导。
+
+原始产品的模板数据、图标字体、网格、筛选 Tabs、业务状态、API 与导航不进入库。Catalog 增加自然高度图标网格、容器滚动列表及 child-owned 滚动与固定 footer 分离示例。逐文件变更与验证写入 [Taro 账本](./migrations/taro-components.json)，静态验证见[Sheet 验证记录](./verification/taro-sheet-2026-11-17/README.md)；微信运行时与宿主视觉/交互仍为 `UNVERIFIED`。
+
 `sunxu-taro@0.1.0` 将 Taro 原生按钮、输入、选择、页签、分段切换、附件呈现和底部导航等 21 个通用控件归入 `src/core/taro/`，由独立 peer dependency 清单及版本化 tgz 消费；额外的 `Icon` 与 `SunxuTaroProvider` 只提供宿主图标注入与解析色值主题契约。宿主不再维护这些控件的副本。
 
 迁移记录见 [Taro 组件契约](./taro-components.md)；宿主仍拥有导航、字体偏好、权限、业务字段及网络副作用。基础 CSS 与后置外观分别公开，保留原有共享几何/状态声明；补齐此前缺失的徽标与原生日期触发器样式。RN/Expo 入口和原有 peer dependencies 不变。示例提供独立 Taro 构建入口；静态类型/打包不代表微信实屏通过，运行态保持 `UNVERIFIED`。

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "date": "2026-11-17",
   "package": "sunxu-taro",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "sourceRoot": "src/core/taro",
   "newPlatformContracts": [
     "Icon",
@@ -16,7 +16,7 @@
     "domain state",
     "icon assets"
   ],
-  "componentCount": 21,
+  "componentCount": 22,
   "components": [
     {
       "component": "AttachmentField",
@@ -67,12 +67,13 @@
       "sourcePath": "src/components/ui/AppButton.tsx",
       "sourceSha256": "324ea8c3ddfb01253b27fb9ea7ebc174a24a61782fd9fc537aa7a707be3c7569",
       "targetPath": "src/core/taro/Button.tsx",
-      "targetSha256": "97a6d332466da56b491ef5b73f20586e0090906422917bcfdd9de39225e566fb",
+      "targetSha256": "7a9710aab213c4115e4d0dd827662902681253c68c7d0a041e959e44b17aecac",
       "status": "MOVED_TO_AUTHORITATIVE_TARO_PACKAGE",
       "hostImplementation": "REMOVED",
       "hostApi": "import { Button } from 'sunxu-taro'",
-      "validation": "Taro independent package typecheck+pack; Catalog typecheck+weapp build; RN root typecheck and pack isolation",
-      "runtimeStatus": "UNVERIFIED"
+      "validation": "sunxu-taro@0.1.1 independent strict typecheck+pack; Catalog typecheck+weapp build; runtime UNVERIFIED",
+      "runtimeStatus": "UNVERIFIED",
+      "adaptation": "Optional expandHitArea override; existing size-derived behavior remains the default."
     },
     {
       "component": "DateTimePicker",
@@ -193,12 +194,13 @@
       "sourcePath": "src/components/ui/AppOptionSheet.tsx",
       "sourceSha256": "1510dfa198971a37635cec77bba4767b3ea2d629680038a66240575cd661be65",
       "targetPath": "src/core/taro/OptionSheet.tsx",
-      "targetSha256": "fdd1d35c6930182b7fd4022373b422cd6ca08fc494746205b030e1ae8895f96a",
+      "targetSha256": "340160c787d119c4e3e11e169d4e6e6b0d833db90918d08a945ed929aefb0c9d",
       "status": "MOVED_TO_AUTHORITATIVE_TARO_PACKAGE",
       "hostImplementation": "REMOVED",
       "hostApi": "import { OptionSheet } from 'sunxu-taro'",
-      "validation": "Taro independent package typecheck+pack; Catalog typecheck+weapp build; RN root typecheck and pack isolation",
-      "runtimeStatus": "UNVERIFIED"
+      "validation": "sunxu-taro@0.1.1 independent strict typecheck+pack; Catalog typecheck+weapp build; runtime UNVERIFIED",
+      "runtimeStatus": "UNVERIFIED",
+      "adaptation": "Composes public Sheet; preserves options/search, 82vh/eight-row geometry and separate onChoose/onClose semantics."
     },
     {
       "component": "PageContentContainer",
@@ -311,6 +313,21 @@
       "hostApi": "import { Textarea } from 'sunxu-taro'",
       "validation": "Taro independent package typecheck+pack; Catalog typecheck+weapp build; RN root typecheck and pack isolation",
       "runtimeStatus": "UNVERIFIED"
+    },
+    {
+      "component": "Sheet",
+      "sourceRepository": "sunxu",
+      "sourceCommit": null,
+      "sourcePath": null,
+      "sourceSha256": null,
+      "targetPath": "src/core/taro/Sheet.tsx",
+      "targetSha256": "3e8af09bb33c0dd2768f71972f6896ec3344f7b1fe900d74c23ae8bdac80ba08",
+      "status": "NEW_PUBLIC_TARO_CONTAINER",
+      "hostImplementation": "COMPOSITION_ONLY",
+      "hostApi": "import { Sheet } from 'sunxu-taro'",
+      "origin": "General Taro shell extracted from OptionSheet; no product source code, icon assets, business data or navigation copied.",
+      "validation": "sunxu-taro@0.1.1 independent strict typecheck+pack; Catalog typecheck+weapp build; runtime UNVERIFIED",
+      "runtimeStatus": "UNVERIFIED"
     }
   ],
   "tabsVariantRenames": {
@@ -319,5 +336,43 @@
     "wukong-backlog": "section",
     "wukong-knowledge": "compact-navigation"
   },
-  "visualStatus": "UNVERIFIED"
+  "visualStatus": "UNVERIFIED",
+  "revisions": [
+    {
+      "version": "0.1.1",
+      "baselineCommit": "a3af7ef",
+      "date": "2026-11-17",
+      "contracts": [
+        "Sheet header/close/content/footer composition",
+        "natural/scroll/fill content ownership",
+        "public geometry tokens and safe-area ownership",
+        "OptionSheet backward-compatible controlled events",
+        "Button optional hit-area override"
+      ],
+      "files": [
+        {
+          "path": "src/core/taro/Sheet.tsx",
+          "sha256": "3e8af09bb33c0dd2768f71972f6896ec3344f7b1fe900d74c23ae8bdac80ba08"
+        },
+        {
+          "path": "src/core/taro/OptionSheet.tsx",
+          "sha256": "340160c787d119c4e3e11e169d4e6e6b0d833db90918d08a945ed929aefb0c9d"
+        },
+        {
+          "path": "src/core/taro/Button.tsx",
+          "sha256": "7a9710aab213c4115e4d0dd827662902681253c68c7d0a041e959e44b17aecac"
+        },
+        {
+          "path": "src/core/taro/index.ts",
+          "sha256": "de81bf8e8c107aa7e954f3c464f7ca0dc49a28fd94cd015afead1671c71cf7a4"
+        },
+        {
+          "path": "src/core/taro/styles.css",
+          "sha256": "7f65123aedc9a4f00cada88357f8e7446dfc1a6f2b400aae69ed1a57bd27945d"
+        }
+      ],
+      "verification": "docs/verification/taro-sheet-2026-11-17/README.md",
+      "runtimeStatus": "UNVERIFIED"
+    }
+  ]
 }

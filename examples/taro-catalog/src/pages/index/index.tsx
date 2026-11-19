@@ -1,14 +1,16 @@
 import { useState } from 'react';
-import { Text, View } from '@tarojs/components';
+import { ScrollView, Text, View } from '@tarojs/components';
 import {
   AttachmentField, Badge, BottomTabBar, Button, DateTimePicker,
-  FilterActionButton, FilterBar, Hint, IconTile, Input,
-  PageContentContainer, SearchInput, SegmentedControl, Select, Switch,
+  FilterActionButton, FilterBar, Hint, Icon, IconTile, Input,
+  PageContentContainer, SearchInput, SegmentedControl, Select, Sheet, Switch,
   Tabs, Textarea, type AttachmentItem,
 } from 'sunxu-taro';
 
 const OPTIONS = [{ value: 'active', label: '进行中' }, { value: 'done', label: '已完成' }];
 const INITIAL_FILES: AttachmentItem[] = [{ id: 'sample', name: '示例文档.pdf', kind: 'document', status: 'error', statusText: '上传失败' }];
+const GRID_ITEMS = ['文档', '搜索', '完成', '信息', '记录', '更多'];
+const LONG_ITEMS = Array.from({ length: 18 }, (_, index) => `候选 ${index + 1}：可滚动的长名称示例`);
 
 export default function CatalogPage() {
   const [keyword, setKeyword] = useState('');
@@ -19,6 +21,7 @@ export default function CatalogPage() {
   const [note, setNote] = useState('');
   const [files, setFiles] = useState(INITIAL_FILES);
   const [feedback, setFeedback] = useState('');
+  const [sheet, setSheet] = useState<'grid' | 'list' | 'footer' | null>(null);
   return <PageContentContainer className="catalog">
     <View className="catalog__section">
       <SearchInput ariaLabel="搜索组件" value={keyword} placeholder="搜索组件" onInput={(event) => setKeyword(event.detail.value)} clearable onClear={() => setKeyword('')} />
@@ -35,7 +38,27 @@ export default function CatalogPage() {
     </View>
     <View className="catalog__section"><AttachmentField items={files} label="附件" onOpen={(item) => setFeedback(item.name)} onRetry={(item) => setFiles((current) => current.map((file) => file.id === item.id ? { ...file, status: 'ready', statusText: '' } : file))} onRemove={(item) => setFiles((current) => current.filter((file) => file.id !== item.id))} /></View>
     <View className="catalog__actions"><Button className="catalog__action" uiSize="regular" onClick={() => setFeedback('动作完成')}>确认</Button><Button uiSize="regular" appearance="plain" onClick={() => { setKeyword(''); setNote(''); setFiles(INITIAL_FILES); setFeedback(''); }}>重置</Button></View>
+    <View className="catalog__section">
+      <Button uiSize="regular" onClick={() => setSheet('grid')}>自然高度图标网格</Button>
+      <Button uiSize="regular" onClick={() => setSheet('list')}>容器滚动列表</Button>
+      <Button uiSize="regular" onClick={() => setSheet('footer')}>标题插槽与固定底栏</Button>
+    </View>
     {feedback ? <View role="status"><Text>{feedback}</Text></View> : null}
     <BottomTabBar tabs={OPTIONS.map((item) => ({ key: item.value, label: item.label }))} activeKey={active} onChange={setActive} />
+    <Sheet open={sheet === 'grid'} title="选择" onClose={() => setSheet(null)} closePlacement="start" titleAlign="center" className="catalog__sheet-grid">
+      <View className="catalog__icon-grid">
+        {GRID_ITEMS.map((label, index) => <Button className="catalog__grid-option" key={label} uiSize="row" appearance="plain" onClick={() => { setFeedback(label); setSheet(null); }}>
+          <IconTile><Icon name={index === 1 ? 'search' : index === 2 ? 'checkmark' : 'info'} /></IconTile><Text>{label}</Text>
+        </Button>)}
+      </View>
+    </Sheet>
+    <Sheet open={sheet === 'list'} title="选择候选" onClose={() => setSheet(null)} bodyMode="scroll" className="catalog__sheet-list">
+      {LONG_ITEMS.map((label) => <Button className="catalog__sheet-option" key={label} uiSize="row" appearance="plain" onClick={() => { setFeedback(label); setSheet(null); }}>{label}</Button>)}
+    </Sheet>
+    <Sheet open={sheet === 'footer'} title="筛选候选" onClose={() => setSheet(null)} closePlacement="start" titleAlign="center" bodyMode="fill" className="catalog__sheet-footer" header={<Tabs options={OPTIONS} value={active} onChange={setActive} />} footer={<View className="catalog__sheet-actions"><Button uiSize="regular" appearance="plain" onClick={() => setChoice(0)}>重置</Button><Button className="catalog__action" uiSize="regular" onClick={() => { setFeedback(`已应用${active === 'active' ? '进行中' : '已完成'}条件`); setSheet(null); }}>应用</Button></View>}>
+      <ScrollView className="catalog__sheet-child-scroll" scrollY enableFlex>
+        {LONG_ITEMS.map((label, index) => <Button className="catalog__sheet-option" key={label} uiSize="row" appearance="plain" aria-pressed={choice === index} onClick={() => setChoice(index)}>{label}{choice === index ? ' ✓' : ''}</Button>)}
+      </ScrollView>
+    </Sheet>
   </PageContentContainer>;
 }

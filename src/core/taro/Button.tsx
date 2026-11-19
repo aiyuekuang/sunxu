@@ -11,6 +11,8 @@ export type ButtonProps = Omit<NativeButtonProps, 'className'> & {
   className?: string;
   screenReaderLabel?: string;
   appearance?: 'standard' | 'plain';
+  /** Override automatic transparent hit-area expansion for tightly spaced controls. */
+  expandHitArea?: boolean;
   /** Allow a floating button to drag within the viewport and snap to a side. */
   draggableFab?: boolean;
   uiSize: 'small' | 'compact' | 'medium' | 'regular' | 'tall' | 'large' | 'hero' | 'fab' | 'icon' | 'touch-icon' | 'row' | 'tab' | 'segmented' | 'link' | 'action' | 'filter' | 'backdrop';
@@ -30,6 +32,7 @@ export function Button({
   className = '',
   screenReaderLabel,
   appearance = 'standard',
+  expandHitArea,
   draggableFab = false,
   plain,
   uiSize,
@@ -126,11 +129,11 @@ export function Button({
     onClick?.(event);
   };
 
-  const expandHitArea = ['small', 'compact', 'medium', 'regular', 'tall', 'large', 'icon', 'row', 'tab', 'segmented', 'link', 'filter'].includes(uiSize);
+  const shouldExpandHitArea = expandHitArea ?? ['small', 'compact', 'medium', 'regular', 'tall', 'large', 'icon', 'row', 'tab', 'segmented', 'link', 'filter'].includes(uiSize);
   const variantClasses = [
     `ui-button--size-${uiSize}`,
     appearance === 'plain' ? 'ui-button--appearance-plain' : '',
-    expandHitArea ? 'ui-button--expanded-hit-area' : '',
+    shouldExpandHitArea ? 'ui-button--expanded-hit-area' : '',
     shape ? `ui-button--shape-${shape}` : ''
   ].filter(Boolean).join(' ');
   return (

@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { ScrollView, Text, View } from '@tarojs/components';
+import { ScrollView, Text } from '@tarojs/components';
 import { Button } from './Button';
 import { Icon } from './Icon';
 import { SearchInput } from './SearchInput';
+import { Sheet } from './Sheet';
 
 const OPTION_ROW_HEIGHT_RPX = 84; // Matches --h-select-option.
 const MAX_VISIBLE_OPTIONS = 8;
@@ -50,27 +51,7 @@ export function OptionSheet({
   }
 
   return (
-    <View className="ui-select-sheet-host">
-      <Button
-        className="ui-select-sheet__backdrop"
-        ariaLabel={`关闭${title}选项`}
-        onClick={close}
-        appearance="plain"
-        uiSize="backdrop"
-      />
-      <View className="ui-select-sheet" ariaRole="dialog" ariaLabel={title}>
-        <View className="ui-select-sheet__header">
-          <Text className="ui-select-sheet__title">{title}</Text>
-          <Button
-            className="ui-select-sheet__close"
-            ariaLabel={`关闭${title}选项`}
-            onClick={close}
-            appearance="plain"
-            uiSize="icon"
-          >
-            <Icon name="close" size="var(--sz-icon-control)" />
-          </Button>
-        </View>
+    <Sheet open={open} title={title} onClose={close} closeLabel={`关闭${title}选项`} className="ui-select-sheet-host" bodyMode="fill">
         {searchable ? (
           <SearchInput
             ariaLabel={`${title}搜索`}
@@ -107,7 +88,6 @@ export function OptionSheet({
         ) : (
           <Text className="ui-select-sheet__empty">{keyword ? '没有匹配选项' : emptyText}</Text>
         )}
-      </View>
-    </View>
+    </Sheet>
   );
 }
