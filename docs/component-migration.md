@@ -22,6 +22,59 @@
 - **状态**：默认显示主题 surface 和细边线；选中使用主题 `primarySurface` 与主色边线区分；按压沿用卡片反馈；禁用通过原生 disabled 与降强调表达。加载、错误和结果为空由列表容器负责。
 - **无障碍与边界**：整卡一个触控目标，选择和禁用状态进入 `accessibilityState`；内部图标动作仍用 `IconActionButton` 并停止冒泡。用于实体选择列表时避免再造一套手绘 radio 卡片；状态/视图筛选仍使用 `StatusTabs`/`SelectableChip`。
 
+## ListCard.Actions 与 SwipeableRow 列表操作契约
+
+- **稳定任务**：在记录卡片底部直接提供最常用的记录级操作，把低频操作收进按需展开的左滑区，减少卡片高度和动作竞争。
+- **组件分工**：`ListCard.Actions` 只承载卡片底部可见操作；常用操作最多 3 个。按钮使用 Sunxu `ActionButton` 的 `text` 变体和紧凑尺寸，按钮间用 `Divider orientation="vertical"` 分隔。`SwipeableRow.rightActions` 承载低频操作和第 4 项起的溢出动作，由 `SwipeableRow` 统一处理左滑展开、行详情点击及动作按钮的禁用/加载状态。
+- **视觉与响应式**：可见操作保持单行、轻量，不堆叠成多行全宽实心或描边按钮。只有一个明确主操作时才可用主色文字强调；分隔线使用主题色并在浅色、深色主题下都清楚可见。窄屏、长文案或大字模式下优先把低优先级操作移入左滑区，不压缩触控目标或让按钮换行。
+- **动作和数据边界**：操作、权限、业务状态和回调由宿主提供；组件只负责呈现和交互。左滑只展开操作区，不直接提交删除等高风险动作。滑动区内每项操作都须保留键盘和辅助技术可到达的非手势入口（如该记录详情中的操作菜单）；关键操作还须有清楚可见的非手势入口。
+- **行点击与组合**：有左滑操作时由 `SwipeableRow.onPress` 持有行详情点击；其子 `ListCard` 仅负责卡片内容和样式，不同时设置 `ListCard.onPress`。没有左滑操作时，可由 `ListCard.onPress` 承担整行主动作。卡片内部按钮须停止事件冒泡，只执行自身操作，不误触发行详情。
+- **当前 API 边界**：现有 `ListCard.Actions` 是可组合容器，不自动插入分隔线或强制最多 3 个按钮；宿主按本契约组合 `ActionButton`、`Divider` 与 `SwipeableRow`。本规范不代表这些约束已由运行时代码强制执行。
+- **最近邻替代及拒绝原因**：把多个动作做成上下堆叠的大按钮会拉长每条记录并让次要动作获得过高视觉权重；把 4 个以上按钮全部常驻则会挤压记录信息，因此不采用这两种布局。
+
+```tsx
+<SwipeableRow
+  onPress={() => openDetail(item)}
+  accessibilityLabel="打开记录详情"
+  rightActions={[
+    {
+      label: '归档',
+      icon: 'archive-outline',
+      color: colors.primary,
+      onPress: () => archive(item),
+    },
+  ]}
+>
+  <ListCard>
+    {/* 记录信息 */}
+    <ListCard.Actions>
+      <ActionButton
+        variant="text"
+        size="sm"
+        textColor={colors.primary}
+        onPress={(event) => {
+          event.stopPropagation();
+          openPrimaryAction(item);
+        }}
+      >
+        主要操作
+      </ActionButton>
+      <Divider orientation="vertical" />
+      <ActionButton
+        variant="text"
+        size="sm"
+        onPress={(event) => {
+          event.stopPropagation();
+          openSecondaryAction(item);
+        }}
+      >
+        次要操作
+      </ActionButton>
+    </ListCard.Actions>
+  </ListCard>
+</SwipeableRow>
+```
+
 ## IconActionButton 异步状态契约
 
 - **稳定任务**：触发一个没有可见文字标签的单一图标操作，例如刷新、回拨或置顶。
@@ -213,19 +266,7 @@ CRM 宿主对 49 个再导出组件与来源基线逐文件比对后，修正与
 - `BottomSheet` 使用根级 `BottomSheetModalProvider` 提供的 portal host；不要在其内部再嵌套 `PortalProvider`，否则详情等弹层会收到点击状态却无法显示。
 - 主行点击必须立即打开详情，详情接口在弹层内继续加载；行内电话、评论等独立按钮须调用 `event.stopPropagation()`，避免一次点击同时执行行详情。
 
-标准结构：
-
-```tsx
-<SwipeableRow
-  onPress={() => openDetail(item)}
-  accessibilityLabel={`打开${item.name}详情`}
-  rightActions={[{ label: '更多', icon: 'ellipsis-horizontal', color, onPress: () => openMore(item) }]}
->
-  <ListCard>{/* 纯展示行内容；不要再给它设置整行 onPress */}</ListCard>
-</SwipeableRow>
-```
-
-没有左滑操作时，可直接用 `ListCard.onPress` 承担整行主动作。不要在 `SwipeableRow` 与内层 `ListCard` 同时设置整行点击。
+列表记录的标准操作布局与组合示例见上方 [ListCard.Actions 与 SwipeableRow 列表操作契约](#listcardactions-与-swipeablerow-列表操作契约)。没有左滑操作时，可直接用 `ListCard.onPress` 承担整行主动作；不要让 `SwipeableRow` 与内层 `ListCard` 同时处理同一行详情点击。
 
 运行时手势展开仍需在原生宿主设备上检查；类型检查通过前不发布新包。当前公开包授权门禁见[授权与发布](#验证授权与发布)。
 
