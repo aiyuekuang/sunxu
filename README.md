@@ -35,6 +35,8 @@ export function ExampleApp() {
 
 短时提示和轻量确认使用 `CenteredModal`；上下文选择或短编辑使用 `BottomSheet`；完整表单使用 `FullScreenModal`。三者都支持固定 `footer` 操作区，内容单独滚动。自定义操作区占满可用宽度，并列按钮自适应等分；确认类流程操作不放在标题栏或滚动内容中。旧 `renderFooter` 仍兼容并已弃用。
 
+`FilterBar` 的高级筛选统一使用 `FullScreenModal`；日期范围快捷项少于 20 个时直接显示在筛选内容中，不再折叠。
+
 页面容器默认把顶部安全区与页头绘制为同一主题表面，正文仍使用页面背景；业务页面直接使用 `ListScreenContainer`、`DetailScreenContainer` 或 `FormScreenContainer` 即可衔接状态栏区域和页头。自定义页头背景时，通过 `headerBackgroundColor` 同步安全区底色；父级导航已处理顶部安全区时，将 `safeAreaEdges` 配置为不含 `top`，避免重复留白。底部操作区可搭配 `BottomActionBar`，由操作栏本身处理底部安全区。
 
 `DateNavigator` 可按日、周、月或年切换；未设置 `period` 时仍按天切换。传入 `maximumDate` 可限制日期选择，并在到达最后一个可用周期时禁用向后切换。日期锚点和数据请求仍由宿主管理。

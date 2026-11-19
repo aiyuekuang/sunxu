@@ -28,7 +28,7 @@ import { DateRangeQuickSelect } from './DateRangeQuickSelect';
 import { FilterActionButton } from './FilterActionButton';
 import { FilterQuickControl } from './FilterQuickControl';
 import { FormField } from './FormField';
-import { BottomSheet } from './BottomSheet';
+import { FullScreenModal } from './FullScreenModal';
 import { SelectableChip } from './SelectableChip';
 
 export interface FilterOption {
@@ -205,8 +205,6 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
   const { colors } = useTheme();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [advancedVisible, setAdvancedVisible] = useState(false);
-  // 同一时刻只展开一个日期组的快捷选项，避免多个 date_range 组重复堆叠同一套 chips
-  const [openQuickRangeKey, setOpenQuickRangeKey] = useState<string | null>(null);
   const [saveEnabled, setSaveEnabled] = useState(false);
   const [localAdvanced, setLocalAdvanced] = useState<Record<string, string | undefined>>({});
   const quickRowRef = useRef<View>(null);
@@ -396,8 +394,6 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
       advVals[key] = values[key];
     }
     setLocalAdvanced(advVals);
-    const dateRangeFilters = advancedFilters.filter(isDateRange);
-    setOpenQuickRangeKey(dateRangeFilters.length === 1 ? dateRangeFilters[0].key : null);
     setAdvancedVisible(true);
   }, [allExtraKeys, advancedFilters, values]);
 
@@ -438,7 +434,6 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
 
   const handleAdvancedReset = useCallback(() => {
     setLocalAdvanced({});
-    setOpenQuickRangeKey(null);
     onResetAll?.();
   }, [onResetAll]);
 
@@ -614,11 +609,10 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
       )}
 
       {/* 高级筛选：筛选项独立滚动，重置/应用固定在弹层底部。 */}
-      <BottomSheet
+      <FullScreenModal
         visible={advancedVisible}
         onClose={() => setAdvancedVisible(false)}
         title="高级筛选"
-        maxHeightRatio={0.82}
         footer={(
           <View style={styles.advFooter}>
             <ActionButton
@@ -686,34 +680,16 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
                     containerStyle={styles.dateField}
                   />
                 </View>
-                <View style={styles.quickRangeGroup}>
-                  <ActionButton
-                    variant="text"
-                    size="sm"
-                    textColor={colors.primary}
-                    style={styles.quickRangeTrigger}
-                    trailingIcon={openQuickRangeKey === filter.key ? 'chevron-up' : 'chevron-down'}
-                    expanded={openQuickRangeKey === filter.key}
-                    onPress={() =>
-                      setOpenQuickRangeKey((current) => (current === filter.key ? null : filter.key))
-                    }
-                    accessibilityLabel={`${filter.label}快捷日期`}
-                  >
-                    快捷日期
-                  </ActionButton>
-                  {openQuickRangeKey === filter.key ? (
-                    <DateRangeQuickSelect
-                      value={[localAdvanced[filter.startKey], localAdvanced[filter.endKey]]}
-                      onSelect={([startDate, endDate]) => {
-                        setLocalAdvanced((current) => ({
-                          ...current,
-                          [filter.startKey]: startDate,
-                          [filter.endKey]: endDate,
-                        }));
-                      }}
-                    />
-                  ) : null}
-                </View>
+                <DateRangeQuickSelect
+                  value={[localAdvanced[filter.startKey], localAdvanced[filter.endKey]]}
+                  onSelect={([startDate, endDate]) => {
+                    setLocalAdvanced((current) => ({
+                      ...current,
+                      [filter.startKey]: startDate,
+                      [filter.endKey]: endDate,
+                    }));
+                  }}
+                />
               </View>
             ) : isTextFilter(filter) ? (
               <FormField
@@ -780,7 +756,7 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
             />
           </View>
         )}
-      </BottomSheet>
+      </FullScreenModal>
     </>
   );
 });
@@ -883,12 +859,6 @@ const styles = StyleSheet.create({
   },
   dateRangeGroup: {
     gap: Spacing.xs,
-  },
-  quickRangeGroup: {
-    gap: Spacing.xs,
-  },
-  quickRangeTrigger: {
-    alignSelf: 'flex-start',
   },
   dateField: {
     flex: 1,

@@ -452,3 +452,9 @@ Tel App 已改用以上契约，并将列表/表单/工作台容器、错误边�
 - `examples/catalog` 增加附件状态和底部导航示例，覆盖宿主接线边界。
 
 Digi CRM 小程序以 `AppAttachmentField` 与 `AppBottomTabBar` 提供 Taro 适配；`CrmFileField` 与 `CrmCustomBottomNav` 复用呈现控件，保留各自 CRM 上传、媒体预览、路由、权限和数据逻辑。`CrmSignatureField` 仍是单一 Taro Canvas/CRM 上传场景；组织选择可由现有实体选择器与树选择器组合，因此不作为共享基础组件新增。
+
+## 2026-11-19 FilterBar 全屏高级筛选
+
+- `FilterBar` 的高级筛选统一使用 `FullScreenModal`，筛选内容在弹窗内滚动，重置/应用按钮固定在底部。
+- 日期范围的快捷日期选项直接展示在对应筛选组中，不再折叠；当前 9 个快捷区间（少于 20 项）始终可见，并保留当前区间的选中态。
+- `advancedFilters`、筛选暂存/应用、日期边界校验和持久化契约不变；这是 Sunxu 公共组件行为，宿主继续通过配置提供业务选项与字段。
