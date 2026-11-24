@@ -8,7 +8,7 @@ Sunxu 是面向 React Native / Expo App 的通用组件与页面容器库。当�
 
 ## 开始任务前
 
-1. 阅读本文件、`README.md` 和 `docs/component-migration.md`。
+1. 阅读本文件、`README.md`、`docs/component-migration.md` 和 `docs/component-usage-policy.md`。
 2. 检查 `src/core/**` 的现有实现和调用方式，避免产生重复语义的公共 API。
 3. MES 来源是只读基线 `../mes-app` 的固定提交 `e92d02d7cf2269cf8c564a60ff6a00255e903c8e`；尊重其基线边界，不访问客户交付仓，也不修改来源仓。
 4. 基线来源工作区在盘点时存在未提交改动；只允许引用固定提交快照，并核对清单中的 SHA-256。
