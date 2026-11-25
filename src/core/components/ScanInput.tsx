@@ -11,7 +11,7 @@ import { useScaledFontSize } from '../theme/font-scale';
 import { toast, toastConfig } from '../toast';
 import { AppText as Text } from './AppText';
 
-interface ScanInputProps {
+export interface ScanInputProps {
   label: string;
   value: string;
   onChangeText: (text: string) => void;

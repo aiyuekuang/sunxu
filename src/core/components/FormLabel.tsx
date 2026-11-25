@@ -180,13 +180,15 @@ export function FormLabel({
 }
 
 /** Icon-only help for a page or section explanation that has no field label. */
+export interface ContextualHelpButtonProps {
+  help: FieldHelpContent;
+  accessibilityLabel?: string;
+}
+
 export function ContextualHelpButton({
   help,
   accessibilityLabel,
-}: {
-  help: FieldHelpContent;
-  accessibilityLabel?: string;
-}) {
+}: ContextualHelpButtonProps) {
   return <FormLabel label="" help={help} iconOnly accessibilityLabel={accessibilityLabel} />;
 }
 

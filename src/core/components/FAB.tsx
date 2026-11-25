@@ -15,7 +15,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Shadow, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 
-interface FABProps {
+export interface FABProps {
   onPress: () => void;
   icon?: keyof typeof Ionicons.glyphMap;
   style?: StyleProp<ViewStyle>;
@@ -24,7 +24,10 @@ interface FABProps {
   draggable?: boolean;
   /** 可选：持久化拖动后的位置，避免每次进入页面都要重新摆放。 */
   storageKey?: string;
-  accessibilityLabel?: string;
+  /** Reports failures from optional drag-position persistence. */
+  onStorageError?: (error: unknown) => void | Promise<void>;
+  /** Required because the FAB is an icon-only control. */
+  accessibilityLabel: string;
   accessibilityHint?: string;
   testID?: string;
 }
@@ -92,6 +95,7 @@ export function FAB({
   disabled = false,
   draggable = false,
   storageKey,
+  onStorageError,
   accessibilityLabel,
   accessibilityHint,
   testID,
@@ -107,6 +111,18 @@ export function FAB({
   const didDragRef = useRef(false);
   const pan = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
 
+  const reportStorageError = useCallback(async (error: unknown) => {
+    if (!onStorageError) {
+      console.warn('FAB position persistence failed', error);
+      return;
+    }
+    try {
+      await onStorageError(error);
+    } catch (handlerError) {
+      console.error('FAB storage error handler failed', handlerError);
+    }
+  }, [onStorageError]);
+
   useEffect(() => {
     positionRef.current = position;
   }, [position]);
@@ -114,27 +130,29 @@ export function FAB({
   useEffect(() => {
     if (!draggable || !storageKey) return;
     let active = true;
-    void AsyncStorage.getItem(storageKey).then((serialized) => {
-      if (!active || !serialized) return;
-      try {
-        const parsed: unknown = JSON.parse(serialized);
-        if (isFABPosition(parsed)) {
-          const size = containerSizeRef.current;
-          const next =
-            size.width > 0 && size.height > 0
-              ? clampPosition(parsed, size.width, size.height)
-              : parsed;
-          positionRef.current = next;
-          setPosition(next);
+    void AsyncStorage.getItem(storageKey)
+      .then((serialized) => {
+        if (!active || !serialized) return;
+        try {
+          const parsed: unknown = JSON.parse(serialized);
+          if (isFABPosition(parsed)) {
+            const size = containerSizeRef.current;
+            const next =
+              size.width > 0 && size.height > 0
+                ? clampPosition(parsed, size.width, size.height)
+                : parsed;
+            positionRef.current = next;
+            setPosition(next);
+          }
+        } catch {
+          // 位置偏好损坏时保留默认位置，不影响新增操作。
         }
-      } catch {
-        // 位置偏好损坏时保留默认位置，不影响新增操作。
-      }
-    });
+      })
+      .catch(reportStorageError);
     return () => {
       active = false;
     };
-  }, [draggable, storageKey]);
+  }, [draggable, reportStorageError, storageKey]);
 
   const handleContainerLayout = useCallback((event: LayoutChangeEvent) => {
     const nextSize = {
@@ -152,9 +170,11 @@ export function FAB({
 
   const savePosition = useCallback(
     (next: FABPosition) => {
-      if (storageKey) void AsyncStorage.setItem(storageKey, JSON.stringify(next));
+      if (storageKey) {
+        void AsyncStorage.setItem(storageKey, JSON.stringify(next)).catch(reportStorageError);
+      }
     },
-    [storageKey],
+    [reportStorageError, storageKey],
   );
 
   const panResponder = useMemo(

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import {
+  Platform,
   Pressable,
   StyleSheet,
   View,
@@ -11,11 +12,14 @@ import { CountBadge } from './Badge';
 import { AppText as Text } from './AppText';
 import {
   FontSize,
+  MIN_TOUCH_TARGET,
   MIN_TOUCH_TARGET_ANDROID,
   Spacing,
 } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { useScaledFontSize } from '../theme/font-scale';
+
+const TAB_TARGET = Platform.OS === 'android' ? MIN_TOUCH_TARGET_ANDROID : MIN_TOUCH_TARGET;
 
 /** A tab item for the bottom navigation bar. Route changes stay with the host. */
 export interface BottomTabItem<T extends string = string> {
@@ -24,8 +28,19 @@ export interface BottomTabItem<T extends string = string> {
   icon: ReactNode;
   /** Optional icon rendered while this tab is selected. */
   activeIcon?: ReactNode;
+  /** Highlight a high-priority tab with the library's primary icon surface. */
+  emphasis?: 'primary';
+  /** Optional surface color for an emphasized tab; defaults to the theme primary color. */
+  emphasisColor?: string;
+  /** Hide the visual label while keeping `label` as the default accessible name. */
+  labelVisible?: boolean;
   /** Positive numbers and non-empty strings render a badge; numeric values above 99 show as 99+. */
   badge?: number | string;
+  /** Optional independent action for an actionable badge, such as opening unread items. */
+  onBadgePress?: () => void;
+  badgeAccessibilityLabel?: string;
+  badgeAccessibilityHint?: string;
+  badgeTestID?: string;
   /** Optional replacement for the default label (which includes the visible badge value). */
   accessibilityLabel?: string;
   accessibilityHint?: string;
@@ -41,6 +56,8 @@ export interface BottomTabBarProps<T extends string = string> {
   style?: StyleProp<ViewStyle>;
   backgroundColor?: string;
   borderTopColor?: string;
+  /** Height of the visible bar content, excluding the bottom safe-area inset. */
+  baseHeight?: number;
   /** Minimum space below the bar when the host has no bottom safe-area inset. */
   bottomInsetBase?: number;
   /** Set false when the host already owns the bottom safe-area padding. */
@@ -59,6 +76,7 @@ export function BottomTabBar<T extends string = string>({
   style,
   backgroundColor,
   borderTopColor,
+  baseHeight,
   bottomInsetBase = Spacing.sm,
   includeSafeArea = true,
 }: BottomTabBarProps<T>) {
@@ -79,6 +97,7 @@ export function BottomTabBar<T extends string = string>({
           backgroundColor: backgroundColor ?? colors.tabBarBg,
           borderTopColor: borderTopColor ?? colors.tabBarBorder,
           paddingBottom,
+          height: baseHeight === undefined ? undefined : baseHeight + paddingBottom,
         },
         style,
       ]}
@@ -93,43 +112,67 @@ export function BottomTabBar<T extends string = string>({
             : colors.tabBarInactive;
 
         return (
-          <Pressable
-            key={tab.key}
-            testID={tab.testID}
-            disabled={tab.disabled}
-            onPress={() => onChange(tab.key)}
-            accessibilityRole="tab"
-            accessibilityLabel={tab.accessibilityLabel ?? accessibleTabLabel(tab.label, badge)}
-            accessibilityHint={tab.accessibilityHint}
-            accessibilityState={{ selected, disabled: tab.disabled }}
-            aria-selected={selected}
-            style={({ pressed }) => [
-              styles.item,
-              pressed && !tab.disabled ? styles.itemPressed : null,
-              tab.disabled ? styles.itemDisabled : null,
-            ]}
-          >
-            <View style={styles.itemContent}>
-              <View
-                style={styles.iconSlot}
-                accessibilityElementsHidden
-                importantForAccessibility="no-hide-descendants"
-              >
-                {selected ? tab.activeIcon ?? tab.icon : tab.icon}
+          <View key={tab.key} style={styles.itemContainer}>
+            <Pressable
+              testID={tab.testID}
+              disabled={tab.disabled}
+              onPress={() => onChange(tab.key)}
+              accessibilityRole="tab"
+              accessibilityLabel={tab.accessibilityLabel ?? accessibleTabLabel(tab.label, badge)}
+              accessibilityHint={tab.accessibilityHint}
+              accessibilityState={{ selected, disabled: tab.disabled }}
+              aria-selected={selected}
+              style={({ pressed }) => [
+                styles.item,
+                pressed && !tab.disabled ? styles.itemPressed : null,
+                tab.disabled ? styles.itemDisabled : null,
+              ]}
+            >
+              <View style={styles.itemContent}>
+                <View
+                  style={[
+                    styles.iconSlot,
+                    tab.emphasis === 'primary' && styles.primaryIconSlot,
+                    tab.emphasis === 'primary' && {
+                      backgroundColor: tab.emphasisColor ?? colors.primary,
+                    },
+                  ]}
+                  accessibilityElementsHidden
+                  importantForAccessibility="no-hide-descendants"
+                >
+                  {selected ? tab.activeIcon ?? tab.icon : tab.icon}
+                </View>
+                {tab.labelVisible === false ? null : (
+                  <Text
+                    numberOfLines={1}
+                    style={[styles.label, { color: labelColor, fontSize: labelFontSize }]}
+                  >
+                    {tab.label}
+                  </Text>
+                )}
               </View>
-              {badge ? (
-                <View pointerEvents="none" style={styles.badge}>
+            </Pressable>
+            {badge ? (
+              tab.onBadgePress ? (
+                <Pressable
+                  onPress={tab.onBadgePress}
+                  accessibilityRole="button"
+                  accessibilityLabel={tab.badgeAccessibilityLabel ?? `查看${tab.label}，${badge}`}
+                  accessibilityHint={tab.badgeAccessibilityHint}
+                  accessibilityState={{ disabled: tab.disabled }}
+                  disabled={tab.disabled}
+                  testID={tab.badgeTestID}
+                  style={styles.badgeAction}
+                >
+                  <CountBadge count={badge} tone="error" />
+                </Pressable>
+              ) : (
+                <View pointerEvents="none" style={styles.badgeAction}>
                   <CountBadge count={badge} tone="error" />
                 </View>
-              ) : null}
-              <Text
-                numberOfLines={1}
-                style={[styles.label, { color: labelColor, fontSize: labelFontSize }]}
-              >
-                {tab.label}
-              </Text>
-            </View>
-          </Pressable>
+              )
+            ) : null}
+          </View>
         );
       })}
     </View>
@@ -157,10 +200,15 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.xs,
     borderTopWidth: StyleSheet.hairlineWidth,
   },
+  itemContainer: {
+    flex: 1,
+    minWidth: 0,
+    position: 'relative',
+  },
   item: {
     flex: 1,
     minWidth: 0,
-    minHeight: MIN_TOUCH_TARGET_ANDROID,
+    minHeight: TAB_TARGET,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -176,10 +224,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  badge: {
+  primaryIconSlot: {
+    width: TAB_TARGET,
+    height: TAB_TARGET,
+    borderRadius: 22,
+  },
+  badgeAction: {
     position: 'absolute',
-    top: -2,
-    right: -14,
+    top: 0,
+    right: 0,
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
     zIndex: 1,
   },
   label: {

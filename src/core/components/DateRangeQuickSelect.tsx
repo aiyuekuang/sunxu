@@ -62,7 +62,7 @@ const PRESETS = [
   },
 ] as const;
 
-interface DateRangeQuickSelectProps {
+export interface DateRangeQuickSelectProps {
   onSelect: (value: DateRangeValue) => void;
   /** 当前区间，用于高亮命中的快捷选项 */
   value?: [string | undefined, string | undefined];

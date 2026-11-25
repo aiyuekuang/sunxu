@@ -14,10 +14,10 @@ import { useTheme } from '../theme/useTheme';
 
 export type IconActionTone = 'neutral' | 'primary' | 'success' | 'warning' | 'danger';
 export type IconActionVariant = 'plain' | 'tinted' | 'filled';
-type ActionIcon = React.ComponentProps<typeof MaterialCommunityIcons>['name'];
+export type IconActionButtonIconName = React.ComponentProps<typeof MaterialCommunityIcons>['name'];
 
 export interface IconActionButtonProps {
-  icon: ActionIcon;
+  icon: IconActionButtonIconName;
   onPress: (event: GestureResponderEvent) => void;
   accessibilityLabel: string;
   tone?: IconActionTone;

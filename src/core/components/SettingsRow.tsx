@@ -7,10 +7,10 @@ import { AppText } from './AppText';
 import { InlineLoading } from './LoadingView';
 import { ScalePressable } from './ScalePressable';
 
-type SettingsIcon = React.ComponentProps<typeof MaterialCommunityIcons>['name'];
+export type SettingsRowIconName = React.ComponentProps<typeof MaterialCommunityIcons>['name'];
 
 export interface SettingsRowProps {
-  icon: SettingsIcon;
+  icon: SettingsRowIconName;
   label: string;
   description?: string;
   value?: string;

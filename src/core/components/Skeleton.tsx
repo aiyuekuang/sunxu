@@ -66,7 +66,11 @@ export function Skeleton({
 }
 
 // 常用的预设排列
-export function SkeletonCard({ style }: { style?: ViewStyle }) {
+export interface SkeletonCardProps {
+  style?: ViewStyle;
+}
+
+export function SkeletonCard({ style }: SkeletonCardProps) {
   const { colors } = useTheme();
   return (
     <View style={[styles.card, { backgroundColor: colors.surface }, style]}>
@@ -80,7 +84,11 @@ export function SkeletonCard({ style }: { style?: ViewStyle }) {
   );
 }
 
-export function SkeletonList({ count = 5 }: { count?: number }) {
+export interface SkeletonListProps {
+  count?: number;
+}
+
+export function SkeletonList({ count = 5 }: SkeletonListProps) {
   return (
     <View style={styles.list}>
       {Array.from({ length: count }).map((_, i) => (

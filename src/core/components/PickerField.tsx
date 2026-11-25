@@ -8,6 +8,7 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   BackHandler,
+  Pressable,
   Platform,
   StyleSheet,
   TouchableOpacity,
@@ -15,12 +16,14 @@ import {
   type ViewStyle,
 } from 'react-native';
 import { AppText as Text } from './AppText';
-import { FontSize, Radius, Spacing } from '../theme/tokens';
+import { FontSize, MIN_TOUCH_TARGET, MIN_TOUCH_TARGET_ANDROID, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { useScaledFontSize } from '../theme/font-scale';
 import { useBottomSheetTextInput } from './BottomSheetContext';
 import { type FieldHelpContent, FormLabel } from './FormLabel';
 import { useModalRequestCloseContext } from './ModalRequestCloseContext';
+
+const PICKER_TARGET = Platform.OS === 'android' ? MIN_TOUCH_TARGET_ANDROID : MIN_TOUCH_TARGET;
 
 export interface PickerOption {
   label: string;
@@ -31,7 +34,7 @@ export interface PickerOption {
   disabledReason?: string;
 }
 
-interface PickerFieldProps {
+export interface PickerFieldProps {
   label: string;
   value?: string;
   options: PickerOption[];
@@ -47,6 +50,9 @@ interface PickerFieldProps {
   disabled?: boolean;
   /** 禁用时展示给用户的原因，并作为无障碍提示 */
   disabledReason?: string;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
+  testID?: string;
 }
 
 export function PickerField({
@@ -63,6 +69,9 @@ export function PickerField({
   searchable = true,
   disabled = false,
   disabledReason,
+  accessibilityLabel,
+  accessibilityHint,
+  testID,
 }: PickerFieldProps) {
   const { colors } = useTheme();
   const searchInputFontSize = useScaledFontSize(FontSize.base);
@@ -79,6 +88,7 @@ export function PickerField({
   const selectedOption = options.find((o) => o.value === value);
   const displayText = selectedOption?.label ?? '';
   const resolvedDisabledReason = disabled ? (disabledReason ?? '当前字段不可修改') : undefined;
+  const triggerLabel = accessibilityLabel ?? (label || '选择项');
 
   const filtered = useMemo(
     () =>
@@ -146,8 +156,13 @@ export function PickerField({
       {/* Header */}
       <View style={[styles.sheetHeader, { borderBottomColor: colors.border }]}>
         <Text style={[styles.sheetTitle, { color: colors.text }]}>{label}</Text>
-        <TouchableOpacity onPress={close} hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}>
-          <Ionicons name="close" size={22} color={colors.textSecondary} />
+        <TouchableOpacity
+          onPress={close}
+          hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
+          accessibilityRole="button"
+          accessibilityLabel="关闭选择器"
+        >
+          <Ionicons name="close" size={22} color={colors.textSecondary} accessible={false} />
         </TouchableOpacity>
       </View>
 
@@ -180,10 +195,10 @@ export function PickerField({
   );
 
   return (
-    <View style={[styles.container, containerStyle]}>
+    <View style={[styles.container, containerStyle]} testID={testID}>
       <FormLabel label={label} required={required} help={help} />
 
-      <TouchableOpacity
+      <View
         style={[
           styles.inputWrapper,
           {
@@ -192,28 +207,40 @@ export function PickerField({
             opacity: disabled ? 0.72 : 1,
           },
         ]}
-        onPress={disabled ? undefined : open}
-        activeOpacity={disabled ? 1 : 0.7}
-        accessibilityState={{ disabled: Boolean(disabled) }}
-        accessibilityHint={resolvedDisabledReason}
       >
-        <Text
-          style={[styles.valueText, { color: displayText ? colors.text : colors.textTertiary }]}
-          numberOfLines={1}
+        <Pressable
+          style={styles.inputMain}
+          onPress={disabled ? undefined : open}
+          disabled={disabled}
+          accessibilityRole="button"
+          accessibilityLabel={`${triggerLabel}，${displayText || placeholder || '请选择'}`}
+          accessibilityHint={accessibilityHint ?? resolvedDisabledReason}
+          accessibilityState={{ disabled }}
+          testID={testID ? `${testID}-open` : undefined}
         >
-          {displayText || placeholder || '请选择'}
-        </Text>
+          <Text
+            style={[styles.valueText, { color: displayText ? colors.text : colors.textTertiary }]}
+            numberOfLines={1}
+          >
+            {displayText || placeholder || '请选择'}
+          </Text>
+          {!clearable || !displayText ? (
+            <Ionicons name="chevron-down" size={16} color={colors.textTertiary} accessible={false} />
+          ) : null}
+        </Pressable>
         {clearable && displayText && !disabled ? (
           <TouchableOpacity
+            style={styles.clearButton}
             onPress={handleClear}
             hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
+            accessibilityRole="button"
+            accessibilityLabel={`清除${label}`}
+            testID={testID ? `${testID}-clear` : undefined}
           >
-            <Ionicons name="close-circle" size={18} color={colors.textTertiary} />
+            <Ionicons name="close-circle" size={18} color={colors.textTertiary} accessible={false} />
           </TouchableOpacity>
-        ) : (
-          <Ionicons name="chevron-down" size={16} color={colors.textTertiary} />
-        )}
-      </TouchableOpacity>
+        ) : null}
+      </View>
 
       {error && <Text style={[styles.error, { color: colors.error }]}>{error}</Text>}
       {resolvedDisabledReason ? (
@@ -307,9 +334,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderRadius: Radius.sm,
-    paddingHorizontal: Spacing.md,
-    height: 42,
+    paddingLeft: Spacing.md,
+    minHeight: PICKER_TARGET,
+  },
+  inputMain: {
+    flex: 1,
+    minHeight: PICKER_TARGET,
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: Spacing.sm,
+  },
+  clearButton: {
+    minWidth: PICKER_TARGET,
+    minHeight: PICKER_TARGET,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   valueText: {
     flex: 1,

@@ -5,7 +5,7 @@ import { AppText as Text } from './AppText';
 import { FontSize, Radius, Shadow, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 
-interface DetailCardProps {
+export interface DetailCardProps {
   title?: string;
   children: React.ReactNode;
   /** 卡片外层布局样式；style 仍只作用于内容卡片。 */
@@ -54,7 +54,7 @@ export function DetailCard({
   );
 }
 
-interface InfoRowProps {
+export interface InfoRowProps {
   label: string;
   value?: string | number | null;
   /** 是否为最后一行（不显示底部分隔线） */
@@ -99,7 +99,7 @@ export function InfoRow({ label, value, last, right, onPress }: InfoRowProps) {
   return primaryRow;
 }
 
-interface StatusTagProps {
+export interface StatusTagProps {
   label: string;
   color: string;
   bg: string;

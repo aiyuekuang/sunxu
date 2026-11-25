@@ -8,7 +8,7 @@ import { useScaledFontSize } from '../theme/font-scale';
 import { useBottomSheetTextInput } from './BottomSheetContext';
 import { IconActionButton } from './IconActionButton';
 
-interface SearchBarProps {
+export interface SearchBarProps {
   value: string;
   onChangeText: (text: string) => void;
   placeholder?: string;

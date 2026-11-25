@@ -5,10 +5,11 @@ import {
   type StyleProp,
   StyleSheet,
   TouchableOpacity,
+  Platform,
   View,
   type ViewStyle,
 } from 'react-native';
-import { FontSize, Radius, Spacing } from '../theme/tokens';
+import { FontSize, MIN_TOUCH_TARGET, MIN_TOUCH_TARGET_ANDROID, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { AppText as Text } from './AppText';
 
@@ -20,8 +21,12 @@ export interface SelectableChipProps {
   disabled?: boolean;
   /** 自定义读屏名称；默认使用可见标签。 */
   accessibilityLabel?: string;
+  accessibilityHint?: string;
   /** 选择项语义；列表单选组可声明 radio。 */
   accessibilityRole?: AccessibilityRole;
+  /** Optional semantic color for a categorized option. */
+  color?: string;
+  appearance?: 'filled' | 'outline';
   /** 扩展透明触控区域，不改变胶囊的可见尺寸。 */
   hitSlop?: Insets;
   /** 可选尾随信息，如筛选数量。 */
@@ -29,6 +34,7 @@ export interface SelectableChipProps {
   /** sm=列表/弹层内的紧凑筛选胶囊；md=表单/设置卡内的常规选择胶囊 */
   size?: 'sm' | 'md';
   style?: StyleProp<ViewStyle>;
+  testID?: string;
 }
 
 /**
@@ -46,48 +52,73 @@ export function SelectableChip({
   onPress,
   disabled = false,
   accessibilityLabel,
+  accessibilityHint,
   accessibilityRole = 'button',
+  color,
+  appearance = 'filled',
   hitSlop,
   suffix,
   size = 'sm',
   style,
+  testID,
 }: SelectableChipProps) {
   const { colors } = useTheme();
+  const usesCheckedState = accessibilityRole === 'radio' || accessibilityRole === 'checkbox';
+  const minimumTarget = Platform.OS === 'android' ? MIN_TOUCH_TARGET_ANDROID : MIN_TOUCH_TARGET;
+  const selectedBackgroundColor = color ?? (appearance === 'outline' ? colors.primarySurface : colors.primary);
+  const selectedTextColor = color ? colors.textOnPrimary : appearance === 'outline' ? colors.primary : colors.textOnPrimary;
+  const unselectedBackgroundColor = color ? 'transparent' : appearance === 'outline' ? 'transparent' : colors.surfaceSecondary;
+  const unselectedBorderColor = color ?? (appearance === 'outline' ? colors.border : 'transparent');
 
   return (
     <TouchableOpacity
-      style={[
-        styles.chip,
-        size === 'sm' ? styles.chipSm : styles.chipMd,
-        {
-          backgroundColor: selected ? `${colors.primary}14` : colors.surfaceSecondary,
-          borderColor: selected ? `${colors.primary}2E` : colors.borderLight,
-          opacity: disabled ? 0.5 : 1,
-        },
-        style,
-      ]}
+      style={[styles.target, { minHeight: minimumTarget, minWidth: minimumTarget }]}
       hitSlop={hitSlop}
       activeOpacity={0.72}
       disabled={disabled}
       onPress={onPress}
       accessibilityRole={accessibilityRole}
-      accessibilityState={{ selected, disabled }}
+      accessibilityState={usesCheckedState ? { checked: selected, disabled } : { selected, disabled }}
       accessibilityLabel={accessibilityLabel ?? label}
+      accessibilityHint={accessibilityHint}
+      aria-checked={usesCheckedState ? selected : undefined}
+      aria-selected={accessibilityRole === 'tab' ? selected : undefined}
+      aria-pressed={accessibilityRole === 'button' ? selected : undefined}
+      aria-disabled={disabled}
+      testID={testID}
     >
-      <View style={styles.content}>
-        <Text
-          style={[styles.chipText, { color: selected ? colors.primary : colors.textSecondary }]}
-          numberOfLines={1}
-        >
-          {label}
-        </Text>
-        {suffix}
+      <View
+        style={[
+          styles.chip,
+          size === 'sm' ? styles.chipSm : styles.chipMd,
+          {
+            backgroundColor: selected ? selectedBackgroundColor : unselectedBackgroundColor,
+            borderColor: selected ? color ?? colors.primary : unselectedBorderColor,
+            opacity: disabled ? 0.5 : 1,
+          },
+          style,
+        ]}
+      >
+        <View style={styles.content}>
+          <Text
+            style={[styles.chipText, { color: selected ? selectedTextColor : color ?? colors.textSecondary }]}
+            numberOfLines={1}
+          >
+            {label}
+          </Text>
+          {suffix}
+        </View>
       </View>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
+  target: {
+    alignSelf: 'flex-start',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   chip: {
     borderRadius: Radius.full,
     borderWidth: StyleSheet.hairlineWidth,

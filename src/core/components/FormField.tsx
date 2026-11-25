@@ -21,20 +21,39 @@ export interface FormFieldProps extends TextInputProps {
   /** 字段标签；传空字符串时不渲染标签行（如筛选面板里已由分组标题提供标签） */
   label?: string;
   error?: string;
+  /** Optional result outline when the host has validation state but no inline error message. */
+  validationState?: 'success' | 'error';
   required?: boolean;
   help?: FieldHelpContent;
+  /** Compact controls keep platform touch size while reducing internal padding. */
+  size?: 'default' | 'compact';
   /** Layout the field group; `style` remains the native TextInput style. */
   containerStyle?: StyleProp<ViewStyle>;
+  /** Optional visual override for the shared input shell. */
+  inputWrapperStyle?: StyleProp<ViewStyle>;
   secureToggle?: boolean;
   rightElement?: React.ReactNode;
+}
+
+export interface FormSwitchProps {
+  label: string;
+  value: boolean;
+  onValueChange: (value: boolean) => void;
+  disabled?: boolean;
+  containerStyle?: ViewStyle;
+  accessibilityHint?: string;
+  testID?: string;
 }
 
 export function FormField({
   label,
   error,
+  validationState,
   required,
   help,
+  size = 'default',
   containerStyle,
+  inputWrapperStyle,
   secureToggle,
   secureTextEntry,
   rightElement,
@@ -51,6 +70,7 @@ export function FormField({
   const { colors } = useTheme();
   const inputFontSize = useScaledFontSize(FontSize.base);
   const touchTarget = Platform.OS === 'android' ? MIN_TOUCH_TARGET_ANDROID : MIN_TOUCH_TARGET;
+  const compact = size === 'compact';
   const [focused, setFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { InputComponent, inputKey, inputProps } = useBottomSheetTextInput({ value, onChangeText });
@@ -62,12 +82,23 @@ export function FormField({
       <View
         style={[
           styles.inputWrapper,
-          multiline && styles.inputWrapperMultiline,
+          compact && styles.inputWrapperCompact,
+          multiline && (compact ? styles.inputWrapperMultilineCompact : styles.inputWrapperMultiline),
+          compact && {
+            minHeight: multiline ? Math.max(touchTarget, 48) : touchTarget,
+          },
           {
-            borderColor: error ? colors.error : focused ? colors.primary : colors.border,
+            borderColor: error || validationState === 'error'
+              ? colors.error
+              : validationState === 'success'
+                ? colors.success
+                : focused
+                  ? colors.primary
+                  : colors.border,
             backgroundColor: isReadOnly ? colors.surfaceSecondary : colors.surface,
           },
           isReadOnly && styles.inputWrapperReadonly,
+          inputWrapperStyle,
         ]}
       >
         <InputComponent
@@ -75,9 +106,10 @@ export function FormField({
           style={[
             styles.input,
             Platform.OS === 'web' && styles.inputWeb,
+            multiline && (compact ? styles.inputMultilineCompact : styles.inputMultiline),
+            { color: colors.text, fontSize: inputFontSize },
             style,
-            { minHeight: touchTarget, color: colors.text, fontSize: inputFontSize },
-            multiline && styles.inputMultiline,
+            { minHeight: multiline ? (compact ? Math.max(touchTarget, 48) : 64) : touchTarget },
           ]}
           placeholderTextColor={colors.textTertiary}
           secureTextEntry={secureTextEntry && !showPassword}
@@ -122,15 +154,7 @@ export function FormSwitch({
   containerStyle,
   accessibilityHint,
   testID,
-}: {
-  label: string;
-  value: boolean;
-  onValueChange: (v: boolean) => void;
-  disabled?: boolean;
-  containerStyle?: ViewStyle;
-  accessibilityHint?: string;
-  testID?: string;
-}) {
+}: FormSwitchProps) {
   const { colors } = useTheme();
   return (
     <View style={[styles.switchRow, containerStyle]}>
@@ -160,11 +184,20 @@ const styles = StyleSheet.create({
     minHeight: MIN_TOUCH_TARGET_ANDROID,
     gap: Spacing.sm,
   },
+  inputWrapperCompact: {
+    borderRadius: Radius.sm,
+    paddingHorizontal: Spacing.sm,
+  },
   inputWrapperMultiline: {
     height: undefined,
     minHeight: 80,
     alignItems: 'flex-start',
     paddingVertical: Spacing.sm,
+  },
+  inputWrapperMultilineCompact: {
+    height: undefined,
+    alignItems: 'flex-start',
+    paddingVertical: Spacing.xs,
   },
   inputWrapperReadonly: {
     opacity: 0.72,
@@ -181,6 +214,9 @@ const styles = StyleSheet.create({
   },
   inputMultiline: {
     minHeight: 64,
+  },
+  inputMultilineCompact: {
+    minHeight: 48,
   },
   error: {
     fontSize: FontSize.xs,

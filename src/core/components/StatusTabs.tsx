@@ -24,7 +24,7 @@ export interface TabItem<T extends string = string> {
   disabled?: boolean;
 }
 
-interface StatusTabsProps<T extends string = string> {
+export interface StatusTabsProps<T extends string = string> {
   tabs: TabItem<T>[];
   activeKey: T;
   onChange: (key: T) => void;

@@ -22,7 +22,7 @@ export interface DetailAction {
   accessibilityHint?: string;
 }
 
-interface DetailActionBarProps {
+export interface DetailActionBarProps {
   /** Actions are ordered by task priority; the first four remain in the bar. */
   actions: DetailAction[];
   /** Set false when the parent footer or safe-area container already owns the bottom inset. */

@@ -1,12 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import { useEffect, useState } from 'react';
-import { Alert, Image, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { useRef, useState } from 'react';
+import { Alert, Image, Platform, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { AppText as Text } from './AppText';
-import { FontSize, Radius, Spacing } from '../theme/tokens';
+import { FontSize, MIN_TOUCH_TARGET, MIN_TOUCH_TARGET_ANDROID, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { toast } from '../toast';
 import { ImagePreviewModal } from './ImagePreviewModal';
+
+const PHOTO_ACTION_TARGET = Platform.OS === 'android' ? MIN_TOUCH_TARGET_ANDROID : MIN_TOUCH_TARGET;
 
 /** 包装 async onPress 回调，捕获未处理的 rejection */
 const safeAsync = (fn: () => Promise<void>) => () => {
@@ -15,87 +17,109 @@ const safeAsync = (fn: () => Promise<void>) => () => {
   });
 };
 
-interface PhotoPickerProps {
+export interface PhotoPickerProps {
   photos: string[];
   onPhotosChange: (photos: string[]) => void;
   maxCount?: number;
   label?: string;
-  /** 点检证据只允许现场拍照；成功拍摄后可先上传并由服务端签发证据。 */
+  /** Restrict selection to the camera. Upload and record workflows stay with the host. */
   cameraOnly?: boolean;
   /** 是否允许一次从相册选择多张图片。 */
   allowsMultipleSelection?: boolean;
   /** 标记首张为封面，并允许调整封面顺序。 */
   showCoverControls?: boolean;
-  onPhotoCaptured?: (uri: string) => Promise<string | undefined>;
-  onPhotoEvidenceChange?: (evidenceIds: string[]) => void;
+  /** Let the host finish asynchronous capture processing before the photo is added. */
+  onPhotoCaptured?: (uri: string) => void | Promise<void>;
+  addLabel?: string;
+  disabled?: boolean;
+  readOnly?: boolean;
+  /** Disable edits while the host processes selected photos. */
+  busy?: boolean;
+  testID?: string;
 }
 
 export const PhotoPicker = ({
   photos,
   onPhotosChange,
   maxCount = 3,
-  label = '拍照凭证',
+  label = '照片',
   cameraOnly = false,
   allowsMultipleSelection = false,
   showCoverControls = false,
   onPhotoCaptured,
-  onPhotoEvidenceChange,
+  addLabel = '添加照片',
+  disabled = false,
+  readOnly = false,
+  busy = false,
+  testID,
 }: PhotoPickerProps) => {
   const { colors } = useTheme();
   const [previewUri, setPreviewUri] = useState<string | null>(null);
-  const [evidenceIds, setEvidenceIds] = useState<string[]>([]);
+  const [isWorking, setIsWorking] = useState(false);
+  const photosRef = useRef(photos);
+  photosRef.current = photos;
+  const canEdit = !disabled && !readOnly && !busy && !isWorking;
 
-  useEffect(() => {
-    if (photos.length === 0 && evidenceIds.length > 0) {
-      setEvidenceIds([]);
-      onPhotoEvidenceChange?.([]);
-    }
-  }, [evidenceIds, onPhotoEvidenceChange, photos.length]);
+  const appendPhotos = (uris: string[]) => {
+    const current = photosRef.current;
+    const remaining = Math.max(0, maxCount - current.length);
+    const next = [...current, ...uris.slice(0, remaining)];
+    photosRef.current = next;
+    onPhotosChange(next);
+  };
 
   const takePhoto = async () => {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('权限提示', '需要相机权限才能拍照');
-      return;
-    }
-    const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ['images'],
-      quality: 0.7,
-      allowsEditing: false,
-    });
-    if (!result.canceled && result.assets[0]) {
-      const uri = result.assets[0].uri;
-      const evidenceId = onPhotoCaptured ? await onPhotoCaptured(uri) : undefined;
-      if (evidenceId) {
-        const nextEvidenceIds = [...evidenceIds, evidenceId];
-        setEvidenceIds(nextEvidenceIds);
-        onPhotoEvidenceChange?.(nextEvidenceIds);
+    if (!canEdit) return;
+    setIsWorking(true);
+    try {
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('权限提示', '需要相机权限才能拍照');
+        return;
       }
-      onPhotosChange([...photos, uri]);
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ['images'],
+        quality: 0.7,
+        allowsEditing: false,
+      });
+      if (!result.canceled && result.assets[0]) {
+        const uri = result.assets[0].uri;
+        await onPhotoCaptured?.(uri);
+        appendPhotos([uri]);
+      }
+    } finally {
+      setIsWorking(false);
     }
   };
 
   const pickFromAlbum = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('权限提示', '需要相册权限才能选择图片');
-      return;
-    }
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
-      quality: 0.7,
-      allowsMultipleSelection,
-      selectionLimit: allowsMultipleSelection ? Math.max(1, maxCount - photos.length) : 1,
-    });
-    if (!result.canceled && result.assets.length) {
-      onPhotosChange([
-        ...photos,
-        ...result.assets.slice(0, Math.max(0, maxCount - photos.length)).map((asset) => asset.uri),
-      ]);
+    if (!canEdit) return;
+    setIsWorking(true);
+    try {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('权限提示', '需要相册权限才能选择图片');
+        return;
+      }
+      const current = photosRef.current;
+      const remaining = Math.max(0, maxCount - current.length);
+      if (remaining === 0) return;
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ['images'],
+        quality: 0.7,
+        allowsMultipleSelection,
+        selectionLimit: allowsMultipleSelection ? remaining : 1,
+      });
+      if (!result.canceled && result.assets.length) {
+        appendPhotos(result.assets.map((asset) => asset.uri));
+      }
+    } finally {
+      setIsWorking(false);
     }
   };
 
   const handleAdd = () => {
+    if (!canEdit || photos.length >= maxCount) return;
     if (cameraOnly) {
       safeAsync(takePhoto)();
       return;
@@ -108,32 +132,23 @@ export const PhotoPicker = ({
   };
 
   const removePhoto = (index: number) => {
-    const next = [...photos];
+    if (!canEdit) return;
+    const next = [...photosRef.current];
     next.splice(index, 1);
-    if (evidenceIds[index]) {
-      const nextEvidenceIds = [...evidenceIds];
-      nextEvidenceIds.splice(index, 1);
-      setEvidenceIds(nextEvidenceIds);
-      onPhotoEvidenceChange?.(nextEvidenceIds);
-    }
+    photosRef.current = next;
     onPhotosChange(next);
   };
 
   const setCoverPhoto = (index: number) => {
-    if (index <= 0 || index >= photos.length) return;
-    const nextPhotos = [photos[index], ...photos.filter((_, photoIndex) => photoIndex !== index)];
-    const nextEvidenceIds = [...evidenceIds];
-    if (index < nextEvidenceIds.length) {
-      const [coverEvidenceId] = nextEvidenceIds.splice(index, 1);
-      if (coverEvidenceId) nextEvidenceIds.unshift(coverEvidenceId);
-    }
-    setEvidenceIds(nextEvidenceIds);
-    onPhotoEvidenceChange?.(nextEvidenceIds);
+    if (!canEdit || index <= 0 || index >= photosRef.current.length) return;
+    const current = photosRef.current;
+    const nextPhotos = [current[index], ...current.filter((_, photoIndex) => photoIndex !== index)];
+    photosRef.current = nextPhotos;
     onPhotosChange(nextPhotos);
   };
 
   return (
-    <View>
+    <View testID={testID}>
       <Text style={[styles.label, { color: colors.text }]}>{label}</Text>
       <View style={styles.grid}>
         {photos.map((uri, index) => (
@@ -141,18 +156,23 @@ export const PhotoPicker = ({
             <Pressable
               onPress={() => setPreviewUri(uri)}
               accessibilityRole="imagebutton"
-              accessibilityLabel={`预览第 ${index + 1} 张照片`}
+              accessibilityLabel={`预览照片 ${index + 1}`}
+              testID={testID ? `${testID}-preview-${index + 1}` : undefined}
             >
               <Image source={{ uri }} style={styles.photo} />
             </Pressable>
             <TouchableOpacity
-              style={[styles.removeBtn, { backgroundColor: colors.surface }]}
+              style={styles.removeBtn}
               onPress={() => removePhoto(index)}
-              hitSlop={8}
+              disabled={!canEdit}
               accessibilityRole="button"
-              accessibilityLabel={`删除第 ${index + 1} 张照片`}
+              accessibilityLabel={`移除照片 ${index + 1}`}
+              accessibilityState={{ disabled: !canEdit }}
+              testID={testID ? `${testID}-remove-${index + 1}` : undefined}
             >
-              <Ionicons name="close-circle" size={20} color={colors.error} />
+              <View style={[styles.removeIcon, { backgroundColor: colors.surface }]}>
+                <Ionicons name="close-circle" size={20} color={colors.error} />
+              </View>
             </TouchableOpacity>
             {showCoverControls ? (
               <>
@@ -179,32 +199,46 @@ export const PhotoPicker = ({
                     {index === 0 ? '封面' : `${index + 1}`}
                   </Text>
                 </View>
-                {index > 0 ? (
+                {index > 0 && !readOnly ? (
                   <TouchableOpacity
-                    style={[styles.setCoverBtn, { backgroundColor: colors.surface }]}
+                    style={styles.setCoverBtn}
                     onPress={() => setCoverPhoto(index)}
                     hitSlop={8}
+                    disabled={!canEdit}
                     accessibilityRole="button"
-                    accessibilityLabel={`将第 ${index + 1} 张设为封面`}
+                    accessibilityLabel={`将照片 ${index + 1} 设为封面`}
+                    accessibilityState={{ disabled: !canEdit }}
+                    testID={testID ? `${testID}-cover-${index + 1}` : undefined}
                   >
-                    <Ionicons name="star-outline" size={15} color={colors.primary} />
+                    <View style={[styles.coverActionIcon, { backgroundColor: colors.surface }]}>
+                      <Ionicons name="star-outline" size={15} color={colors.primary} />
+                    </View>
                   </TouchableOpacity>
                 ) : null}
               </>
             ) : null}
           </View>
         ))}
-        {photos.length < maxCount && (
+        {!readOnly && photos.length < maxCount && (
           <TouchableOpacity
             style={[
               styles.addBtn,
               { backgroundColor: colors.surfaceSecondary, borderColor: colors.border },
             ]}
             onPress={handleAdd}
+            disabled={!canEdit}
+            accessibilityRole="button"
+            accessibilityLabel={
+              busy || isWorking
+                ? '正在处理照片'
+                : `${addLabel}，已选择 ${photos.length} 张，共 ${maxCount} 张`
+            }
+            accessibilityState={{ disabled: !canEdit, busy: busy || isWorking }}
+            testID={testID ? `${testID}-add` : undefined}
           >
             <Ionicons name="camera" size={24} color={colors.textSecondary} />
             <Text style={[styles.addText, { color: colors.textSecondary }]}>
-              {photos.length === 0 ? '拍照' : `${photos.length}/${maxCount}`}
+              {photos.length === 0 ? addLabel : `${photos.length}/${maxCount}`}
             </Text>
           </TouchableOpacity>
         )}
@@ -228,7 +262,23 @@ const styles = StyleSheet.create({
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.sm },
   photoWrap: { position: 'relative' },
   photo: { width: 72, height: 72, borderRadius: Radius.sm },
-  removeBtn: { position: 'absolute', top: -6, right: -6, borderRadius: 10 },
+  removeBtn: {
+    position: 'absolute',
+    top: -10,
+    right: -10,
+    width: PHOTO_ACTION_TARGET,
+    height: PHOTO_ACTION_TARGET,
+    borderRadius: PHOTO_ACTION_TARGET / 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  removeIcon: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   addBtn: {
     width: 72,
     height: 72,
@@ -251,8 +301,15 @@ const styles = StyleSheet.create({
   coverText: { fontSize: 9, lineHeight: 12, fontWeight: '600' },
   setCoverBtn: {
     position: 'absolute',
-    bottom: 3,
-    right: 3,
+    bottom: -3,
+    right: -3,
+    width: PHOTO_ACTION_TARGET,
+    height: PHOTO_ACTION_TARGET,
+    borderRadius: PHOTO_ACTION_TARGET / 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  coverActionIcon: {
     width: 32,
     height: 32,
     borderRadius: 16,

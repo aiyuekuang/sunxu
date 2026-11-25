@@ -24,15 +24,15 @@ import { AppText } from './AppText';
 
 export type ActionButtonVariant = 'primary' | 'secondary' | 'outlined' | 'text' | 'danger';
 export type ActionButtonSize = 'sm' | 'md' | 'lg';
-type ActionIcon = React.ComponentProps<typeof MaterialCommunityIcons>['name'];
+export type ActionButtonIconName = React.ComponentProps<typeof MaterialCommunityIcons>['name'];
 
 export interface ActionButtonProps {
   children: React.ReactNode;
   onPress?: (event: GestureResponderEvent) => void;
   variant?: ActionButtonVariant;
   size?: ActionButtonSize;
-  icon?: ActionIcon;
-  trailingIcon?: ActionIcon;
+  icon?: ActionButtonIconName;
+  trailingIcon?: ActionButtonIconName;
   loading?: boolean;
   disabled?: boolean;
   selected?: boolean;

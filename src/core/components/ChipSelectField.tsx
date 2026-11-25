@@ -1,10 +1,9 @@
 import { useCallback } from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity, View, type ViewStyle } from 'react-native';
-import { AppText as Text } from './AppText';
+import { ScrollView, StyleSheet, View, type ViewStyle } from 'react-native';
 import { PickerField } from './PickerField';
-import { FontSize, Radius, Spacing } from '../theme/tokens';
-import { useTheme } from '../theme/useTheme';
+import { Radius, Spacing } from '../theme/tokens';
 import { type FieldHelpContent, FormLabel } from './FormLabel';
+import { SelectableChip } from './SelectableChip';
 
 /** 超过此数量的选项自动切换展示形态 */
 const CHIP_THRESHOLD = 10;
@@ -18,6 +17,10 @@ export interface ChipOption {
   label: string;
   /** 自定义颜色（选中时用于边框和背景色，如评级 A=绿/B=蓝） */
   color?: string;
+  /** 禁用单个选项但保留其可见性。 */
+  disabled?: boolean;
+  /** 禁用原因，同时作为读屏提示。 */
+  disabledReason?: string;
 }
 
 interface ChipSelectFieldBaseProps {
@@ -29,6 +32,9 @@ interface ChipSelectFieldBaseProps {
   help?: FieldHelpContent;
   /** 选项列表 */
   options: ChipOption[];
+  disabled?: boolean;
+  accessibilityLabel?: string;
+  testID?: string;
   /** 允许点击已选中项取消选择，默认 false */
   clearable?: boolean;
   /** 视觉层级；outline 用于筛选面板中的低装饰选项，默认 filled。 */
@@ -136,8 +142,10 @@ export function ChipSelectField(props: ChipSelectFieldProps) {
     appearance = 'filled',
     overflow = 'picker',
     style,
+    disabled = false,
+    accessibilityLabel,
+    testID,
   } = props;
-  const { colors } = useTheme();
   const exceedsThreshold = options.length > CHIP_THRESHOLD;
   const usePicker = exceedsThreshold && overflow === 'picker' && !props.multiple;
   const useScroll = exceedsThreshold && (overflow === 'scroll' || props.multiple);
@@ -179,11 +187,19 @@ export function ChipSelectField(props: ChipSelectFieldProps) {
         label={label ?? ''}
         required={required}
         help={help}
-        options={options.map((o) => ({ value: o.value, label: o.label }))}
+        options={options.map((o) => ({
+          value: o.value,
+          label: o.label,
+          disabled: o.disabled,
+          disabledReason: o.disabledReason,
+        }))}
         value={(props as ChipSelectFieldSingleProps).value}
         onChange={(props as ChipSelectFieldSingleProps).onChange}
         clearable={clearable}
+        disabled={disabled}
         containerStyle={style}
+        accessibilityLabel={accessibilityLabel ?? label ?? '选择项'}
+        testID={testID}
       />
     );
   }
@@ -191,61 +207,28 @@ export function ChipSelectField(props: ChipSelectFieldProps) {
   // 渲染单个 Chip
   const renderChip = (opt: ChipOption) => {
     const selected = isSelected(opt.value);
-    const chipColor = opt.color;
-
-    // 有自定义颜色：选中时该颜色做背景+白色文字，未选中时透明背景+该颜色文字
-    // 无自定义颜色：选中时 primary 背景+白色文字，未选中时 surfaceSecondary
-    const chipBg = selected
-      ? (chipColor ?? (appearance === 'outline' ? colors.primarySurface : colors.primary))
-      : chipColor
-        ? 'transparent'
-        : appearance === 'outline'
-          ? 'transparent'
-          : colors.surfaceSecondary;
-
-    const chipBorder = selected
-      ? (chipColor ?? colors.primary)
-      : (chipColor ?? (appearance === 'outline' ? colors.border : 'transparent'));
-
-    const textColor = selected
-      ? chipColor
-        ? colors.textOnPrimary
-        : appearance === 'outline'
-          ? colors.primary
-          : colors.textOnPrimary
-      : (chipColor ?? colors.textSecondary);
 
     return (
-      <TouchableOpacity
+      <SelectableChip
         key={opt.value}
-        style={[
-          styles.chip,
-          {
-            backgroundColor: chipBg,
-            borderColor: chipBorder,
-          },
-        ]}
+        label={opt.label}
+        selected={selected}
         onPress={() => handlePress(opt.value)}
-        activeOpacity={0.7}
-      >
-        <Text
-          numberOfLines={1}
-          style={[
-            styles.chipText,
-            {
-              color: textColor,
-              fontWeight: selected ? '600' : '400',
-            },
-          ]}
-        >
-          {opt.label}
-        </Text>
-      </TouchableOpacity>
+        disabled={disabled || Boolean(opt.disabled)}
+        accessibilityRole={props.multiple ? 'checkbox' : 'radio'}
+        accessibilityLabel={`${accessibilityLabel ?? label ?? '选项'}：${opt.label}`}
+        accessibilityHint={opt.disabled ? opt.disabledReason ?? '当前选项不可选择' : undefined}
+        appearance={appearance}
+        color={opt.color}
+        size="md"
+        style={styles.chip}
+        testID={testID ? `${testID}-${opt.value}` : undefined}
+      />
     );
   };
 
   return (
-    <View style={[styles.container, style]}>
+    <View style={[styles.container, style]} testID={testID}>
       {label ? <FormLabel label={label} required={required} help={help} /> : null}
       {useScroll ? (
         // 超过阈值：横向滚动
@@ -285,8 +268,5 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.sm - 2,
     borderRadius: Radius.sm,
     borderWidth: 1,
-  },
-  chipText: {
-    fontSize: FontSize.sm,
   },
 });

@@ -399,7 +399,7 @@ Tel App 的真实设备/模拟器路由截图、长列表与弹层状态的几�
 - 两组件通过 `src/core/index.ts` 公共导出；Catalog 覆盖姓名回退、可更换头像、上传中和身份摘要示例。`metadata` 可承载 CRM 的组织/职位字段或 Tel App 的坐席/分机字段，字段含义和数据源仍归宿主。
 - Expo Web Catalog 在 375×812、320×720 和 812×375 浅色视口，以及 375×812 深色主题完成渲染；点击回调、忙碌态禁用和 `aria-busy` 已验证。`npm run typecheck`、Web 导出及 spacing ledger 校验通过。截图与几何记录见[Avatar 与 ProfileIdentity 验收](./verification/profile-identity-2026-11-10/README.md)。
 - 有效头像 URL 显示/失败回退、东健 CRM/Tel App 真实资料路由接入、原生 iOS/Android、系统读屏和动态字体仍为 `UNVERIFIED`。
-- 既有 `PhotoPicker` 继续承担多图业务证据流程，不与头像选择合并。宿主应只在后端支持自助头像时提供 `onAvatarPress`。
+- `PhotoPicker` 只管理受控图片 URI、预览、移除和封面顺序；上传、业务证据 ID 与头像更新均由宿主维护。
 
 ## 2026-11-10 IconActionButton 紧凑布局尺寸
 
@@ -471,7 +471,6 @@ Tel App 已改用以上契约，并将列表/表单/工作台容器、错误边�
 
 - `Icon` 提供主题化的独立图标显示，默认作为装饰内容从无障碍树隐藏；只有图标单独承载信息时才传 `accessibilityLabel`。图标操作使用 `IconActionButton`，不要把图标展示组件变成可点控件。
 - `SwitchControl` 为嵌在宿主字段布局中的独立布尔开关，必传受控 `value`、`onValueChange` 和可访问名称；禁用状态使用原生 Switch 的 `disabled` 并同步暴露无障碍状态。`FormSwitch` 组合可见标签和 `SwitchControl`，避免页面重复拼接原生开关。
-- 两者不拥有字段值、权限或保存时机。Taro/微信适配使用 Taro 原生 `Switch` 与平台图标资源，保持相同受控事件、可访问名称和禁用语义，不复用 React Native 源码。
 - Catalog 覆盖装饰图标、开关开启/关闭与禁用状态；真实设备的触控边界与系统读屏行为仍须由宿主验收。
 - Expo Web Catalog 在 375×812 与 320×720 CSS px 下四个周期标签均可见，轨道、分节和页面均无横向溢出；截图与 DOM 几何见[Sunxu 组件接入验收](./verification/sunxu-status-tabs-integration-2026-11-13/README.md)。MES ReportsScreen 的原生开发客户端未加载，宿主页面标记为 `UNVERIFIED`。
 
@@ -479,22 +478,31 @@ Tel App 已改用以上契约，并将列表/表单/工作台容器、错误边�
 
 - 新增 `InlineHint`：短说明以行内展开/收起呈现，触发器名称和 expanded 状态暴露给读屏；较长的结构化指导继续使用 `ContextualHelpButton` / `FormLabel.help` 底部面板。
 - `LoadingView` 增加可选 `message`，在加载指示器下方展示可见说明，并以进度条角色和说明名称向辅助技术报告；省略时维持原有纯指示器外观。
-- Catalog 覆盖行内说明展开、折叠与带文案的页面加载状态；Taro 侧 `AppHint` 映射到 `InlineHint`，`PageState.LoadingState` 映射到带文案 `LoadingView` 的等价实现。
-- Expo Web Catalog 的 375×812 与 320×720 CSS px 视口均已实际渲染；行内说明展开/收起与可见文案、加载状态角色/文案、开关切换及禁用态均已检查。两档页面横向溢出均为 0；组件几何、截图和边界见[组件适配验收](./verification/sunxu-mini-component-parity-2026-11-13/README.md)。
-- 触控命中范围的真实设备表现、系统读屏，以及 Taro/微信目标路由仍为 `UNVERIFIED`；Catalog 证据只证明 Sunxu 共享契约和 Expo Web 示例。
-
-## 2026-11-13 小程序通用控件缺口补齐
-
-全量检查小程序已挂载的组件后，补入两项跨业务 UI 能力：
-
-- `AttachmentField` 以受控附件项呈现图片、视频、文档和一般文件，统一 ready、uploading、error 状态，以及添加、打开、重试、移除和数量上限。文件选择、上传/下载、授权、存储与预览仍由宿主回调完成。
-- `BottomTabBar` 以受控 tab 项呈现图标、标签、选中/禁用状态和可选徽标；宿主继续决定路由、可见菜单、权限和计数，并传入平台图标插槽。组件处理 tablist/selected 语义及底部安全区。
-- `examples/catalog` 增加附件状态和底部导航示例，覆盖宿主接线边界。
-
-Digi CRM 小程序以 `AppAttachmentField` 与 `AppBottomTabBar` 提供 Taro 适配；`CrmFileField` 与 `CrmCustomBottomNav` 复用呈现控件，保留各自 CRM 上传、媒体预览、路由、权限和数据逻辑。`CrmSignatureField` 仍是单一 Taro Canvas/CRM 上传场景；组织选择可由现有实体选择器与树选择器组合，因此不作为共享基础组件新增。
+- Catalog 提供行内说明展开/收起和带文案的加载状态示例；设备触控范围与系统读屏仍需在宿主环境验收。
 
 ## 2026-11-19 FilterBar 全屏高级筛选
 
 - `FilterBar` 的高级筛选统一使用 `FullScreenModal`，筛选内容在弹窗内滚动，重置/应用按钮固定在底部。
 - 日期范围的快捷日期选项直接展示在对应筛选组中，不再折叠；当前 9 个快捷区间（少于 20 项）始终可见，并保留当前区间的选中态。
 - `advancedFilters`、筛选暂存/应用、日期边界校验和持久化契约不变；这是 Sunxu 公共组件行为，宿主继续通过配置提供业务选项与字段。
+
+## 2026-11-24 MES App 接入补充
+
+- `FormField.inputWrapperStyle` 允许聊天编辑器调整共享输入外壳，同时保留 Sunxu 管理的字段触控高度与输入状态。业务校验、输入值和消息提交仍由宿主持有。
+- `BottomTabBar` 的 host contract 增加强调色覆盖、徽标访问名称/提示和 `testID`；主操作图标、可操作徽标与基准高度由共享组件呈现，路由、权限和未读数据仍由宿主提供。
+- `FilterActionButton.active` 允许宿主表达记住筛选等已启用状态，不虚报筛选数量；高亮、徽标和 selected 无障碍状态仍由共享按钮处理。
+- App 的紧凑工单与生产计划操作栏改为纯文案按钮，避免图标和可见标签重复表达同一操作；图标仍保留在独立图标控件和操作菜单中。
+- App 的来料检验数值字段、工单回复输入框、主导航、列表高级筛选、新手引导与各领域底部操作栏接入 `FormField` / `BottomTabBar` / `FilterActionButton` / `ActionButton`；不会将质检判定、消息发送、路由、权限或单据状态处理迁入组件库。
+- Catalog 增加强调色覆盖、记住筛选的受控激活态和密集文案操作栏示例；App 的真实业务路由仍需登录，运行态布局与几何需在已授权业务会话中核验。
+
+## 2026-11-24 组件公共 API 与交互状态完善
+
+- `PhotoPicker` 移除照片证据 ID 与业务回调，只管理受控 `photos` URI；新增通用 `onPhotoCaptured` 宿主预处理回调，以及 `disabled`、`readOnly`、`busy`、`addLabel` 和 `testID`。预处理完成后才把照片 URI 加入受控列表；上传、证据 ID 和服务端状态由宿主持有。
+- `FilterBar` 新增统一 `filters` 配置，以 `type` 和 `placement` 声明快捷/高级选项、日期范围或文本筛选；宿主列表容器继续消费 `placement: 'tab'`，不会把状态 tab 渲染进高级筛选面板。旧 `quickFilters` / `advancedFilters` 保留并标记弃用。筛选持久化键使用 `sunxu_` 命名空间；存储失败可通过 `onStorageError` 接收。旧命名空间中的筛选偏好不会自动恢复。
+- `ChipSelectField` 复用 `SelectableChip`，支持整组选项禁用、单项禁用与禁用原因，并向选择控件暴露 radio/checkbox 和 selected/disabled 状态。`SelectableChip` 保留紧凑胶囊外观，以外层透明触控盒满足平台最小目标尺寸。
+- `PickerField` 与 `TreePickerField` 将清除操作作为独立按钮，补齐访问名称、提示、禁用状态和 `testID`；`ChipSelectField` 的 Picker 降级沿用这些语义。`DrillDownTreePicker` 的节点下钻与父节点选择拆为同级按钮，节点、面包屑和关闭动作可单独访问。
+- `BottomTabBar` 支持主操作图标强调、仅隐藏视觉标签、可操作计数徽标和显式基础高度；徽标动作保留独立 44dp 触控区，禁用页签时同时禁用徽标动作。强调入口默认使用主题主色，也可由宿主通过 `emphasisColor` 指定主题适配色。
+- 图标 FAB 的 `accessibilityLabel` 现为必填；可拖动位置的存储失败通过 `onStorageError` 报告。`ActionMenu` 接住宿主动作的同步异常和 Promise rejection，通过 `onActionError` 报告，未提供处理器时记录错误；菜单触发器及行项支持 `testID`。
+- `FormField` 支持 `size="compact"` 与 `validationState`，但仍保留平台触控高度；`containerStyle` 控制字段组布局，`inputWrapperStyle` 覆盖共享输入外壳，原生 TextInput 样式继续由 `style` 控制。
+- React Native core 导出的组件均提供可单独导入的 props 类型，包括表单、筛选、导航、列表卡片子组件、状态徽标、扫描和占位组件；`ListCard`、`FormPage`、`Skeleton` 等组合/预设组件也暴露对应的子项 props 类型。
+- 目录示例改用统一筛选 API。Expo Web 目录在 375×812 与 320×720 完成实际渲染、交互和溢出核验；证据及几何数据见[组件 API 验收](./verification/component-api-audit-2026-11-24/README.md)。相机/相册权限、非空照片移除/排序/封面交互和原生触控/读屏仍为 `UNVERIFIED`。

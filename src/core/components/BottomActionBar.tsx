@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 
-interface BottomActionBarProps extends PropsWithChildren {
+export interface BottomActionBarProps extends PropsWithChildren {
   style?: StyleProp<ViewStyle>;
   backgroundColor?: string;
   borderTopColor?: string;

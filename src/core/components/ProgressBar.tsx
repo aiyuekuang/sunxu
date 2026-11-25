@@ -2,7 +2,7 @@ import { type DimensionValue, StyleSheet, View, type StyleProp, type ViewStyle }
 import { Radius } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 
-interface ProgressBarProps {
+export interface ProgressBarProps {
   /** 当前值 */
   current: number;
   /** 目标值 */

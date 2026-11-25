@@ -9,6 +9,8 @@ const COMPACT_CONTROL_HIT_SLOP = { top: 4, right: 0, bottom: 4, left: 0 } as con
 export interface FilterActionButtonProps {
   label?: string;
   count?: number;
+  /** Emphasize a host-specific active filter state without implying an open panel. */
+  active?: boolean;
   expanded?: boolean;
   /** 仅显示筛选图标；保留可访问名称和筛选数量提示。 */
   iconOnly?: boolean;
@@ -25,6 +27,7 @@ export interface FilterActionButtonProps {
 export function FilterActionButton({
   label = '筛选',
   count = 0,
+  active = false,
   expanded,
   iconOnly = false,
   size = 'default',
@@ -34,10 +37,10 @@ export function FilterActionButton({
   style,
 }: FilterActionButtonProps) {
   const { colors } = useTheme();
-  const active = count > 0;
-  const emphasized = iconOnly && (active || expanded);
+  const isActive = active || count > 0;
+  const emphasized = iconOnly && (isActive || expanded);
   const isPlain = appearance === 'plain';
-  const iconColor = active || expanded ? colors.primary : colors.textSecondary;
+  const iconColor = isActive || expanded ? colors.primary : colors.textSecondary;
 
   return (
     <TouchableOpacity
@@ -60,7 +63,7 @@ export function FilterActionButton({
       hitSlop={COMPACT_CONTROL_HIT_SLOP}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel ?? label}
-      accessibilityState={{ expanded, selected: active }}
+      accessibilityState={{ expanded, selected: isActive }}
       aria-expanded={expanded}
     >
       {!iconOnly ? (
@@ -68,8 +71,8 @@ export function FilterActionButton({
           style={[
             styles.label,
             {
-              color: active ? colors.primary : colors.text,
-              fontWeight: active ? '600' : '500',
+              color: isActive ? colors.primary : colors.text,
+              fontWeight: isActive ? '600' : '500',
             },
           ]}
           numberOfLines={1}
@@ -81,9 +84,9 @@ export function FilterActionButton({
         <Ionicons
           name={expanded ? 'options' : 'options-outline'}
           size={iconOnly ? 20 : 14}
-          color={iconOnly ? iconColor : active ? colors.primary : colors.textSecondary}
+          color={iconOnly ? iconColor : isActive ? colors.primary : colors.textSecondary}
         />
-        {active ? (
+        {count > 0 ? (
           <View style={[styles.badge, { backgroundColor: colors.primary }]}>
             <Text style={[styles.badgeText, { color: colors.textOnPrimary }]}>{count}</Text>
           </View>

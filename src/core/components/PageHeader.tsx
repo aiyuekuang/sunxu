@@ -39,7 +39,7 @@ export interface HeaderAction {
   destructive?: boolean;
 }
 
-interface PageHeaderProps {
+export interface PageHeaderProps {
   title: string;
   onBack?: () => void;
   /** Existing custom content slot. Use `actions` for count-aware header actions. */
@@ -233,6 +233,17 @@ export function PageHeader({
 }
 
 /** 图标按钮，用于 PageHeader 右侧 */
+export interface HeaderIconButtonProps {
+  icon: keyof typeof Ionicons.glyphMap;
+  onPress: () => void;
+  color?: string;
+  size?: number;
+  accessibilityLabel?: string;
+  accessibilityState?: AccessibilityState;
+  disabled?: boolean;
+  testID?: string;
+}
+
 export function HeaderIconButton({
   icon,
   onPress,
@@ -242,16 +253,7 @@ export function HeaderIconButton({
   accessibilityState,
   disabled = false,
   testID,
-}: {
-  icon: keyof typeof Ionicons.glyphMap;
-  onPress: () => void;
-  color?: string;
-  size?: number;
-  accessibilityLabel?: string;
-  accessibilityState?: AccessibilityState;
-  disabled?: boolean;
-  testID?: string;
-}) {
+}: HeaderIconButtonProps) {
   const { colors } = useTheme();
   const touchTarget = Platform.OS === 'android' ? MIN_TOUCH_TARGET_ANDROID : MIN_TOUCH_TARGET;
   return (

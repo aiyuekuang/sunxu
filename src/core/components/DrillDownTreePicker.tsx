@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   FlatList,
   Modal,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -12,10 +13,12 @@ import {
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { FontSize, Radius, Spacing } from '../theme/tokens';
+import { FontSize, MIN_TOUCH_TARGET, MIN_TOUCH_TARGET_ANDROID, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { AppText as Text } from './AppText';
 import { EmptyState } from './EmptyState';
+
+const TREE_NODE_TARGET = Platform.OS === 'android' ? MIN_TOUCH_TARGET_ANDROID : MIN_TOUCH_TARGET;
 
 /**
  * 下钻式树形选择器（DrillDownTreePicker）
@@ -50,7 +53,7 @@ export interface TreePickerNode {
   [key: string]: unknown;
 }
 
-interface DrillDownTreePickerProps {
+export interface DrillDownTreePickerProps {
   visible: boolean;
   onClose: () => void;
   title: string;
@@ -68,6 +71,7 @@ interface DrillDownTreePickerProps {
   renderExtra?: (item: TreePickerNode) => React.ReactNode;
   /** 是否允许选择非叶子节点，默认 true */
   allowSelectParent?: boolean;
+  testID?: string;
 }
 
 /** 面包屑项 */
@@ -88,6 +92,7 @@ export function DrillDownTreePicker({
   loading = false,
   renderExtra,
   allowSelectParent = true,
+  testID,
 }: DrillDownTreePickerProps) {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
@@ -138,7 +143,7 @@ export function DrillDownTreePicker({
       const isSelected = item.id === selectedId;
 
       return (
-        <TouchableOpacity
+        <View
           style={[
             styles.listItem,
             {
@@ -146,58 +151,71 @@ export function DrillDownTreePicker({
               borderBottomColor: colors.borderLight,
             },
           ]}
-          onPress={() => {
-            if (hasChildren) {
-              drillDown(item);
-            } else {
-              handleSelect(item);
-            }
-          }}
-          activeOpacity={0.6}
         >
-          <View
-            style={[
-              styles.itemIcon,
-              { backgroundColor: hasChildren ? `${colors.primary}15` : colors.border },
-            ]}
+          <TouchableOpacity
+            style={styles.itemMain}
+            onPress={() => {
+              if (hasChildren) {
+                drillDown(item);
+              } else {
+                handleSelect(item);
+              }
+            }}
+            activeOpacity={0.6}
+            accessibilityRole="button"
+            accessibilityLabel={item.name}
+            accessibilityHint={hasChildren ? '展开下级选项' : '选择此项'}
+            accessibilityState={{ selected: isSelected }}
+            testID={testID ? `${testID}-node-${item.id}` : undefined}
           >
-            <Ionicons
-              name={hasChildren ? 'folder-outline' : 'document-outline'}
-              size={16}
-              color={hasChildren ? colors.primary : colors.textSecondary}
-            />
-          </View>
-          <View style={styles.itemContent}>
-            <Text
-              style={[styles.itemName, { color: isSelected ? colors.primary : colors.text }]}
-              numberOfLines={1}
+            <View
+              style={[
+                styles.itemIcon,
+                { backgroundColor: hasChildren ? `${colors.primary}15` : colors.border },
+              ]}
             >
-              {item.name}
-            </Text>
-            {renderExtra?.(item)}
-          </View>
-          {isSelected && <Ionicons name="checkmark-circle" size={20} color={colors.primary} />}
+              <Ionicons
+                name={hasChildren ? 'folder-outline' : 'document-outline'}
+                size={16}
+                color={hasChildren ? colors.primary : colors.textSecondary}
+                accessible={false}
+              />
+            </View>
+            <View style={styles.itemContent}>
+              <Text
+                style={[styles.itemName, { color: isSelected ? colors.primary : colors.text }]}
+                numberOfLines={1}
+              >
+                {item.name}
+              </Text>
+              {renderExtra?.(item)}
+            </View>
+            {isSelected ? <Ionicons name="checkmark-circle" size={20} color={colors.primary} accessible={false} /> : null}
+            {hasChildren ? (
+              <View style={styles.childIndicator} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+                <Text style={[styles.childCount, { color: colors.textTertiary }]}>
+                  {item.children?.length}
+                </Text>
+                <Ionicons name="chevron-forward" size={16} color={colors.textTertiary} />
+              </View>
+            ) : null}
+          </TouchableOpacity>
           {hasChildren && allowSelectParent && !isSelected && (
             <TouchableOpacity
               style={[styles.selectBtn, { borderColor: colors.primary }]}
               onPress={() => handleSelect(item)}
-              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              accessibilityRole="button"
+              accessibilityLabel={`选择${item.name}`}
+              accessibilityHint="选择此项而不展开下级"
+              testID={testID ? `${testID}-select-${item.id}` : undefined}
             >
               <Text style={[styles.selectBtnText, { color: colors.primary }]}>选择</Text>
             </TouchableOpacity>
           )}
-          {hasChildren && (
-            <View style={styles.childIndicator}>
-              <Text style={[styles.childCount, { color: colors.textTertiary }]}>
-                {item.children?.length}
-              </Text>
-              <Ionicons name="chevron-forward" size={16} color={colors.textTertiary} />
-            </View>
-          )}
-        </TouchableOpacity>
+        </View>
       );
     },
-    [colors, selectedId, drillDown, handleSelect, renderExtra, allowSelectParent],
+    [colors, selectedId, drillDown, handleSelect, renderExtra, allowSelectParent, testID],
   );
 
   return (
@@ -206,11 +224,18 @@ export function DrillDownTreePicker({
         <View
           style={[styles.sheet, { backgroundColor: colors.surface }]}
           onStartShouldSetResponder={() => true}
+          testID={testID ? `${testID}-modal` : undefined}
         >
           <View style={[styles.header, { borderBottomColor: colors.border }]}>
             <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
-            <TouchableOpacity onPress={onClose} hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}>
-              <Ionicons name="close" size={24} color={colors.text} />
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={onClose}
+              accessibilityRole="button"
+              accessibilityLabel="关闭选择器"
+              testID={testID ? `${testID}-close` : undefined}
+            >
+              <Ionicons name="close" size={24} color={colors.text} accessible={false} />
             </TouchableOpacity>
           </View>
 
@@ -226,7 +251,14 @@ export function DrillDownTreePicker({
                 const isLast = index === breadcrumbs.length - 1;
                 return (
                   <View key={crumb.id ?? 'root'} style={styles.breadcrumbItem}>
-                    <TouchableOpacity onPress={() => !isLast && jumpTo(index)} disabled={isLast}>
+                    <TouchableOpacity
+                      onPress={() => !isLast && jumpTo(index)}
+                      disabled={isLast}
+                      accessibilityRole="button"
+                      accessibilityLabel={`返回${crumb.name}`}
+                      accessibilityState={{ disabled: isLast }}
+                      testID={testID ? `${testID}-breadcrumb-${index}` : undefined}
+                    >
                       <Text
                         style={[
                           styles.breadcrumbText,
@@ -338,6 +370,14 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
+  itemMain: {
+    flex: 1,
+    minWidth: 0,
+    minHeight: TREE_NODE_TARGET,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+  },
   itemIcon: {
     width: 32,
     height: 32,
@@ -355,10 +395,12 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   selectBtn: {
+    minWidth: TREE_NODE_TARGET,
+    minHeight: TREE_NODE_TARGET,
     borderWidth: 1,
     borderRadius: Radius.sm,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   selectBtnText: {
     fontSize: FontSize.xs,
@@ -371,5 +413,11 @@ const styles = StyleSheet.create({
   },
   childCount: {
     fontSize: FontSize.xs,
+  },
+  closeButton: {
+    width: TREE_NODE_TARGET,
+    height: TREE_NODE_TARGET,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

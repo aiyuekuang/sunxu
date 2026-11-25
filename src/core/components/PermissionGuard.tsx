@@ -4,7 +4,7 @@ import { useTheme } from '../theme/useTheme';
 import { EmptyState } from './EmptyState';
 import { PageHeader } from './PageHeader';
 
-interface PermissionGuardProps {
+export interface PermissionGuardProps {
   /** Permission identifiers are interpreted by the host application. */
   permissions: string[];
   /** Additional identifiers that must all be authorized by the host. */

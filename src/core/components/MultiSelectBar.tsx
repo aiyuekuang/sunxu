@@ -4,20 +4,20 @@ import { AppText as Text } from './AppText';
 import { FontSize, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 
-interface Action {
+export interface MultiSelectAction {
   label: string;
-  icon: string;
+  icon: keyof typeof Ionicons.glyphMap;
   color?: string;
   onPress: () => void;
 }
 
-interface MultiSelectBarProps {
+export interface MultiSelectBarProps {
   selectedCount: number;
   total: number;
   onSelectAll: () => void;
   onDeselectAll: () => void;
   onCancel: () => void;
-  actions: Action[];
+  actions: MultiSelectAction[];
 }
 
 export function MultiSelectBar({

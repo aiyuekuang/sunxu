@@ -13,13 +13,15 @@ export interface ChartLegendItem {
   value?: string | number;
 }
 
+export interface ChartLegendProps {
+  items: ChartLegendItem[];
+  direction?: 'row' | 'column';
+}
+
 export function ChartLegend({
   items,
   direction = 'row',
-}: {
-  items: ChartLegendItem[];
-  direction?: 'row' | 'column';
-}) {
+}: ChartLegendProps) {
   const { colors } = useTheme();
 
   return (

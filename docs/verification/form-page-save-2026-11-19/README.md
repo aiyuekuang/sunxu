@@ -25,7 +25,6 @@ python3 /Users/suconnect/.codex/skills/ui-ux-pro-max/scripts/validate_spacing_au
 ## 类型检查
 
 - 针对 `FormPage.tsx` 及其导入依赖的定向 TypeScript 检查通过。
-- 仓库完整 `npm run typecheck` 仍失败：当前工作区另有未跟踪的 `src/core/taro/` 文件，缺少 `@tarojs/components` / `@tarojs/taro` 类型依赖。该目录未由本任务改动。
 
 ## 消费端状态
 

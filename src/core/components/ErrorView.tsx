@@ -5,7 +5,7 @@ import { useTheme } from '../theme/useTheme';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-interface ErrorViewProps {
+export interface ErrorViewProps {
   /** 页面标题 */
   title?: string;
   /** 返回回调 */

@@ -9,7 +9,7 @@ import { useTheme } from '../theme/useTheme';
 import { toast, toastConfig } from '../toast';
 import { AppText as Text } from './AppText';
 
-interface ScanCameraModalProps {
+export interface ScanCameraModalProps {
   visible: boolean;
   onClose: () => void;
   /** 扫码结果回调；抛出的错误会以 toast 提示 */

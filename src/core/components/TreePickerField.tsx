@@ -1,13 +1,15 @@
 import { Ionicons } from '@expo/vector-icons';
 import type React from 'react';
 import { useCallback, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View, type ViewStyle } from 'react-native';
-import { FontSize, Radius, Spacing } from '../theme/tokens';
+import { Platform, StyleSheet, TouchableOpacity, View, type ViewStyle } from 'react-native';
+import { FontSize, MIN_TOUCH_TARGET, MIN_TOUCH_TARGET_ANDROID, Radius, Spacing } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { toast } from '../toast';
 import { AppText as Text } from './AppText';
 import { DrillDownTreePicker, type TreePickerNode } from './DrillDownTreePicker';
 import { ScanCameraModal } from './ScanCameraModal';
+
+const TREE_PICKER_TARGET = Platform.OS === 'android' ? MIN_TOUCH_TARGET_ANDROID : MIN_TOUCH_TARGET;
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -28,6 +30,8 @@ export interface TreePickerFieldProps {
   excludeId?: string;
   /** Whether the field is required */
   required?: boolean;
+  /** Disable selection and scan actions while the field is read-only or unavailable. */
+  disabled?: boolean;
   /** Placeholder text */
   placeholder?: string;
   /** Picker modal title */
@@ -42,6 +46,9 @@ export interface TreePickerFieldProps {
   onScanResult?: (code: string) => void | Promise<void>;
   /** Layout customization */
   style?: ViewStyle;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
+  testID?: string;
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -55,6 +62,7 @@ export function TreePickerField({
   onClear,
   excludeId,
   required,
+  disabled = false,
   placeholder = '请选择',
   title = '选择',
   error,
@@ -62,6 +70,9 @@ export function TreePickerField({
   scannable,
   onScanResult,
   style,
+  accessibilityLabel,
+  accessibilityHint,
+  testID,
 }: TreePickerFieldProps) {
   const { colors } = useTheme();
 
@@ -71,6 +82,7 @@ export function TreePickerField({
   const [scanning, setScanning] = useState(false);
 
   const openPicker = useCallback(async () => {
+    if (disabled || loadingTree) return;
     setPickerVisible(true);
     setLoadingTree(true);
     try {
@@ -81,7 +93,7 @@ export function TreePickerField({
     } finally {
       setLoadingTree(false);
     }
-  }, [fetchFn]);
+  }, [disabled, fetchFn, loadingTree]);
 
   const handleSelect = useCallback(
     (id: string, name: string) => {
@@ -94,7 +106,7 @@ export function TreePickerField({
   const hasValue = !!value;
 
   return (
-    <View style={[styles.container, style]}>
+    <View style={[styles.container, style]} testID={testID}>
       <Text style={[styles.label, { color: colors.textSecondary }]}>
         {label}
         {required && <Text style={{ color: colors.error, fontSize: FontSize.sm }}> *</Text>}
@@ -106,11 +118,21 @@ export function TreePickerField({
           {
             backgroundColor: colors.surfaceSecondary,
             borderColor: error ? colors.error : 'transparent',
-            paddingRight: scannable ? 0 : Spacing.md,
+            paddingRight: scannable && onScanResult ? 0 : Spacing.md,
           },
         ]}
       >
-        <TouchableOpacity style={styles.triggerMain} onPress={openPicker} activeOpacity={0.7}>
+        <TouchableOpacity
+          style={styles.triggerMain}
+          onPress={openPicker}
+          activeOpacity={disabled || loadingTree ? 1 : 0.7}
+          disabled={disabled || loadingTree}
+          accessibilityRole="button"
+          accessibilityLabel={`${accessibilityLabel ?? label}，${displayValue || placeholder}`}
+          accessibilityHint={accessibilityHint}
+          accessibilityState={{ disabled: disabled || loadingTree, busy: loadingTree }}
+          testID={testID ? `${testID}-open` : undefined}
+        >
           <Text
             style={[styles.triggerText, { color: hasValue ? colors.text : colors.textTertiary }]}
             numberOfLines={1}
@@ -118,23 +140,37 @@ export function TreePickerField({
             {displayValue || placeholder}
           </Text>
 
-          {hasValue && onClear ? (
-            <TouchableOpacity onPress={onClear} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-              <Ionicons name="close-circle" size={18} color={colors.textTertiary} />
-            </TouchableOpacity>
-          ) : (
+          {!hasValue || !onClear ? (
             <Ionicons name="chevron-down" size={16} color={colors.textTertiary} />
-          )}
+          ) : null}
         </TouchableOpacity>
+
+        {hasValue && onClear ? (
+          <TouchableOpacity
+            style={styles.clearButton}
+            onPress={onClear}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            disabled={disabled}
+            accessibilityRole="button"
+            accessibilityLabel={`清除${label}`}
+            accessibilityState={{ disabled }}
+            testID={testID ? `${testID}-clear` : undefined}
+          >
+            <Ionicons name="close-circle" size={18} color={colors.textTertiary} />
+          </TouchableOpacity>
+        ) : null}
 
         {scannable && onScanResult ? (
           <TouchableOpacity
             style={[styles.scanBtn, { backgroundColor: `${colors.primary}12` }]}
             onPress={() => setScanning(true)}
-            activeOpacity={0.7}
+            activeOpacity={disabled || scanning ? 1 : 0.7}
+            disabled={disabled || scanning}
             accessibilityRole="button"
             accessibilityLabel={`扫描${label}`}
             accessibilityHint="打开相机扫描条码"
+            accessibilityState={{ disabled: disabled || scanning, busy: scanning }}
+            testID={testID ? `${testID}-scan` : undefined}
           >
             <Ionicons name="scan-outline" size={18} color={colors.primary} />
           </TouchableOpacity>
@@ -153,6 +189,7 @@ export function TreePickerField({
         onSelect={handleSelect}
         loading={loadingTree}
         renderExtra={renderExtra}
+        testID={testID ? `${testID}-picker` : undefined}
       />
 
       {scannable && onScanResult ? (
@@ -182,18 +219,24 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: Radius.sm,
     paddingLeft: Spacing.md,
-    height: 42,
+    minHeight: TREE_PICKER_TARGET,
   },
   triggerMain: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    height: '100%',
+    minHeight: TREE_PICKER_TARGET,
     gap: Spacing.sm,
   },
+  clearButton: {
+    minWidth: TREE_PICKER_TARGET,
+    minHeight: TREE_PICKER_TARGET,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   scanBtn: {
-    width: 40,
-    height: 40,
+    width: TREE_PICKER_TARGET,
+    height: TREE_PICKER_TARGET,
     borderTopRightRadius: Radius.sm,
     borderBottomRightRadius: Radius.sm,
     alignItems: 'center',

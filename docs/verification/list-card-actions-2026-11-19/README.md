@@ -40,4 +40,4 @@
 
 ## 验证边界
 
-Catalog TypeScript 检查通过，`git diff --check` 通过。仓库级 `yarn typecheck` 被既有未跟踪的 `src/core/taro/**` 文件阻断：该目录引用的 `@tarojs/components` 与 `@tarojs/taro` 未安装；本次 `ListCard` 没有对应类型错误。没有新增或运行单元测试。Expo Web 的几何和点击/滑动已核对，原生设备渲染、系统读屏及大字体模式仍为 `UNVERIFIED`。
+Catalog TypeScript 检查通过，`git diff --check` 通过；本次 `ListCard` 没有对应类型错误。没有新增或运行单元测试。Expo Web 的几何和点击/滑动已核对，原生设备渲染、系统读屏及大字体模式仍为 `UNVERIFIED`。

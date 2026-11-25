@@ -10,6 +10,7 @@ import {
   BottomTabBar,
   CenteredModal,
   ChoiceSheet,
+  ChipSelectField,
   CheckboxField,
   ControlSize,
   DateNavigator,
@@ -20,6 +21,7 @@ import {
   ErrorBoundary,
   EntityFilterChip,
   FAB,
+  FilterActionButton,
   FilterBar,
   FullScreenModal,
   FormField,
@@ -48,12 +50,14 @@ import {
   SwipeableRow,
   SunxuProvider,
   ToastHost,
+  TreePickerField,
   type EntityFilterValue,
   type EntityPickerFetchFn,
   type AttachmentFieldItem,
   type BottomTabItem,
   type PickerOption,
-  type AdvancedFilterConfig,
+  type TreePickerNode,
+  type ListFilterConfig,
   type TabItem,
   useTheme,
 } from 'sunxu';
@@ -75,7 +79,7 @@ type CustomerStatus = 'all' | 'active' | 'paused';
 type ComponentStatus = 'all' | 'waiting' | 'done';
 type TimelineFilterDemo = 'all' | 'calls' | 'followups' | 'others';
 type CustomerOpportunityDemo = 'customers' | 'opportunities';
-type BottomTabDemoKey = 'home' | 'tasks' | 'mine';
+type BottomTabDemoKey = 'home' | 'tasks' | 'scan' | 'mine';
 
 const screenTabs: { key: ScreenKey; label: string }[] = [
   { key: 'list', label: '列表' },
@@ -134,8 +138,10 @@ const pickerOptions: PickerOption[] = [
   { label: '吴专员', value: 'wu' },
 ];
 
-const demoAdvancedFilters: AdvancedFilterConfig[] = [
+const demoAdvancedFilters: ListFilterConfig[] = [
   {
+    type: 'option',
+    placement: 'advanced',
     key: 'status',
     label: '状态',
     options: [
@@ -144,6 +150,8 @@ const demoAdvancedFilters: AdvancedFilterConfig[] = [
     ],
   },
   {
+    type: 'option',
+    placement: 'advanced',
     key: 'region',
     label: '地区',
     options: [
@@ -153,6 +161,8 @@ const demoAdvancedFilters: AdvancedFilterConfig[] = [
     ],
   },
   {
+    type: 'option',
+    placement: 'advanced',
     key: 'source',
     label: '来源',
     options: [
@@ -162,6 +172,8 @@ const demoAdvancedFilters: AdvancedFilterConfig[] = [
     ],
   },
   {
+    type: 'option',
+    placement: 'advanced',
     key: 'level',
     label: '客户等级',
     options: [
@@ -171,6 +183,8 @@ const demoAdvancedFilters: AdvancedFilterConfig[] = [
     ],
   },
   {
+    type: 'option',
+    placement: 'advanced',
     key: 'owner',
     label: '负责人',
     options: [
@@ -180,6 +194,8 @@ const demoAdvancedFilters: AdvancedFilterConfig[] = [
     ],
   },
   {
+    type: 'option',
+    placement: 'advanced',
     key: 'scale',
     label: '团队规模',
     options: [
@@ -189,6 +205,8 @@ const demoAdvancedFilters: AdvancedFilterConfig[] = [
     ],
   },
   {
+    type: 'option',
+    placement: 'advanced',
     key: 'activity',
     label: '近期活动',
     options: [
@@ -198,10 +216,18 @@ const demoAdvancedFilters: AdvancedFilterConfig[] = [
   },
   {
     type: 'date_range',
+    placement: 'advanced',
     key: 'created',
     label: '创建日期',
     startKey: 'createdFrom',
     endKey: 'createdTo',
+  },
+  {
+    type: 'text',
+    placement: 'advanced',
+    key: 'keyword',
+    label: '关键字',
+    placeholder: '输入名称或编码',
   },
 ];
 
@@ -222,6 +248,18 @@ const fetchDemoEntities: EntityPickerFetchFn<DemoEntity> = async ({ keyword, cat
   });
   return { list: filtered, total: filtered.length };
 };
+
+const fetchDemoTree: () => Promise<TreePickerNode[]> = async () => [
+  {
+    id: 'workspace',
+    name: '工作区',
+    children: [
+      { id: 'general', name: '通用设置' },
+      { id: 'appearance', name: '外观设置' },
+    ],
+  },
+  { id: 'personal', name: '个人偏好' },
+];
 
 const fetchDemoCategories = async () => [
   { id: 'customer', name: '客户' },
@@ -280,7 +318,10 @@ function ComponentExamples({
   const [advancedFilterValues, setAdvancedFilterValues] = useState<
     Record<string, string | undefined>
   >({});
+  const [rememberedFilterActive, setRememberedFilterActive] = useState(false);
   const [pickerValue, setPickerValue] = useState('lin');
+  const [chipValue, setChipValue] = useState('ready');
+  const [treeValue, setTreeValue] = useState<{ id: string; name: string } | null>(null);
   const [entityValue, setEntityValue] = useState<EntityFilterValue | null>(null);
   const [photos, setPhotos] = useState<string[]>([]);
   const [bottomTab, setBottomTab] = useState<BottomTabDemoKey>('home');
@@ -313,7 +354,10 @@ function ComponentExamples({
     setCustomerOpportunity('customers');
     setSearch('');
     setAdvancedFilterValues({});
+    setRememberedFilterActive(false);
     setPickerValue('lin');
+    setChipValue('ready');
+    setTreeValue(null);
     setEntityValue(null);
     setPhotos([]);
     setBottomTab('home');
@@ -669,9 +713,26 @@ function ComponentExamples({
 
         <View style={styles.componentSection} testID="demo-filter-bar-fixed-footer">
           <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>FilterBar · 高级筛选</AppText>
+          <View style={styles.filterActionExample}>
+            <FilterActionButton
+              label="记住筛选"
+              active={rememberedFilterActive}
+              count={0}
+              iconOnly
+              appearance="plain"
+              size="compact"
+              accessibilityLabel={rememberedFilterActive ? '关闭记住筛选' : '启用记住筛选'}
+              onPress={() => setRememberedFilterActive((active) => !active)}
+            />
+            <AppText style={[styles.componentHint, { color: colors.textSecondary }]}>
+              {rememberedFilterActive ? '筛选偏好已启用，当前没有筛选条件' : '启用记住筛选'}
+            </AppText>
+          </View>
           <FilterBar
-            quickFilters={[
+            filters={[
               {
+                type: 'option',
+                placement: 'quick',
                 key: 'period',
                 label: '快捷时间',
                 includeAllOption: false,
@@ -681,14 +742,37 @@ function ComponentExamples({
                   { label: '本周', value: 'thisWeek' },
                 ],
               },
+              ...demoAdvancedFilters,
             ]}
-            advancedFilters={demoAdvancedFilters}
             values={{ ...advancedFilterValues, period: quickPeriod }}
             onChange={(values) => {
               setAdvancedFilterValues(values);
               if (values.period) setQuickPeriod(values.period);
             }}
           />
+        </View>
+
+        <View style={styles.componentSection} testID="demo-dense-action-bar">
+          <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>BottomActionBar · 多项操作</AppText>
+          <View style={styles.denseActionBarFrame}>
+            <BottomActionBar style={styles.denseActionBar}>
+              {['提交审批', '封闭检验批', '取消并修正', '审批通过', '更多操作'].map((label) => (
+                <ActionButton
+                  key={label}
+                  size="sm"
+                  style={styles.denseActionButton}
+                  contentStyle={styles.denseActionButtonContent}
+                  onPress={() => setFeedback(`已触发${label}`)}
+                  accessibilityLabel={label}
+                >
+                  {label}
+                </ActionButton>
+              ))}
+            </BottomActionBar>
+          </View>
+          <AppText style={[styles.componentHint, { color: colors.textSecondary }]}>
+            操作超过三项时分行展示，保留完整文案与平台触控热区。
+          </AppText>
         </View>
 
         <View style={styles.componentSection} testID="demo-status-tabs-pill">
@@ -749,6 +833,38 @@ function ComponentExamples({
             onChange={setPickerValue}
             searchable
             clearable
+            accessibilityLabel="选择负责人"
+            testID="catalog-picker-field"
+          />
+        </View>
+
+        <View style={styles.componentSection} testID="demo-chip-select-field">
+          <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>ChipSelectField · 选中与禁用</AppText>
+          <ChipSelectField
+            label="运行状态"
+            accessibilityLabel="选择运行状态"
+            options={[
+              { value: 'ready', label: '可用' },
+              { value: 'paused', label: '暂停' },
+              { value: 'locked', label: '锁定', disabled: true, disabledReason: '该选项由管理员管理' },
+            ]}
+            value={chipValue}
+            onChange={setChipValue}
+            testID="catalog-chip-select"
+          />
+        </View>
+
+        <View style={styles.componentSection} testID="demo-tree-picker-field">
+          <AppText style={[styles.componentSectionTitle, { color: colors.text }]}>TreePickerField · 层级选择</AppText>
+          <TreePickerField
+            label="配置分类"
+            accessibilityLabel="选择配置分类"
+            value={treeValue?.id}
+            displayValue={treeValue?.name}
+            fetchFn={fetchDemoTree}
+            onSelect={(id, name) => setTreeValue({ id, name })}
+            onClear={() => setTreeValue(null)}
+            testID="catalog-tree-picker"
           />
         </View>
 
@@ -777,7 +893,9 @@ function ComponentExamples({
             maxCount={4}
             allowsMultipleSelection
             showCoverControls
-            label="客户现场照片"
+            label="照片"
+            addLabel="添加照片"
+            testID="catalog-photo-picker"
           />
           <AppText style={styles.componentHint}>
             相机和相册授权由宿主 App 提供；此 Expo Web 示例仅展示控件布局。
@@ -814,7 +932,8 @@ function ComponentExamples({
             <BottomTabBar<BottomTabDemoKey>
               tabs={[
                 { key: 'home', label: '首页', icon: <Icon name="home-outline" size={20} color={colors.textSecondary} />, activeIcon: <Icon name="home" size={20} color={colors.primary} /> },
-                { key: 'tasks', label: '待办', icon: <Icon name="inbox-outline" size={20} color={colors.textSecondary} />, activeIcon: <Icon name="inbox" size={20} color={colors.primary} />, badge: 6 },
+                { key: 'tasks', label: '待办', icon: <Icon name="inbox-outline" size={20} color={colors.textSecondary} />, activeIcon: <Icon name="inbox" size={20} color={colors.primary} />, badge: 6, onBadgePress: () => setFeedback('打开待办徽标'), badgeAccessibilityLabel: '查看待办，共 6 项', badgeTestID: 'catalog-task-badge' },
+                { key: 'scan', label: '扫码', icon: <Icon name="barcode-scan" size={24} color={colors.tabBar} />, emphasis: 'primary', emphasisColor: colors.scanBtn, labelVisible: false },
                 { key: 'mine', label: '我的', icon: <Icon name="account-outline" size={20} color={colors.textSecondary} />, activeIcon: <Icon name="account" size={20} color={colors.primary} /> },
               ] satisfies BottomTabItem<BottomTabDemoKey>[]}
               activeKey={bottomTab}
@@ -822,11 +941,13 @@ function ComponentExamples({
               accessibilityLabel="示例主导航"
               includeSafeArea={false}
               bottomInsetBase={4}
+              baseHeight={70}
               style={{ position: 'relative', borderTopWidth: 0, paddingHorizontal: Spacing.xs, paddingTop: Spacing.xs, paddingBottom: 4 }}
             />
           </View>
+          {feedback ? <AppText style={styles.componentHint}>{feedback}</AppText> : null}
           <AppText style={styles.componentHint}>
-            当前页签、路由、权限和徽标数由宿主控制；组件处理选中/禁用语义与安全区。
+            当前页签、路由、权限、徽标动作与徽标数由宿主控制；组件处理强调操作、选中语义、可操作徽标与安全区。
           </AppText>
         </View>
 
@@ -1012,11 +1133,30 @@ function Catalog({ isDark, onToggleTheme }: { isDark: boolean; onToggleTheme: ()
             placeholder="请输入客户名称"
             required
           />
+          <View style={styles.compactFieldRow}>
+            <FormField
+              label="检验值 · 合格"
+              value="12.4"
+              size="compact"
+              validationState="success"
+              keyboardType="numeric"
+              containerStyle={styles.compactField}
+            />
+            <FormField
+              label="检验值 · 不合格"
+              value="18.2"
+              size="compact"
+              validationState="error"
+              keyboardType="numeric"
+              containerStyle={styles.compactField}
+            />
+          </View>
           <FormField
             testID="catalog-form-contact"
             label="联系人"
             placeholder="请输入联系人"
             error="请填写联系人"
+            inputWrapperStyle={styles.inputWrapperExample}
           />
           <FormField
             testID="catalog-form-phone"
@@ -1173,8 +1313,16 @@ const styles = StyleSheet.create({
   statusLine: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 12 },
   componentDemo: { padding: 16, gap: 20 },
   componentSection: { gap: 8 },
+  filterActionExample: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm },
+  denseActionBarFrame: { width: '100%', maxWidth: 320, alignSelf: 'center', overflow: 'hidden' },
+  denseActionBar: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: Spacing.md },
+  denseActionButton: { flex: 0, flexGrow: 0, flexBasis: '30%' },
+  denseActionButtonContent: { paddingHorizontal: 0 },
   componentSectionTitle: { fontSize: 14, fontWeight: '600' },
   bottomTabExample: { overflow: 'hidden', borderWidth: StyleSheet.hairlineWidth, borderRadius: 10 },
+  compactFieldRow: { flexDirection: 'row', gap: Spacing.sm },
+  compactField: { flex: 1, minWidth: 0 },
+  inputWrapperExample: { paddingHorizontal: Spacing.lg },
   avatarStateRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 24, flexWrap: 'wrap' },
   avatarStateItem: { alignItems: 'center', gap: 6 },
   componentHint: { fontSize: 12, lineHeight: 18 },

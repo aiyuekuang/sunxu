@@ -17,7 +17,7 @@ import { ActionButton } from './ActionButton';
 import { LoadingView } from './LoadingView';
 import { FormScreenContainer } from './ScreenContainer';
 
-interface FormPageProps {
+export interface FormPageProps {
   /** Page title */
   title: string;
   /** Submit button label */
@@ -102,6 +102,12 @@ export interface FormSectionProps {
   testID?: string;
 }
 
+export interface FieldProps {
+  label: string;
+  required?: boolean;
+  children: React.ReactNode;
+}
+
 /** Themed, space-efficient group for related form fields and actions. */
 export function FormSection({ title, children, testID }: FormSectionProps) {
   const { colors } = useTheme();
@@ -121,11 +127,7 @@ export function Field({
   label,
   required,
   children,
-}: {
-  label: string;
-  required?: boolean;
-  children: React.ReactNode;
-}) {
+}: FieldProps) {
   const { colors } = useTheme();
   return (
     <View style={styles.fieldWrap}>

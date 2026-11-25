@@ -66,7 +66,7 @@ function resolveNextSort(option: ListSortOption, current?: ListSortValue): ListS
   };
 }
 
-interface ListSortSheetProps {
+export interface ListSortSheetProps {
   visible: boolean;
   options: ListSortOption[];
   value?: ListSortValue;

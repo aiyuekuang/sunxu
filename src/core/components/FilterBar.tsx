@@ -36,7 +36,7 @@ export interface FilterOption {
   value: string;
 }
 
-/** 下拉选项筛选（快捷筛选 + 高级筛选均可用） */
+/** @deprecated Use `OptionFilterConfig` with `placement: 'quick'`. */
 export interface FilterConfig {
   key: string;
   label: string;
@@ -72,7 +72,7 @@ export interface TextFilterConfig {
   persist?: boolean;
 }
 
-/** 高级筛选配置项（支持选项型、日期范围型和文本输入型） */
+/** @deprecated Use `ListFilterConfig`; retained for the split-array API. */
 export type AdvancedFilterConfig = FilterConfig | DateRangeFilterConfig | TextFilterConfig;
 
 export function isDateRange(f: AdvancedFilterConfig): f is DateRangeFilterConfig {
@@ -83,24 +83,52 @@ export function isTextFilter(f: AdvancedFilterConfig): f is TextFilterConfig {
   return 'type' in f && f.type === 'text';
 }
 
-// ─── 统一筛选配置（新 API） ──────────────────────────────────────────────────
+// ─── 统一筛选配置 ────────────────────────────────────────────────────────────
 
-/** 筛选项放置位置：tab=底部标签, quick=快捷下拉, advanced=高级筛选弹窗 */
+/** `tab` is consumed by host list containers; FilterBar renders quick and advanced filters. */
 export type FilterPlacement = 'tab' | 'quick' | 'advanced';
 
-/** 选项型统一筛选配置 */
-export interface OptionFilterConfig {
+/** Quick dropdown filters can optionally hide their "all" choice. */
+export interface QuickOptionFilterConfig {
+  /** Optional for compatibility with host filter configs created before the unified API. */
+  type?: 'option';
   key: string;
   label: string;
   options: FilterOption[];
-  placement: FilterPlacement;
-  /** tab 专用：是否可横向滚动，默认 false */
-  scrollable?: boolean;
-  /** tab 专用：是否自动补"全部"项，默认 true */
+  placement: 'quick';
   includeAllOption?: boolean;
   /** 是否参与筛选记忆，默认 true。设为 false 则该字段不会被保存/恢复 */
   persist?: boolean;
 }
+
+/** Advanced option groups always show their available options directly. */
+export interface AdvancedOptionFilterConfig {
+  /** Optional for compatibility with host filter configs created before the unified API. */
+  type?: 'option';
+  key: string;
+  label: string;
+  options: FilterOption[];
+  placement: 'advanced';
+  /** 是否参与筛选记忆，默认 true。设为 false 则该字段不会被保存/恢复 */
+  persist?: boolean;
+}
+
+/** Status-tab options are owned by the host container, not rendered inside FilterBar. */
+export interface TabOptionFilterConfig {
+  type?: 'option';
+  key: string;
+  label: string;
+  options: FilterOption[];
+  placement: 'tab';
+  scrollable?: boolean;
+  includeAllOption?: boolean;
+  persist?: boolean;
+}
+
+export type OptionFilterConfig =
+  | QuickOptionFilterConfig
+  | AdvancedOptionFilterConfig
+  | TabOptionFilterConfig;
 
 /** 日期范围型统一筛选配置（仅限 advanced） */
 export interface DateRangeListFilterConfig {
@@ -134,11 +162,7 @@ export interface AdvancedFilterExtraArgs {
   setValue: (key: string, value: string | undefined) => void;
 }
 
-export interface FilterBarProps {
-  /** 快捷筛选（搜索栏下方，最多4个） */
-  quickFilters: FilterConfig[];
-  /** 高级筛选（弹窗中，支持选项型和日期范围型） */
-  advancedFilters?: AdvancedFilterConfig[];
+interface FilterBarCommonProps {
   /** 高级筛选面板中的业务自定义条件（如需搜索的物料、仓库等实体） */
   advancedExtra?: (args: AdvancedFilterExtraArgs) => React.ReactNode;
   /** 自定义高级条件对应的值 key，用于暂存、应用和统计已选数量 */
@@ -167,7 +191,26 @@ export interface FilterBarProps {
   onHydrated?: () => void;
   /** 重置全部筛选（包括快捷筛选和页面外部状态） */
   onResetAll?: () => void;
+  /** Storage failures are returned to the host instead of becoming unhandled rejections. */
+  onStorageError?: (error: unknown) => void | Promise<void>;
 }
+
+export type FilterBarProps = FilterBarCommonProps & (
+  | {
+      /** Unified quick/advanced API. Keep primary status tabs in `StatusTabs`. */
+      filters: readonly ListFilterConfig[];
+      quickFilters?: never;
+      advancedFilters?: never;
+    }
+  | {
+      /** @deprecated Use `filters` with an explicit `placement`. */
+      filters?: never;
+      /** @deprecated Use `filters` with `placement: 'quick'`. */
+      quickFilters: readonly FilterConfig[];
+      /** @deprecated Use `filters` with `placement: 'advanced'`. */
+      advancedFilters?: readonly AdvancedFilterConfig[];
+    }
+);
 
 export interface FilterBarRef {
   openAdvanced: () => void;
@@ -175,18 +218,18 @@ export interface FilterBarRef {
   isSaveEnabled: () => boolean;
 }
 
-/** 导出存储 key 前缀，供 ConfigListScreen 持久化 tab 使用 */
-export const FILTER_TAB_PREFIX = 'mes_filter_tab_';
+/** Namespaced key prefixes for library-owned persisted filter state. */
+export const FILTER_TAB_PREFIX = 'sunxu_filter_tab_';
 export { SAVE_FLAG_PREFIX as FILTER_SAVE_FLAG_PREFIX };
 
-const STORAGE_PREFIX = 'mes_filter_';
-const SAVE_FLAG_PREFIX = 'mes_filter_save_';
-const ADVANCED_FILTER_CHIP_HIT_SLOP = { top: 4, right: 0, bottom: 4, left: 0 } as const;
+const STORAGE_PREFIX = 'sunxu_filter_';
+const SAVE_FLAG_PREFIX = 'sunxu_filter_save_';
 
 export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function FilterBar(
-  {
-    quickFilters,
-    advancedFilters = [],
+  props,
+  ref,
+) {
+  const {
     advancedExtra,
     advancedExtraKeys = [],
     advancedExtraActiveKeys = advancedExtraKeys,
@@ -199,9 +242,40 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
     onSaveEnabledChange,
     onHydrated,
     onResetAll,
-  },
-  ref,
-) {
+    onStorageError,
+  } = props;
+  const unifiedFilters = props.filters;
+  const legacyQuickFilters = props.quickFilters;
+  const legacyAdvancedFilters = props.advancedFilters;
+  const quickFilters = useMemo<FilterConfig[]>(() => {
+    if (!unifiedFilters) return [...(legacyQuickFilters ?? [])];
+    return unifiedFilters
+      .filter(
+        (filter): filter is QuickOptionFilterConfig =>
+          filter.placement === 'quick' && (filter.type === undefined || filter.type === 'option'),
+      )
+      .map(({ key, label, options, includeAllOption, persist }) => ({
+        key,
+        label,
+        options: [...options],
+        includeAllOption,
+        persist,
+      }));
+  }, [legacyQuickFilters, unifiedFilters]);
+  const advancedFilters = useMemo<AdvancedFilterConfig[]>(() => {
+    if (!unifiedFilters) return [...(legacyAdvancedFilters ?? [])];
+    return unifiedFilters
+      .filter((filter) => filter.placement === 'advanced')
+      .map((filter): AdvancedFilterConfig => {
+        if (filter.type && filter.type !== 'option') return filter;
+        return {
+          key: filter.key,
+          label: filter.label,
+          options: [...filter.options],
+          persist: filter.persist,
+        };
+      });
+  }, [legacyAdvancedFilters, unifiedFilters]);
   const { colors } = useTheme();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [advancedVisible, setAdvancedVisible] = useState(false);
@@ -304,6 +378,22 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
   onSaveEnabledChangeRef.current = onSaveEnabledChange;
   const onHydratedRef = useRef(onHydrated);
   onHydratedRef.current = onHydrated;
+  const onStorageErrorRef = useRef(onStorageError);
+  onStorageErrorRef.current = onStorageError;
+  const reportStorageError = useCallback((error: unknown) => {
+    const handler = onStorageErrorRef.current;
+    if (!handler) {
+      console.warn('[Sunxu FilterBar] Filter persistence failed.', error);
+      return;
+    }
+    try {
+      void Promise.resolve(handler(error)).catch((callbackError: unknown) => {
+        console.error('[Sunxu FilterBar] onStorageError callback failed.', callbackError);
+      });
+    } catch (callbackError) {
+      console.error('[Sunxu FilterBar] onStorageError callback failed.', callbackError);
+    }
+  }, []);
 
   // 加载保存的筛选（含失效值验证）
   useEffect(() => {
@@ -342,13 +432,17 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
               }
             }
             onChangeRef.current(validated);
-          } catch {}
+          } catch (error) {
+            reportStorageError(error);
+          }
         }
+      } catch (error) {
+        reportStorageError(error);
       } finally {
         onHydratedRef.current?.();
       }
     })();
-  }, [storageKey]);
+  }, [reportStorageError, storageKey]);
 
   // 保存筛选值（自动排除 nonPersistKeys 中的字段）
   const persistValues = useCallback(
@@ -358,9 +452,13 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
       for (const [k, v] of Object.entries(vals)) {
         if (v && !nonPersistKeys.has(k)) cleaned[k] = v;
       }
-      await AsyncStorage.setItem(STORAGE_PREFIX + storageKey, JSON.stringify(cleaned));
+      try {
+        await AsyncStorage.setItem(STORAGE_PREFIX + storageKey, JSON.stringify(cleaned));
+      } catch (error) {
+        reportStorageError(error);
+      }
     },
-    [storageKey, saveEnabled, nonPersistKeys],
+    [storageKey, saveEnabled, nonPersistKeys, reportStorageError],
   );
 
   // 快捷筛选点击
@@ -442,15 +540,19 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
       setSaveEnabled(enabled);
       onSaveEnabledChange?.(enabled);
       if (storageKey) {
-        await AsyncStorage.setItem(SAVE_FLAG_PREFIX + storageKey, enabled ? '1' : '0');
-        if (!enabled) {
-          await AsyncStorage.removeItem(STORAGE_PREFIX + storageKey);
-        } else {
-          await persistValues(values);
+        try {
+          await AsyncStorage.setItem(SAVE_FLAG_PREFIX + storageKey, enabled ? '1' : '0');
+          if (!enabled) {
+            await AsyncStorage.removeItem(STORAGE_PREFIX + storageKey);
+          } else {
+            await persistValues(values);
+          }
+        } catch (error) {
+          reportStorageError(error);
         }
       }
     },
-    [storageKey, values, persistValues, onSaveEnabledChange],
+    [storageKey, values, persistValues, onSaveEnabledChange, reportStorageError],
   );
 
   const advancedActiveCount =
@@ -716,7 +818,6 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
                       selected={isSel}
                       accessibilityRole="radio"
                       accessibilityLabel={`${filter.label}：${opt.label}`}
-                      hitSlop={ADVANCED_FILTER_CHIP_HIT_SLOP}
                       style={styles.advChip}
                       size="sm"
                       onPress={() =>

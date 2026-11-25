@@ -6,12 +6,12 @@ import { useScaledFontSize } from '../theme/font-scale';
 import { AppText as Text } from './AppText';
 import { type FieldHelpContent, FormLabel } from './FormLabel';
 
-interface QuickButton {
+export interface QuickNumInputButton {
   label: string;
   value: number | 'max' | 'min';
 }
 
-interface QuickNumInputProps {
+export interface QuickNumInputProps {
   label: string;
   value: string;
   onChangeText: (text: string) => void;
@@ -26,7 +26,7 @@ interface QuickNumInputProps {
   /** 步进值，默认 1 */
   step?: number;
   /** 自定义快捷按钮，不传则默认 ±step 和 Max */
-  quickButtons?: QuickButton[];
+  quickButtons?: QuickNumInputButton[];
   /** 单位标签（如 "件"、"个"） */
   unit?: string;
   /** 提示文字（如 "计划 100"） */

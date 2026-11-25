@@ -15,7 +15,7 @@ import { ActionButton } from './ActionButton';
 import { AppText as Text } from './AppText';
 import { Divider } from './Divider';
 
-interface ListCardProps {
+export interface ListCardProps {
   /** Makes the card the primary action. With Actions, only the information area is tappable. */
   onPress?: () => void;
   /** Optional secondary action for a long press. */
@@ -39,7 +39,7 @@ interface ListCardProps {
 
 export type ListCardActionTone = 'neutral' | 'primary' | 'success' | 'warning' | 'danger';
 
-interface CardActionProps {
+export interface ListCardActionProps {
   children: React.ReactNode;
   onPress: (event: GestureResponderEvent) => void;
   tone?: ListCardActionTone;
@@ -48,6 +48,40 @@ interface CardActionProps {
   accessibilityLabel?: string;
   accessibilityHint?: string;
   testID?: string;
+}
+
+export interface ListCardHeaderProps {
+  children: React.ReactNode;
+  style?: ViewStyle;
+}
+
+export interface ListCardTitleProps {
+  children: React.ReactNode;
+  numberOfLines?: number;
+}
+
+export interface ListCardSubtitleProps {
+  children: React.ReactNode;
+  numberOfLines?: number;
+}
+
+export interface ListCardMetaProps {
+  children: React.ReactNode;
+  style?: ViewStyle;
+}
+
+export interface ListCardMetaTextProps {
+  children: React.ReactNode;
+  color?: string;
+}
+
+export interface ListCardCodeProps {
+  children: React.ReactNode;
+  color?: string;
+}
+
+export interface ListCardActionsProps {
+  children: React.ReactNode;
 }
 
 /**
@@ -147,7 +181,7 @@ export function ListCard({
 // ---- Compound sub-components ----
 
 /** 卡片头部：左侧 + 右侧（通常是编号 + Badge） */
-function CardHeader({ children, style }: { children: React.ReactNode; style?: ViewStyle }) {
+function CardHeader({ children, style }: ListCardHeaderProps) {
   return <View style={[styles.header, style]}>{children}</View>;
 }
 
@@ -155,10 +189,7 @@ function CardHeader({ children, style }: { children: React.ReactNode; style?: Vi
 function CardTitle({
   children,
   numberOfLines = 1,
-}: {
-  children: React.ReactNode;
-  numberOfLines?: number;
-}) {
+}: ListCardTitleProps) {
   const { colors } = useTheme();
   return (
     <Text style={[styles.title, { color: colors.text }]} numberOfLines={numberOfLines}>
@@ -171,10 +202,7 @@ function CardTitle({
 function CardSubtitle({
   children,
   numberOfLines = 2,
-}: {
-  children: React.ReactNode;
-  numberOfLines?: number;
-}) {
+}: ListCardSubtitleProps) {
   const { colors } = useTheme();
   return (
     <Text style={[styles.subtitle, { color: colors.textSecondary }]} numberOfLines={numberOfLines}>
@@ -184,12 +212,12 @@ function CardSubtitle({
 }
 
 /** 卡片元数据行（水平排列） */
-function CardMeta({ children, style }: { children: React.ReactNode; style?: ViewStyle }) {
+function CardMeta({ children, style }: ListCardMetaProps) {
   return <View style={[styles.meta, style]}>{children}</View>;
 }
 
 /** 卡片元数据文本 */
-function MetaText({ children, color }: { children: React.ReactNode; color?: string }) {
+function MetaText({ children, color }: ListCardMetaTextProps) {
   const { colors } = useTheme();
   return (
     <Text style={[styles.metaText, { color: color ?? colors.textSecondary }]} numberOfLines={1}>
@@ -199,7 +227,7 @@ function MetaText({ children, color }: { children: React.ReactNode; color?: stri
 }
 
 /** 卡片编号文本（常用于 header 左侧） */
-function CardCode({ children, color }: { children: React.ReactNode; color?: string }) {
+function CardCode({ children, color }: ListCardCodeProps) {
   const { colors } = useTheme();
   return (
     <Text style={[styles.code, { color: color ?? colors.primary }]} numberOfLines={1}>
@@ -227,7 +255,7 @@ function CardAction({
   accessibilityLabel,
   accessibilityHint,
   testID,
-}: CardActionProps) {
+}: ListCardActionProps) {
   const { colors } = useTheme();
   const textColor = {
     neutral: colors.textSecondary,
@@ -278,7 +306,7 @@ function isActionControl(child: React.ReactNode): boolean {
 const warnedActionCounts = new Set<number>();
 
 /** Bottom action row. Use up to three controls; overflow belongs in SwipeableRow. */
-function CardActions({ children }: { children: React.ReactNode }) {
+function CardActions({ children }: ListCardActionsProps) {
   const nodes = flattenFragments(children);
   const actionNodes = nodes.filter(isActionControl);
   const supportingNodes = nodes.filter((node) => !isActionControl(node));

@@ -3,9 +3,9 @@ import { AppText as Text } from './AppText';
 import { useTheme } from '../theme/useTheme';
 import { FontSize, Spacing, Radius } from '../theme/tokens';
 
-type BadgeVariant = 'success' | 'warning' | 'error' | 'info' | 'default' | 'primary';
+export type BadgeVariant = 'success' | 'warning' | 'error' | 'info' | 'default' | 'primary';
 
-interface BadgeProps {
+export interface BadgeProps {
   label: string;
   variant?: BadgeVariant;
   /** 自定义颜色，优先于 variant。传 color 会自动生成 20% 透明度背景 */
@@ -46,18 +46,20 @@ export type StatusConfig<T extends string = string> = Record<
   { label: string; color: string; bg?: string }
 >;
 
+export interface ConfigBadgeProps<T extends string = string> {
+  value: T;
+  config: StatusConfig<T>;
+  size?: 'sm' | 'md';
+  fallbackLabel?: string;
+}
+
 /** 根据 StatusConfig 渲染 Badge 的便捷组件 */
 export function ConfigBadge<T extends string>({
   value,
   config,
   size = 'md',
   fallbackLabel,
-}: {
-  value: T;
-  config: StatusConfig<T>;
-  size?: 'sm' | 'md';
-  fallbackLabel?: string;
-}) {
+}: ConfigBadgeProps<T>) {
   // 兜底显性化：未命中且 value 非空时显示原始码（可排查），value 为空才显示「未知状态」
   const cfg = config[value] ?? {
     label: value ? (fallbackLabel ?? String(value)) : (fallbackLabel ?? '未知状态'),
@@ -66,14 +68,16 @@ export function ConfigBadge<T extends string>({
   return <Badge label={cfg.label} color={cfg.color} bg={cfg.bg} size={size} />;
 }
 
+export interface CountBadgeProps {
+  count: number | string;
+  tone?: 'primary' | 'error' | 'default';
+}
+
 /** Compact outlined badge for a section count or notification summary. */
 export function CountBadge({
   count,
   tone = 'primary',
-}: {
-  count: number | string;
-  tone?: 'primary' | 'error' | 'default';
-}) {
+}: CountBadgeProps) {
   const { colors } = useTheme();
   const color =
     tone === 'error' ? colors.error : tone === 'default' ? colors.textSecondary : colors.primary;

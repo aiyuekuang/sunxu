@@ -23,7 +23,7 @@ export function LoadingView({ message }: LoadingViewProps = {}) {
   );
 }
 
-interface InlineLoadingProps {
+export interface InlineLoadingProps {
   /** 覆盖默认颜色（主题色），常用于按钮内白色 spinner */
   color?: string;
   /** 传递给 React Native ActivityIndicator 的尺寸；小尺寸可以传具体数字 */
