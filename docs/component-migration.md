@@ -507,3 +507,9 @@ Tel App 已改用以上契约，并将列表/表单/工作台容器、错误边�
 - `FormField` 支持 `size="compact"` 与 `validationState`，但仍保留平台触控高度；`containerStyle` 控制字段组布局，`inputWrapperStyle` 覆盖共享输入外壳，原生 TextInput 样式继续由 `style` 控制。
 - React Native core 导出的组件均提供可单独导入的 props 类型，包括表单、筛选、导航、列表卡片子组件、状态徽标、扫描和占位组件；`ListCard`、`FormPage`、`Skeleton` 等组合/预设组件也暴露对应的子项 props 类型。
 - 目录示例改用统一筛选 API。Expo Web 目录在 375×812 与 320×720 完成实际渲染、交互和溢出核验；证据及几何数据见[组件 API 验收](./verification/component-api-audit-2026-11-24/README.md)。相机/相册权限、非空照片移除/排序/封面交互和原生触控/读屏仍为 `UNVERIFIED`。
+
+## 2026-11-28 FilterBar 高优先级自定义筛选
+
+- `FilterBar.leadingExtra` 提供共享筛选行的高优先级自定义筛选插槽，顺序为 `leadingControl`、`leadingExtra`、快捷筛选配置、`extra`；现有调用不传该属性时布局不变，原有 `extra` 继续承载尾部自定义筛选。存在自定义内联筛选时行高扩展到平台最小触控目标，避免触控框溢出分隔线；只有快捷配置时保留原紧凑行高。
+- 插槽只定义呈现顺序；筛选值、持久化、权限、请求参数和业务动作仍归宿主。可复用的日期/“仅我的”等常用条件置于前部，实体选择等其他条件置于尾部，避免页面各自重做通用筛选条。
+- Catalog 增加 `SelectableChip` 前置筛选示例。Expo Web Catalog 在 375×812 与 320×720 实际渲染，确认高优先级条件先于快捷筛选、44px 触控框完整落在筛选行内、切换状态可访问且页面无横向溢出；截图和 DOM 几何见[FilterBar 前置筛选验收](./verification/filterbar-leading-extra-2026-11-28/README.md)。MES App 受保护业务路由及原生触控/读屏仍为 `UNVERIFIED`。

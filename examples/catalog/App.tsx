@@ -42,6 +42,7 @@ import {
   ProfileIdentity,
   SearchBar,
   ScalePressable,
+  SelectableChip,
   SectionCard,
   SettingsRow,
   Spacing,
@@ -316,6 +317,7 @@ function ComponentExamples({
   const [customerOpportunity, setCustomerOpportunity] = useState<CustomerOpportunityDemo>('customers');
   const [search, setSearch] = useState('');
   const [quickPeriod, setQuickPeriod] = useState('today');
+  const [priorityFilterActive, setPriorityFilterActive] = useState(false);
   const [advancedFilterValues, setAdvancedFilterValues] = useState<
     Record<string, string | undefined>
   >({});
@@ -730,6 +732,15 @@ function ComponentExamples({
             </AppText>
           </View>
           <FilterBar
+            leadingExtra={
+              <SelectableChip
+                label="仅我的"
+                selected={priorityFilterActive}
+                onPress={() => setPriorityFilterActive((active) => !active)}
+                accessibilityLabel="仅我的筛选"
+                size="sm"
+              />
+            }
             filters={[
               {
                 type: 'option',

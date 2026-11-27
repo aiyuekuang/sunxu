@@ -185,6 +185,8 @@ interface FilterBarCommonProps {
     onPress: () => void;
     active?: boolean;
   };
+  /** 高优先级自定义筛选，排在快捷筛选之前；与其共用横向行并保留完整触控高度 */
+  leadingExtra?: React.ReactNode;
   /** 记住筛选开关变化回调（通知父组件持久化 tab 等状态） */
   onSaveEnabledChange?: (enabled: boolean) => void;
   /** 初始持久化筛选恢复完成回调 */
@@ -239,6 +241,7 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
     hideAdvancedButton = false,
     extra,
     leadingControl,
+    leadingExtra,
     onSaveEnabledChange,
     onHydrated,
     onResetAll,
@@ -565,6 +568,9 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
     saveEnabled,
   ]);
 
+  const quickRowHeight =
+    leadingExtra || extra ? MIN_TOUCH_TARGET : MIN_TOUCH_TARGET - Spacing.sm;
+
   return (
     <>
       {/* 快捷筛选行：仅在有可见内容时渲染。高级筛选按钮隐藏时由调用方提供入口，
@@ -572,15 +578,19 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
       {(quickFilters.length > 0 ||
         advancedExtra ||
         leadingControl ||
+        leadingExtra ||
         extra ||
         (!hideAdvancedButton && advancedFilters.length > 0)) && (
-        <View ref={quickRowRef} style={[styles.quickRow, { borderBottomColor: colors.border }]}>
+        <View
+          ref={quickRowRef}
+          style={[styles.quickRow, { borderBottomColor: colors.border, height: quickRowHeight }]}
+        >
           <ScrollView
-            style={styles.quickScroll}
+            style={[styles.quickScroll, { height: quickRowHeight }]}
             horizontal
             showsHorizontalScrollIndicator={false}
             bounces={false}
-            contentContainerStyle={styles.quickScrollContent}
+            contentContainerStyle={[styles.quickScrollContent, { height: quickRowHeight }]}
           >
             {leadingControl && (
               <FilterQuickControl
@@ -590,6 +600,8 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
                 accessibilityLabel={`${leadingControl.label}，点击选择排序方式`}
               />
             )}
+
+            {leadingExtra}
 
             {quickFilters.map((filter) => {
               const selected = values[filter.key];
@@ -620,7 +632,7 @@ export const FilterBar = React.forwardRef<FilterBarRef, FilterBarProps>(function
           </ScrollView>
           {/* 高级筛选按钮固定在最右侧，仅保留无背景图标 */}
           {!hideAdvancedButton && (advancedFilters.length > 0 || advancedExtra) && (
-            <View style={styles.advancedAction}>
+            <View style={[styles.advancedAction, { height: quickRowHeight }]}>
               <FilterActionButton
                 iconOnly
                 size="compact"

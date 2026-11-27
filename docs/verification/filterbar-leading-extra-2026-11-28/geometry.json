@@ -1,0 +1,119 @@
+{
+  "route": "Catalog → 组件 → FilterBar · 高级筛选",
+  "targetUrl": "http://localhost:8097",
+  "results": [
+    {
+      "viewport": {
+        "name": "375x812",
+        "width": 375,
+        "height": 812
+      },
+      "section": {
+        "x": 28,
+        "y": 346,
+        "width": 319,
+        "height": 116,
+        "right": 347,
+        "bottom": 462
+      },
+      "filterRow": {
+        "x": 36,
+        "y": 417.5,
+        "width": 263,
+        "height": 44,
+        "right": 299,
+        "bottom": 461.5
+      },
+      "leadingFilter": {
+        "x": 36,
+        "y": 417.5,
+        "width": 55,
+        "height": 44,
+        "right": 91,
+        "bottom": 461.5
+      },
+      "firstQuickFilter": {
+        "x": 95,
+        "y": 421.5,
+        "width": 48,
+        "height": 36,
+        "right": 143,
+        "bottom": 457.5
+      },
+      "initialSelectedState": "false",
+      "orderCorrect": true,
+      "leadingFilterFitsRow": true,
+      "firstQuickFilterFitsRow": true,
+      "document": {
+        "viewportWidth": 375,
+        "documentWidth": 375,
+        "bodyWidth": 375
+      },
+      "scroller": {
+        "clientWidth": 263,
+        "scrollWidth": 263,
+        "scrollLeft": 0,
+        "overflowX": "auto"
+      },
+      "selectedState": "true",
+      "screenshot": "375x812.png"
+    },
+    {
+      "viewport": {
+        "name": "320x720",
+        "width": 320,
+        "height": 720
+      },
+      "section": {
+        "x": 28,
+        "y": 300,
+        "width": 264,
+        "height": 116,
+        "right": 292,
+        "bottom": 416
+      },
+      "filterRow": {
+        "x": 36,
+        "y": 371.5,
+        "width": 208,
+        "height": 44,
+        "right": 244,
+        "bottom": 415.5
+      },
+      "leadingFilter": {
+        "x": 36,
+        "y": 371.5,
+        "width": 55,
+        "height": 44,
+        "right": 91,
+        "bottom": 415.5
+      },
+      "firstQuickFilter": {
+        "x": 95,
+        "y": 375.5,
+        "width": 48,
+        "height": 36,
+        "right": 143,
+        "bottom": 411.5
+      },
+      "initialSelectedState": "false",
+      "orderCorrect": true,
+      "leadingFilterFitsRow": true,
+      "firstQuickFilterFitsRow": true,
+      "document": {
+        "viewportWidth": 320,
+        "documentWidth": 320,
+        "bodyWidth": 320
+      },
+      "scroller": {
+        "clientWidth": 208,
+        "scrollWidth": 208,
+        "scrollLeft": 0,
+        "overflowX": "auto"
+      },
+      "selectedState": "true",
+      "screenshot": "320x720.png"
+    }
+  ],
+  "pageErrors": []
+}
