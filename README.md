@@ -31,7 +31,24 @@ export function ExampleApp() {
 
 页面操作应直达用户选择的目标；一次点击不能先切 Tab 或进入中间页，再自动打开目标表单/弹层。多步骤任务应显示为由用户逐步操作的明确流程，详见[页面操作与导航直达规范](https://github.com/aiyuekuang/sunxu/blob/main/docs/component-migration.md#页面操作与导航直达)。
 
-`PageHeader` 和 `HeaderIconButton` 提供标准页头及右侧动作。需要按数量收纳时，在 `ListScreenContainer`、`DetailScreenContainer` 或 `FormScreenContainer` 使用 `headerActions`：单个动作以图标直显，多个动作收进右侧“更多操作”下拉菜单；旧的 `headerRight` 自定义插槽继续可用。
+`PageHeader` 和 `HeaderIconButton` 提供标准页头及右侧动作。直接使用 `PageHeader` 时，将业务操作作为 `actions` 传入：单个动作以图标直显，多个动作收进右侧「…」下拉菜单。`ListScreenContainer`、`DetailScreenContainer` 和 `FormScreenContainer` 对应使用 `headerActions`，并透传到 `PageHeader.actions`。宿主负责按权限和业务状态筛选动作；`right`/`headerRight` 保留给非操作内容或旧调用兼容，不要用它并排绘制多个页头操作。
+
+```tsx
+import { PageHeader, type HeaderAction } from 'sunxu/core';
+
+const actions: HeaderAction[] = [
+  { id: 'edit', label: '编辑', icon: 'create-outline', onPress: handleEdit },
+  {
+    id: 'delete',
+    label: '删除',
+    icon: 'trash-outline',
+    onPress: handleDelete,
+    destructive: true,
+  },
+];
+
+<PageHeader title="详情" actions={actions} />
+```
 
 短时提示和轻量确认使用 `CenteredModal`；上下文选择或短编辑使用 `BottomSheet`；完整表单使用 `FullScreenModal`。三者都支持固定 `footer` 操作区，内容单独滚动。自定义操作区占满可用宽度，并列按钮自适应等分；确认类流程操作不放在标题栏或滚动内容中。旧 `renderFooter` 仍兼容并已弃用。
 
