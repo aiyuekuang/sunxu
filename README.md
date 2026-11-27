@@ -31,13 +31,19 @@ export function ExampleApp() {
 
 页面操作应直达用户选择的目标；一次点击不能先切 Tab 或进入中间页，再自动打开目标表单/弹层。多步骤任务应显示为由用户逐步操作的明确流程，详见[页面操作与导航直达规范](https://github.com/aiyuekuang/sunxu/blob/main/docs/component-migration.md#页面操作与导航直达)。
 
-`PageHeader` 和 `HeaderIconButton` 提供标准页头及右侧动作。直接使用 `PageHeader` 时，将业务操作作为 `actions` 传入：单个动作以图标直显，多个动作收进右侧「…」下拉菜单。`ListScreenContainer`、`DetailScreenContainer` 和 `FormScreenContainer` 对应使用 `headerActions`，并透传到 `PageHeader.actions`。宿主负责按权限和业务状态筛选动作；`right`/`headerRight` 保留给非操作内容或旧调用兼容，不要用它并排绘制多个页头操作。
+`PageHeader` 和 `HeaderIconButton` 提供标准页头及右侧动作。直接使用 `PageHeader` 时，将业务操作作为 `actions` 传入：单个动作以图标直显，多个动作收进右侧「…」下拉菜单。菜单可用 `description` 在操作名称下显示简短的补充说明；单项图标不显示说明，但会将其作为读屏提示。选择菜单项后，Sunxu 会先关闭菜单，再调用宿主回调。`ListScreenContainer`、`DetailScreenContainer` 和 `FormScreenContainer` 对应使用 `headerActions`，并透传到 `PageHeader.actions`。宿主负责按权限和业务状态筛选动作；`right`/`headerRight` 保留给非操作内容或旧调用兼容，不要用它并排绘制多个页头操作。
 
 ```tsx
 import { PageHeader, type HeaderAction } from 'sunxu/core';
 
 const actions: HeaderAction[] = [
-  { id: 'edit', label: '编辑', icon: 'create-outline', onPress: handleEdit },
+  {
+    id: 'edit',
+    label: '编辑',
+    description: '进入编辑表单，修改当前记录。',
+    icon: 'create-outline',
+    onPress: handleEdit,
+  },
   {
     id: 'delete',
     label: '删除',

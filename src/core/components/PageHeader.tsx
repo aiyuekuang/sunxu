@@ -31,6 +31,8 @@ export interface HeaderAction {
   id: string;
   /** Visible label in the overflow menu and accessible name for an icon-only action. */
   label: string;
+  /** Optional supporting text shown below the label in the overflow menu and announced as an accessibility hint. */
+  description?: string;
   onPress: () => void;
   /** Used for the single visible action; overflow rows use text labels. */
   icon: keyof typeof Ionicons.glyphMap;
@@ -68,6 +70,8 @@ export function PageHeader({
   const [menuVisible, setMenuVisible] = useState(false);
   const [menuPosition, setMenuPosition] = useState<{ top: number; right: number }>({ top: 0, right: Spacing.sm });
   const menuTriggerRef = useRef<View>(null);
+  const pendingActionRef = useRef<HeaderAction['onPress'] | null>(null);
+  const menuClosingRef = useRef(false);
   const touchTarget = Platform.OS === 'android' ? MIN_TOUCH_TARGET_ANDROID : MIN_TOUCH_TARGET;
   const actionCount = actions?.length ?? 0;
   const rightColumnWidth = actions !== undefined && actionCount > 0 ? touchTarget : undefined;
@@ -76,7 +80,33 @@ export function PageHeader({
     if (actionCount < 2) setMenuVisible(false);
   }, [actionCount]);
 
+  useEffect(() => {
+    // React Native exposes Modal.onDismiss only on iOS. Android removes the
+    // native modal host in the commit where visible becomes false, so dispatch
+    // after that commit rather than racing it with the same press event.
+    if (Platform.OS === 'ios' || menuVisible) return;
+    const pendingAction = pendingActionRef.current;
+    if (!pendingAction) return;
+    pendingActionRef.current = null;
+    menuClosingRef.current = false;
+    pendingAction();
+  }, [menuVisible]);
+
   const closeMenu = () => setMenuVisible(false);
+  const handleModalDismiss = () => {
+    if (Platform.OS !== 'ios') return;
+    const pendingAction = pendingActionRef.current;
+    if (!pendingAction) return;
+    pendingActionRef.current = null;
+    menuClosingRef.current = false;
+    pendingAction();
+  };
+  const selectAction = (action: HeaderAction) => {
+    if (menuClosingRef.current) return;
+    menuClosingRef.current = true;
+    pendingActionRef.current = action.onPress;
+    setMenuVisible(false);
+  };
   const openMenu = () => {
     menuTriggerRef.current?.measureInWindow((x, y, width, height) => {
       const top = y + height + Spacing.xs;
@@ -99,6 +129,7 @@ export function PageHeader({
           icon={action.icon}
           onPress={action.onPress}
           accessibilityLabel={action.accessibilityLabel ?? action.label}
+          accessibilityHint={action.description}
           disabled={action.disabled}
           color={action.destructive ? colors.error : undefined}
           testID={`page-header-action-${action.id}`}
@@ -167,6 +198,7 @@ export function PageHeader({
           statusBarTranslucent
           presentationStyle="overFullScreen"
           onRequestClose={closeMenu}
+          onDismiss={handleModalDismiss}
         >
           <View style={styles.menuOverlay}>
             <Pressable
@@ -198,10 +230,7 @@ export function PageHeader({
                 {actions.map((action) => (
                   <Pressable
                     key={action.id}
-                    onPress={() => {
-                      closeMenu();
-                      action.onPress();
-                    }}
+                    onPress={() => selectAction(action)}
                     disabled={action.disabled}
                     style={({ pressed }) => [
                       styles.menuAction,
@@ -211,16 +240,25 @@ export function PageHeader({
                     ]}
                     accessibilityRole="menuitem"
                     accessibilityLabel={action.accessibilityLabel ?? action.label}
+                    accessibilityHint={action.description}
                     accessibilityState={{ disabled: action.disabled }}
                     testID={`page-header-action-${action.id}`}
                   >
-                    <Text
-                      style={{
-                        color: action.disabled ? colors.textMuted : action.destructive ? colors.error : colors.text,
-                      }}
-                    >
-                      {action.label}
-                    </Text>
+                    <View style={styles.menuActionCopy}>
+                      <Text
+                        style={[
+                          styles.menuActionLabel,
+                          { color: action.disabled ? colors.textMuted : action.destructive ? colors.error : colors.text },
+                        ]}
+                      >
+                        {action.label}
+                      </Text>
+                      {action.description ? (
+                        <Text style={[styles.menuActionDescription, { color: colors.textMuted }]}>
+                          {action.description}
+                        </Text>
+                      ) : null}
+                    </View>
                   </Pressable>
                 ))}
               </ScrollView>
@@ -239,6 +277,7 @@ export interface HeaderIconButtonProps {
   color?: string;
   size?: number;
   accessibilityLabel?: string;
+  accessibilityHint?: string;
   accessibilityState?: AccessibilityState;
   disabled?: boolean;
   testID?: string;
@@ -250,6 +289,7 @@ export function HeaderIconButton({
   color,
   size = 20,
   accessibilityLabel = '打开操作',
+  accessibilityHint,
   accessibilityState,
   disabled = false,
   testID,
@@ -265,6 +305,7 @@ export function HeaderIconButton({
       activeOpacity={0.6}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
+      accessibilityHint={accessibilityHint}
       accessibilityState={{ ...accessibilityState, disabled }}
       testID={testID}
     >
@@ -320,6 +361,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.xs,
     justifyContent: 'center',
+  },
+  menuActionCopy: {
+    gap: Spacing.xs,
+  },
+  menuActionLabel: {
+    fontSize: FontSize.sm,
+    fontWeight: '500',
+  },
+  menuActionDescription: {
+    fontSize: FontSize.xs,
   },
   disabledAction: {
     opacity: 0.65,

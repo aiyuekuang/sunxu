@@ -8,6 +8,7 @@ import {
   CountBadge,
   BottomActionBar,
   BottomTabBar,
+  BottomSheet,
   CenteredModal,
   ChoiceSheet,
   ChipSelectField,
@@ -1117,6 +1118,7 @@ function Catalog({ isDark, onToggleTheme }: { isDark: boolean; onToggleTheme: ()
   const [customerStatus, setCustomerStatus] = useState<CustomerStatus>('all');
   const [keyword, setKeyword] = useState('');
   const [detailActionFeedback, setDetailActionFeedback] = useState('');
+  const [headerHistoryVisible, setHeaderHistoryVisible] = useState(false);
 
   if (screen === 'form') {
     return (
@@ -1189,6 +1191,22 @@ function Catalog({ isDark, onToggleTheme }: { isDark: boolean; onToggleTheme: ()
       <DetailScreenContainer
         title="客户详情"
         onBack={() => setScreen('list')}
+        headerActions={[
+          {
+            id: 'refresh-customer',
+            label: '刷新资料',
+            description: '重新加载当前客户的最新资料。',
+            icon: 'refresh-outline',
+            onPress: () => setDetailActionFeedback('已触发刷新资料'),
+          },
+          {
+            id: 'view-customer-history',
+            label: '查看变更记录',
+            description: '查看近期修改过的字段与操作时间。',
+            icon: 'time-outline',
+            onPress: () => setHeaderHistoryVisible(true),
+          },
+        ]}
         footer={
           <DetailActionBar
             maxVisibleActions={3}
@@ -1216,6 +1234,15 @@ function Catalog({ isDark, onToggleTheme }: { isDark: boolean; onToggleTheme: ()
           </View>
           <InfoRow label="最近更新" value="2026-11-05 09:30" last />
         </DetailCard>
+        <BottomSheet
+          visible={headerHistoryVisible}
+          onClose={() => setHeaderHistoryVisible(false)}
+          title="资料变更记录"
+          dynamicHeight
+          maxHeightRatio={0.5}
+        >
+          <AppText>2026-11-05 09:30　更新了客户联系人信息。</AppText>
+        </BottomSheet>
       </DetailScreenContainer>
     );
   }
